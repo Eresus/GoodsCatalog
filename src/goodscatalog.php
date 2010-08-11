@@ -69,4 +69,69 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public $type = 'client,admin,content';
 
+	/**
+	 * Действия при инсталляции
+	 *
+	 * @return void
+	 * @see main/core/Plugin::install()
+	 */
+	public function install()
+	{
+		parent::install();
+
+		/*
+		 * Таблица товаров
+		 */
+		$sql = "
+			`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
+			`section` int(10) unsigned NOT NULL COMMENT 'Привязка к разделу',
+			`active` bool NOT NULL default 0 COMMENT 'Активность',
+			`position` int(10) unsigned NOT NULL default '0' COMMENT 'Порядковый номер',
+			`article` varchar(255) NOT NULL default '' COMMENT 'Артикул',
+			`title` varchar(255) NOT NULL default '' COMMENT 'Название',
+			`about` text NOT NULL default '' COMMENT 'Краткое описание',
+			`description` longtext NOT NULL default '' COMMENT 'Описание',
+			`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла основной фотографии',
+			`special` bool NOT NULL default 0 COMMENT 'Спецпредложение',
+			`brand` int(10) unsigned default NULL COMMENT 'Привязка к бренду',
+			PRIMARY KEY  (`id`),
+			KEY `admin_list` (`section`, `position`),
+			KEY `client_list` (`active`, `section`, `position`),
+			KEY `admin_special` (`special`),
+			KEY `client_special` (`active`, `special`)
+		";
+		$this->dbCreateTable($sql, 'goods');
+
+		/*
+		 * Таблица брендов
+		 */
+		$sql = "
+			`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
+			`active` bool NOT NULL default 0 COMMENT 'Активность',
+			`title` varchar(255) NOT NULL default '' COMMENT 'Название',
+			`description` longtext NOT NULL default '' COMMENT 'Описание',
+			`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла логотипа',
+			PRIMARY KEY  (`id`),
+			KEY `admin_list` (`title`),
+			KEY `client_list` (`active`, `title`)
+		";
+		$this->dbCreateTable($sql, 'brands');
+
+		/*
+		 * Таблица дополнительных фотографий
+		 */
+		$sql = "
+			`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
+			`active` bool NOT NULL default 0 COMMENT 'Активность',
+			`position` int(10) unsigned NOT NULL default '0' COMMENT 'Порядковый номер',
+			`goods` int(10) unsigned default 0 COMMENT 'Привязка к товару',
+			`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла',
+			PRIMARY KEY  (`id`),
+			KEY `admin_list` (`goods`, `position`),
+			KEY `client_list` (`active`, `goods`, `position`)
+		";
+		$this->dbCreateTable($sql, 'photos');
+
+	}
+	//-----------------------------------------------------------------------------
 }
