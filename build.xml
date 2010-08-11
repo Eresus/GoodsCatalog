@@ -21,6 +21,25 @@
 		<mkdir dir="${build.dir}" />
 
 		<!--
+			Check sources for bad code
+		-->
+		<if>
+			<istrue value="${phpmd}" />
+			<then>
+				<phpmd rulesets="${phpmd.rulesets}">
+					<formatter
+						type="${phpmd.format}"
+						outfile="${phpmd.output}"
+					/>
+					<fileset dir="src">
+						<include name="**/*.php" />
+						<exclude name=".svn" />
+					</fileset>
+				</phpmd>
+			</then>
+		</if>
+		
+		<!--
 			Check sources for coding standards
 		-->
 		<if>
