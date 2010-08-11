@@ -49,7 +49,7 @@ class GoodsCatalog extends ContentPlugin
 	 * Требуемая версия ядра
 	 * @var string
 	 */
-	public $kernel = '2.12';
+	public $kernel = '2.13';
 
 	/**
 	 * Название плагина
@@ -70,6 +70,79 @@ class GoodsCatalog extends ContentPlugin
 	public $type = 'client,admin,content';
 
 	/**
+	 * Настройки плагина
+	 *
+	 * @var array
+	 */
+	public $settings = array(
+		// Кол-во товаров на странице
+		'goodsPerPage' => 10,
+
+		/* Логотип */
+		// Использовать логотип
+		'logoEnabled' => false,
+		// Положение логотипа
+		'logoPosition' => 'BL', // Значения: TL, TR, BL, Br. T - верх, B - низ, L - лево, R - право.
+		// Вертикальный отступ от края в пикселах
+		'logoVPadding' => 10,
+		// Горизонтальный отступ от края в пикселах
+		'logoHPadding' => 10,
+
+		// Использовать основную фотографию
+		'mainPhotoEnabled' => false,
+
+		// Использовать дополнительные фотографии
+		'extPhotosEnabled' => false,
+
+		/* Фотографии */
+		'photoMaxWidth' => 800,
+		'photoMaxHeight' => 600,
+
+		/* Миниатюры */
+		'thumbWidth' => 200,
+		'thumbHeight' => 150,
+
+		// Использовать бренды
+		'brandsEnabled' => false,
+
+		/* Логотип бренда */
+		'brandLogoMaxWidth' => 300,
+		'brandLogoMaxHeight' => 300,
+
+		// Использовать Спецпредложения
+		'specialsEnabled' => false
+	);
+
+	/**
+	 * Конструктор
+	 *
+	 * @return GoodsCatalog
+	 */
+	public function __construct()
+	{
+		global $Eresus;
+
+		parent::__construct();
+
+		if (!Core::getValue('core.template.templateDir'))
+		{
+			Core::setValue('core.template.templateDir', $Eresus->froot);
+		}
+
+		if (!Core::getValue('core.template.compileDir'))
+		{
+			Core::setValue('core.template.compileDir', $Eresus->fdata . 'cache');
+		}
+
+		if (!Core::getValue('core.template.charset'))
+		{
+			Core::setValue('core.template.charset', 'windows-1251');
+		}
+
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
 	 * Действия при инсталляции
 	 *
 	 * @return void
@@ -77,6 +150,8 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function install()
 	{
+		global $Eresus;
+
 		parent::install();
 
 		/*
@@ -135,6 +210,12 @@ class GoodsCatalog extends ContentPlugin
 		/* Создаём директории данных */
 		$this->mkdir('goods');
 		$this->mkdir('brands');
+
+		/* Создаём директорию кэша */
+		$umask = umask(0000);
+		@mkdir($Eresus->fdata . 'cache', 0777);
+		umask($umask);
+
 	}
 	//-----------------------------------------------------------------------------
 
@@ -152,4 +233,105 @@ class GoodsCatalog extends ContentPlugin
 		parent::uninstall();
 	}
 	//-----------------------------------------------------------------------------
+
+	/**
+	 * Диалог настроек
+	 *
+	 * @return string
+	 */
+	public function settings()
+	{
+		global $page;
+
+		$page->linkStyles($this->urlCode . 'admin.css');
+		$this->linkJQuery();
+
+		// Данные для подстановки в шаблон
+		$data = array();
+		$data['this'] = $this;
+		$data['page'] = $page;
+		$data['logoExists'] = FS::isFile($this->getLogoFileName());
+
+		// Создаём экземпляр шаблона
+		$tmpl = new Template('ext/' . $this->name . '/templates/settings.html');
+
+		// Компилируем шаблон и данные
+		$html = $tmpl->compile($data);
+
+		return $html;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Дополнительные действия при сохранении настроек
+	 *
+	 * @return void
+	 * @see main/core/Plugin::onSettingsUpdate()
+	 */
+	public function onSettingsUpdate()
+	{
+		$this->uploadLogo();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Загружает файл логотипа
+	 *
+	 * @return void
+	 */
+	private function uploadLogo()
+	{
+		$tmpFile = $this->getTempFileName();
+		if (!upload('logoImage', $tmpFile))
+		{
+			return;
+		}
+
+		$info = getimagesize($tmpFile);
+		if ($info['mime'] != 'image/png')
+		{
+			ErrorMessage('Логотип должен быть в формате PNG. Загруженный файл имеет формат "' .
+				$info['mime'] . '"');
+			return;
+		}
+
+		rename($tmpFile, $this->getLogoFileName());
+
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает имя файла логотипа
+	 *
+	 * @return string
+	 */
+	private function getLogoFileName()
+	{
+		return $this->dirData . 'logo.png';
+	}
+	//-----------------------------------------------------------------------------
+	/**
+	 * Метод возвращает имя для временного файла в области, доступной для безопасного чтения
+	 * и записи.
+	 *
+	 * @return string
+	 */
+	private function getTempFileName()
+	{
+		return $this->dirData . 'tmp_upload.bin';
+	}
+	//-----------------------------------------------------------------------------
+	/**
+	 * Подключает библиотеку jQuery
+	 *
+	 * @return void
+	 */
+	private function linkJQuery()
+	{
+		global $Eresus, $page;
+
+		$page->linkScripts($Eresus->root . 'core/jquery/jquery.min.js');
+	}
+	//-----------------------------------------------------------------------------
+
 }

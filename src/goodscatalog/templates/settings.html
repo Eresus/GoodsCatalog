@@ -1,0 +1,120 @@
+<div class="window" style="width: 600px; float: left;">
+	<div class="title">Настройки каталога товаров</div>
+	<div class="content">
+
+		<form name="settings" id="settings" action="admin.php?mod=plgmgr&id={$this->name}" method="post" enctype="multipart/form-data">
+
+			<div class="hidden">
+				<input type="hidden" name="update" value="{$this->name}" />
+				<input type="hidden" name="submitURL" value="admin.php?mod=plgmgr" />
+			</div>
+
+			<table width="100%" id="catalog-settings-main">
+				<tr>
+					<td class="formLabel">Показывать</td>
+					<td>
+						<input type="text" name="goodsPerPage" id="catalog-goodsPerPage-input"
+							value="{$this->settings.goodsPerPage}" maxlength="3" size="3" />
+						товаров на одной странице
+					</td>
+				</tr>
+
+				<!-- ЛОГОТИП -->
+				<tr><th colspan="2" class="formHeader">Логотип</th></tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="hidden" name="logoEnabled" value="" />
+						<label>
+							<input type="checkbox" name="logoEnabled" id="catalog-logoEnabled-input" value="1"{if $this->settings.logoEnabled} checked="checked"{/if} />
+							Накладывать логотип на фотографии товаров
+						</label>
+					</td>
+				</tr>
+				<tr class="catalog-logoEnabled-related">
+					<td></td>
+					<td>
+						Положение логотипа на фотографии: <br />
+						<table class="catalog-settings-logoPosition">
+							<tr>
+								<td>
+									<input type="radio" name="logoPosition" value="TL"{if $this->settings.logoPosition == 'TL'} checked="checked"{/if}{if !$this->settings.logoEnabled} disabled="disabled"{/if} title="Верхний левый угол" />
+								</td>
+								<td>
+									<input type="radio" name="logoPosition" value="TR"{if $this->settings.logoPosition == 'TR'} checked="checked"{/if}{if !$this->settings.logoEnabled} disabled="disabled"{/if} title="Верхний правый угол" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="radio" name="logoPosition" value="BL"{if $this->settings.logoPosition == 'BL'} checked="checked"{/if}{if !$this->settings.logoEnabled} disabled="disabled"{/if} title="Нижний левый угол" />
+								</td>
+								<td>
+									<input type="radio" name="logoPosition" value="BR"{if $this->settings.logoPosition == 'BR'} checked="checked"{/if}{if !$this->settings.logoEnabled} disabled="disabled"{/if} title="Нижний правый угол" />
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr class="catalog-logoEnabled-related">
+					<td class="formLabel">Логотип</td>
+					<td>
+						<div>
+						{if $logoExists}
+						<img src="{$this->urlData}logo.png" alt="Логотип" />
+						{else}
+						<strong>не загружен</strong>
+						{/if}
+						</div>
+						<input type="file" name="logoImage" {if !$this->settings.logoEnabled} disabled="disabled"{/if} />
+						<div class="minor">Логотип должен быть в формате <a href="http://ru.wikipedia.org/wiki/PNG">PNG</a>.</div>
+						
+					</td>
+				</tr>
+				<tr class="catalog-logoEnabled-related">
+					<td class="formLabel">Отступ</td>
+					<td>
+						<input type="text" name="logoVPadding" value="{$this->settings.logoVPadding}" maxlength="4" size="4"{if !$this->settings.logoEnabled} disabled="disabled"{/if} />
+						точек по вертикали
+					</td>
+				</tr>
+				<tr class="catalog-logoEnabled-related">
+					<td class="formLabel">Отступ</td>
+					<td>
+						<input type="text" name="logoHPadding" value="{$this->settings.logoHPadding}" maxlength="4" size="4"{if !$this->settings.logoEnabled} disabled="disabled"{/if} />
+						точек по горизонтали
+					</td>
+				</tr>
+
+			</table>
+
+			<table width="100%">
+				<tr>
+					<td colspan="2" align="center">
+						<br />
+						<input type="submit" class="button" value="Сохранить" onclick="formApplyClick('settings')" />
+						<input type="button" class="button" value="Закрыть" onclick="javascript:history.back();" />
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+	jQuery(document).ready(function ()
+	{
+		jQuery("#catalog-logoEnabled-input").click(function ()
+		{
+			var inputs = jQuery("#catalog-settings-main .catalog-logoEnabled-related :input");
+			if ($(this).get(0).checked)
+			{
+				inputs.removeAttr('disabled');
+			}
+			else
+			{
+				inputs.attr('disabled', 'disabled');
+			}
+		});
+		
+	});
+//--><!]]></script>
