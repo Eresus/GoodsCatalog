@@ -132,6 +132,9 @@ class GoodsCatalog extends ContentPlugin
 		";
 		$this->dbCreateTable($sql, 'photos');
 
+		/* Создаём директории данных */
+		$this->mkdir('goods');
+		$this->mkdir('brands');
 	}
 	//-----------------------------------------------------------------------------
 }
