@@ -68,5 +68,4 @@ class GoodsCatalog extends ContentPlugin
 	 * @var string
 	 */
 	public $type = 'client,admin,content';
-
 }
