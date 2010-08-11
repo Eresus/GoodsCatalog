@@ -137,4 +137,19 @@ class GoodsCatalog extends ContentPlugin
 		$this->mkdir('brands');
 	}
 	//-----------------------------------------------------------------------------
+
+	/**
+	 * Действия при удалении плагина
+	 *
+	 * @return void
+	 * @see main/core/Plugin::uninstall()
+	 */
+	public function uninstall()
+	{
+		/* Удаляем директории данных */
+		$this->rmdir();
+
+		parent::uninstall();
+	}
+	//-----------------------------------------------------------------------------
 }
