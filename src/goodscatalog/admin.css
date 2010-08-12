@@ -116,6 +116,14 @@ a.pseudo:visited
 	}
 
 /**
+ * Поле для ввода чилса
+ */
+input[type=text].number
+{
+	text-align: right;
+}
+
+/**
  * Ячейка с меткой поля формы
  */
 td.formLabel
