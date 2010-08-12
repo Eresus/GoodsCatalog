@@ -66,7 +66,79 @@ class GoodsCatalogBrandsAdminUI
 	 */
 	public function getHTML()
 	{
-		return '#';
+		switch (true)
+		{
+			case arg('action') == 'add':
+				$html = $this->renderAddDialog();
+			break;
+
+			default:
+				$html = $this->renderList();
+			break;
+		}
+
+		// Дополнительные стили
+		$GLOBALS['page']->linkStyles($this->plugin->urlCode . 'admin.css');
+
+		return $html;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает разметку интерфейса списка брендов
+	 *
+	 * @return string  HTML
+	 *
+	 * @since 1.00
+	 */
+	private function renderList()
+	{
+		// Данные для подстановки в шаблон
+		$data = $this->plugin->getHelper()->prepareTmplData();
+
+		// Создаём экземпляр шаблона
+		$tmpl = $this->plugin->getHelper()->getAdminTemplate('brands-list.html');
+
+		// Компилируем шаблон и данные
+		$html = $tmpl->compile($data);
+
+		return $html;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает разметку диалога добавления бренда
+	 *
+	 * @return string  HTML
+	 *
+	 * @since 1.00
+	 */
+	private function renderAddDialog()
+	{
+		/*
+		 * Имитируем использование старых форм на основе массивов.
+		 * Это требуется для правильного подключения WYSIWYG.
+		 */
+		$wysiwyg = $GLOBALS['Eresus']->extensions->load('forms', 'html');
+		$fakeForm = array('values' => array());
+		$fakeField = array(
+			'name' => 'description',
+			'value' => '',
+			'label' => '',
+			'height' => null,
+		);
+		$wysiwyg->forms_html($fakeForm, $fakeField);
+
+		// Данные для подстановки в шаблон
+		$data = $this->plugin->getHelper()->prepareTmplData();
+
+		// Создаём экземпляр шаблона
+		$tmpl = $this->plugin->getHelper()->getAdminTemplate('brands-add.html');
+
+		// Компилируем шаблон и данные
+		$html = $tmpl->compile($data);
+
+		return $html;
 	}
 	//-----------------------------------------------------------------------------
 }
