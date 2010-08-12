@@ -114,6 +114,13 @@ class GoodsCatalog extends ContentPlugin
 	);
 
 	/**
+	 * Объект-помщник
+	 *
+	 * @var GoodsCatalogHelper
+	 */
+	private $helper;
+
+	/**
 	 * Конструктор
 	 *
 	 * @return GoodsCatalog
@@ -252,10 +259,10 @@ class GoodsCatalog extends ContentPlugin
 		global $page;
 
 		$page->linkStyles($this->urlCode . 'admin.css');
-		$this->linkJQuery();
+		$this->getHelper()->linkJQuery();
 
 		// Данные для подстановки в шаблон
-		$data = $this->adminGetTmplData();
+		$data = $this->getHelper()->prepareTmplData();
 		$data['logoExists'] = FS::isFile($this->getLogoFileName());
 
 		// Создаём экземпляр шаблона
@@ -291,7 +298,7 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	private function uploadLogo()
 	{
-		$tmpFile = $this->getTempFileName();
+		$tmpFile = $this->getHelper()->getTempFileName();
 		if (!upload('logoImage', $tmpFile))
 		{
 			return;
@@ -322,32 +329,21 @@ class GoodsCatalog extends ContentPlugin
 		return $this->dirData . 'logo.png';
 	}
 	//-----------------------------------------------------------------------------
+
 	/**
-	 * Метод возвращает имя для временного файла в области, доступной для безопасного чтения
-	 * и записи.
+	 * Возвращает объект-помощник
 	 *
-	 * @return string
+	 * @return GoodsCatalogHelper
 	 *
 	 * @since 1.00
 	 */
-	private function getTempFileName()
+	private function getHelper()
 	{
-		return $this->dirData . 'tmp_upload.bin';
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Подключает библиотеку jQuery
-	 *
-	 * @return void
-	 *
-	 * @since 1.00
-	 */
-	private function linkJQuery()
-	{
-		global $Eresus, $page;
-
-		$page->linkScripts($Eresus->root . 'core/jquery/jquery.min.js');
+		if (!$this->helper)
+		{
+			$this->helper = new GoodsCatalogHelper($this);
+		}
+		return $this->helper;
 	}
 	//-----------------------------------------------------------------------------
 
@@ -364,25 +360,6 @@ class GoodsCatalog extends ContentPlugin
 	{
 		$tmpl = new Template('ext/' . $this->name . '/templates/' . $name);
 		return $tmpl;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Возвращает массив данных для шаблона.
-	 *
-	 * Массив предварительно наполняется частоиспользуемыми переменными.
-	 *
-	 * @return array
-	 *
-	 * @since 1.00
-	 */
-	private function adminGetTmplData()
-	{
-		$data = array();
-		$data['this'] = $this;
-		$data['page'] = $GLOBALS['page'];
-		$data['Eresus'] = $GLOBALS['Eresus'];
-		return $data;
 	}
 	//-----------------------------------------------------------------------------
 
@@ -423,7 +400,7 @@ class GoodsCatalog extends ContentPlugin
 	private function adminRenderGoodsList()
 	{
 		// Данные для подстановки в шаблон
-		$data = $this->adminGetTmplData();
+		$data = $this->getHelper()->prepareTmplData();
 		$data['sectionId'] = arg('section', 'int');
 
 		// Создаём экземпляр шаблона
@@ -446,7 +423,7 @@ class GoodsCatalog extends ContentPlugin
 	private function adminAddGoodDialog()
 	{
 		// Данные для подстановки в шаблон
-		$data = $this->adminGetTmplData();
+		$data = $this->getHelper()->prepareTmplData();
 		$data['sectionId'] = arg('section', 'int');
 
 		// Создаём экземпляр шаблона
@@ -456,6 +433,87 @@ class GoodsCatalog extends ContentPlugin
 		$html = $tmpl->compile($data);
 
 		return $html;
+	}
+	//-----------------------------------------------------------------------------
+}
+
+
+
+
+/**
+ * Класс-помощник
+ *
+ * Класс содержит вспомогательный функционал
+ *
+ * @package GoodsCatalog
+ */
+class GoodsCatalogHelper
+{
+	/**
+	 * Объект плагина
+	 *
+	 * @var GoodsCatalog
+	 */
+	private $plugin;
+
+	/**
+	 * Конструктор
+	 *
+	 * @param GoodsCatalog $plugin
+	 *
+	 * @return GoodsCatalogHelper
+	 */
+	public function __construct(GoodsCatalog $plugin)
+	{
+		$this->plugin = $plugin;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Метод возвращает имя для временного файла в области, доступной для безопасного чтения
+	 * и записи.
+	 *
+	 * @return string
+	 *
+	 * @since 1.00
+	 */
+	public function getTempFileName()
+	{
+		return $this->plugin->dirData . 'tmp_upload.bin';
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Подключает библиотеку jQuery
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	public function linkJQuery()
+	{
+		global $Eresus, $page;
+
+		$page->linkScripts($Eresus->root . 'core/jquery/jquery.min.js');
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает массив данных для шаблона.
+	 *
+	 * Массив предварительно наполняется частоиспользуемыми переменными.
+	 *
+	 * @return array
+	 *
+	 * @since 1.00
+	 */
+	public function prepareTmplData()
+	{
+		$data = array();
+		$data['this'] = $this->plugin;
+		$data['page'] = $GLOBALS['page'];
+		$data['Eresus'] = $GLOBALS['Eresus'];
+		return $data;
 	}
 	//-----------------------------------------------------------------------------
 }
