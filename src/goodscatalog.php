@@ -117,6 +117,8 @@ class GoodsCatalog extends ContentPlugin
 	 * Конструктор
 	 *
 	 * @return GoodsCatalog
+	 *
+	 * @since 1.00
 	 */
 	public function __construct()
 	{
@@ -146,7 +148,9 @@ class GoodsCatalog extends ContentPlugin
 	 * Действия при инсталляции
 	 *
 	 * @return void
+	 *
 	 * @see main/core/Plugin::install()
+	 * @since 1.00
 	 */
 	public function install()
 	{
@@ -223,7 +227,9 @@ class GoodsCatalog extends ContentPlugin
 	 * Действия при удалении плагина
 	 *
 	 * @return void
+	 *
 	 * @see main/core/Plugin::uninstall()
+	 * @since 1.00
 	 */
 	public function uninstall()
 	{
@@ -238,6 +244,8 @@ class GoodsCatalog extends ContentPlugin
 	 * Диалог настроек
 	 *
 	 * @return string
+	 *
+	 * @since 1.00
 	 */
 	public function settings()
 	{
@@ -247,13 +255,11 @@ class GoodsCatalog extends ContentPlugin
 		$this->linkJQuery();
 
 		// Данные для подстановки в шаблон
-		$data = array();
-		$data['this'] = $this;
-		$data['page'] = $page;
+		$data = $this->adminGetTmplData();
 		$data['logoExists'] = FS::isFile($this->getLogoFileName());
 
 		// Создаём экземпляр шаблона
-		$tmpl = new Template('ext/' . $this->name . '/templates/settings.html');
+		$tmpl = $this->adminGetTemplate('settings.html');
 
 		// Компилируем шаблон и данные
 		$html = $tmpl->compile($data);
@@ -266,7 +272,9 @@ class GoodsCatalog extends ContentPlugin
 	 * Дополнительные действия при сохранении настроек
 	 *
 	 * @return void
+	 *
 	 * @see main/core/Plugin::onSettingsUpdate()
+	 * @since 1.00
 	 */
 	public function onSettingsUpdate()
 	{
@@ -278,6 +286,8 @@ class GoodsCatalog extends ContentPlugin
 	 * Загружает файл логотипа
 	 *
 	 * @return void
+	 *
+	 * @since 1.00
 	 */
 	private function uploadLogo()
 	{
@@ -304,6 +314,8 @@ class GoodsCatalog extends ContentPlugin
 	 * Возвращает имя файла логотипа
 	 *
 	 * @return string
+	 *
+	 * @since 1.00
 	 */
 	private function getLogoFileName()
 	{
@@ -315,16 +327,21 @@ class GoodsCatalog extends ContentPlugin
 	 * и записи.
 	 *
 	 * @return string
+	 *
+	 * @since 1.00
 	 */
 	private function getTempFileName()
 	{
 		return $this->dirData . 'tmp_upload.bin';
 	}
 	//-----------------------------------------------------------------------------
+
 	/**
 	 * Подключает библиотеку jQuery
 	 *
 	 * @return void
+	 *
+	 * @since 1.00
 	 */
 	private function linkJQuery()
 	{
@@ -334,4 +351,83 @@ class GoodsCatalog extends ContentPlugin
 	}
 	//-----------------------------------------------------------------------------
 
+	/**
+	 * Возвращает экземпляр шаблона с указанным именем
+	 *
+	 * @param string $name  Имя файла шаблона относительно директории шаблонов плагина
+	 *
+	 * @return Template
+	 *
+	 * @since 1.00
+	 */
+	private function adminGetTemplate($name)
+	{
+		$tmpl = new Template('ext/' . $this->name . '/templates/' . $name);
+		return $tmpl;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает массив данных для шаблона.
+	 *
+	 * Массив предварительно наполняется частоиспользуемыми переменными.
+	 *
+	 * @return array
+	 *
+	 * @since 1.00
+	 */
+	private function adminGetTmplData()
+	{
+		$data = array();
+		$data['this'] = $this;
+		$data['page'] = $GLOBALS['page'];
+		$data['Eresus'] = $GLOBALS['Eresus'];
+		return $data;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Формирование HTML-кода АИ
+	 *
+	 * @return string  HTML
+	 *
+	 * @since 1.00
+	 */
+	public function adminRenderContent()
+	{
+		switch (true)
+		{
+			default:
+				$html = $this->adminRenderGoodsList();
+			break;
+		}
+
+		return $html;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Отрисовывает интерфейс списка товаров
+	 *
+	 * @return string  HTML
+	 *
+	 * @since 1.00
+	 */
+	private function adminRenderGoodsList()
+	{
+		// Данные для подстановки в шаблон
+		$data = $this->adminGetTmplData();
+		$data['sectionId'] = arg('section', 'int');
+
+		// Создаём экземпляр шаблона
+		$tmpl = $this->adminGetTemplate('goods-list.html');
+
+		// Компилируем шаблон и данные
+		$html = $tmpl->compile($data);
+
+		$GLOBALS['page']->linkStyles($this->urlCode . 'admin.css');
+
+		return $html;
+	}
+	//-----------------------------------------------------------------------------
 }
