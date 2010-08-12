@@ -60,6 +60,8 @@ a.pseudo:visited
 {
 	box-sizing: border-box;
 	width: 100%;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 }
 
 /**
