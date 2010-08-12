@@ -31,5 +31,6 @@
  * $Id$
  */
 return array(
+	'GoodsCatalogGoodsAdminUI' => 'GoodsAdminUI.php',
 	'GoodsCatalogBrandsAdminUI' => 'BrandsAdminUI.php',
 );

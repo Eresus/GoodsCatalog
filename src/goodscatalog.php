@@ -264,7 +264,7 @@ class GoodsCatalog extends ContentPlugin
 		$data['logoExists'] = FS::isFile($this->getLogoFileName());
 
 		// Создаём экземпляр шаблона
-		$tmpl = $this->adminGetTemplate('settings.html');
+		$tmpl = $this->getHelper()->getAdminTemplate('settings.html');
 
 		// Компилируем шаблон и данные
 		$html = $tmpl->compile($data);
@@ -335,29 +335,13 @@ class GoodsCatalog extends ContentPlugin
 	 *
 	 * @since 1.00
 	 */
-	private function getHelper()
+	public function getHelper()
 	{
 		if (!$this->helper)
 		{
 			$this->helper = new GoodsCatalogHelper($this);
 		}
 		return $this->helper;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Возвращает экземпляр шаблона с указанным именем
-	 *
-	 * @param string $name  Имя файла шаблона относительно директории шаблонов плагина
-	 *
-	 * @return Template
-	 *
-	 * @since 1.00
-	 */
-	private function adminGetTemplate($name)
-	{
-		$tmpl = new Template('ext/' . $this->name . '/templates/' . $name);
-		return $tmpl;
 	}
 	//-----------------------------------------------------------------------------
 
@@ -404,83 +388,12 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function adminRenderContent()
 	{
-		switch (true)
-		{
-			case arg('action') == 'add':
-				$html = $this->adminAddGoodDialog();
-			break;
+		$ui = new GoodsCatalogGoodsAdminUI($this);
 
-			default:
-				$html = $this->adminRenderGoodsList();
-			break;
-		}
-
-		// Дополнительные стили
-		$GLOBALS['page']->linkStyles($this->urlCode . 'admin.css');
-
-		return $html;
+		return $ui->getHTML();
 	}
 	//-----------------------------------------------------------------------------
 
-	/**
-	 * Отрисовывает интерфейс списка товаров
-	 *
-	 * @return string  HTML
-	 *
-	 * @since 1.00
-	 */
-	private function adminRenderGoodsList()
-	{
-		// Данные для подстановки в шаблон
-		$data = $this->getHelper()->prepareTmplData();
-		$data['sectionId'] = arg('section', 'int');
-
-		// Создаём экземпляр шаблона
-		$tmpl = $this->adminGetTemplate('goods-list.html');
-
-		// Компилируем шаблон и данные
-		$html = $tmpl->compile($data);
-
-		return $html;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Возвращает диалог добавления товара
-	 *
-	 * @return string  HTML
-	 *
-	 * @since 1.00
-	 */
-	private function adminAddGoodDialog()
-	{
-		/*
-		 * Имитируем использование старых форм на основе массивов.
-		 * Это требуется для правильного подключения WYSIWYG.
-		 */
-		$wysiwyg = $GLOBALS['Eresus']->extensions->load('forms', 'html');
-		$fakeForm = array('values' => array());
-		$fakeField = array(
-			'name' => 'description',
-			'value' => '',
-			'label' => '',
-			'height' => null,
-		);
-		$wysiwyg->forms_html($fakeForm, $fakeField);
-
-		// Данные для подстановки в шаблон
-		$data = $this->getHelper()->prepareTmplData();
-		$data['sectionId'] = arg('section', 'int');
-
-		// Создаём экземпляр шаблона
-		$tmpl = $this->adminGetTemplate('goods-add.html');
-
-		// Компилируем шаблон и данные
-		$html = $tmpl->compile($data);
-
-		return $html;
-	}
-	//-----------------------------------------------------------------------------
 }
 
 
@@ -540,6 +453,22 @@ class GoodsCatalogHelper
 		global $Eresus, $page;
 
 		$page->linkScripts($Eresus->root . 'core/jquery/jquery.min.js');
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает экземпляр шаблона АИ с указанным именем
+	 *
+	 * @param string $name  Имя файла шаблона относительно директории шаблонов плагина
+	 *
+	 * @return Template
+	 *
+	 * @since 1.00
+	 */
+	public function getAdminTemplate($name)
+	{
+		$tmpl = new Template('ext/' . $this->plugin->name . '/templates/' . $name);
+		return $tmpl;
 	}
 	//-----------------------------------------------------------------------------
 
