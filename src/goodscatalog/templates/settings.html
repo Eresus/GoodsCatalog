@@ -99,9 +99,9 @@
 				<tr>
 					<td></td>
 					<td>
-						<input type="hidden" name="extPhotoEnabled" value="" />
+						<input type="hidden" name="extPhotosEnabled" value="" />
 						<label>
-							<input type="checkbox" name="extPhotoEnabled" id="catalog-extPhotoEnabled-input" value="1"{if $this->settings.extPhotoEnabled} checked="checked"{/if} />
+							<input type="checkbox" name="extPhotosEnabled" id="catalog-extPhotosEnabled-input" value="1"{if $this->settings.extPhotosEnabled} checked="checked"{/if} />
 							Включить Дополнительные фотографии товара
 						</label>
 					</td>
@@ -111,15 +111,15 @@
 				<tr class="catalog-photoEnabled-related">
 					<td class="formLabel">Макс. ширина</td>
 					<td>
-						<input type="text" name="photoMaxWidth" value="{$this->settings.photoMaxWidth}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotoEnabled} disabled="disabled"{/if} />
-						(точек)
+						<input type="text" name="photoMaxWidth" value="{$this->settings.photoMaxWidth}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotosEnabled} disabled="disabled"{/if} />
+						точек
 					</td>
 				</tr>
 				<tr class="catalog-photoEnabled-related">
 					<td class="formLabel">Макс. высота</td>
 					<td>
-						<input type="text" name="photoMaxHeight" value="{$this->settings.photoMaxHeight}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotoEnabled} disabled="disabled"{/if} />
-						(точек)
+						<input type="text" name="photoMaxHeight" value="{$this->settings.photoMaxHeight}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotosEnabled} disabled="disabled"{/if} />
+						точек
 					</td>
 				</tr>
 
@@ -127,18 +127,47 @@
 				<tr class="catalog-photoEnabled-related">
 					<td class="formLabel">Макс. ширина</td>
 					<td>
-						<input type="text" name="thumbWidth" value="{$this->settings.thumbWidth}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotoEnabled} disabled="disabled"{/if} />
-						(точек)
+						<input type="text" name="thumbWidth" value="{$this->settings.thumbWidth}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotosEnabled} disabled="disabled"{/if} />
+						точек
 					</td>
 				</tr>
 				<tr class="catalog-photoEnabled-related">
 					<td class="formLabel">Макс. высота</td>
 					<td>
-						<input type="text" name=thumbHeight" value="{$this->settings.thumbHeight}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotoEnabled} disabled="disabled"{/if} />
-						(точек)
+						<input type="text" name=thumbHeight" value="{$this->settings.thumbHeight}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotosEnabled} disabled="disabled"{/if} />
+						точек
 					</td>
 				</tr>
 
+				<!-- БРЕНДЫ -->
+				<tr><th colspan="2" class="formHeader">Бренды</th></tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="hidden" name="brandsEnabled" value="" />
+						<label>
+							<input type="checkbox" name="brandsEnabled" id="catalog-brandsEnabled-input" value="1"{if $this->settings.brandsEnabled} checked="checked"{/if} />
+							Включить бренды
+						</label>
+					</td>
+				</tr>
+				
+				<tr><th colspan="2" class="formHeader">Логотипы брендов</th></tr>
+				<tr class="catalog-brandsEnabled-related">
+					<td class="formLabel">Макс. ширина</td>
+					<td>
+						<input type="text" name="brandLogoMaxWidth" value="{$this->settings.brandLogoMaxWidth}" maxlength="4" size="4" class="number"{if !$this->settings.brandsEnabled} disabled="disabled"{/if} />
+						точек
+					</td>
+				</tr>
+				<tr class="catalog-brandsEnabled-related">
+					<td class="formLabel">Макс. высота</td>
+					<td>
+						<input type="text" name="brandLogoMaxHeight" value="{$this->settings.brandLogoMaxHeight}" maxlength="4" size="4" class="number"{if !$this->settings.brandsEnabled} disabled="disabled"{/if} />
+						точек
+					</td>
+				</tr>
+				
 			</table>
 
 			<table width="100%">
@@ -170,9 +199,9 @@
 			}
 		});
 		
-		jQuery("#catalog-mainPhotoEnabled-input,#catalog-extPhotoEnabled-input").click(function ()
+		jQuery("#catalog-mainPhotoEnabled-input,#catalog-extPhotosEnabled-input").click(function ()
 		{
-			var checks = jQuery("#catalog-mainPhotoEnabled-input,#catalog-extPhotoEnabled-input");
+			var checks = jQuery("#catalog-mainPhotoEnabled-input,#catalog-extPhotosEnabled-input");
 			var inputs = jQuery("#catalog-settings-main .catalog-photoEnabled-related :input");
 			
 			for (var i = 0; i < checks.length; i++)
@@ -188,6 +217,19 @@
 			/* Если все переключатели выключены, деактивируем поля ввода */
 			inputs.attr('disabled', 'disabled');
 			
+		});
+		
+		jQuery("#catalog-brandsEnabled-input").click(function ()
+		{
+			var inputs = jQuery("#catalog-settings-main .catalog-brandsEnabled-related :input");
+			if ($(this).get(0).checked)
+			{
+				inputs.removeAttr('disabled');
+			}
+			else
+			{
+				inputs.attr('disabled', 'disabled');
+			}
 		});
 		
 	});
