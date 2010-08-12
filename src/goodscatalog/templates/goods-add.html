@@ -82,6 +82,18 @@
 					</td>
 				</tr>
 				{/if}
+				{if $this->settings.brandsEnabled}
+				<tr>
+					<td class="formLabel">
+						<label for="catalog-brand-input">Бренд</label>
+					</td>
+					<td>
+						<select name="brand" id="catalog-brand-input">
+							<option value="">(не относится ни к одному бренду)</option>
+						</select>
+					</td>
+				</tr>
+				{/if}
 				
 			</table>
 
