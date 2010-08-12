@@ -54,6 +54,15 @@ a.pseudo:visited
 }
 
 /**
+ * Элемент должен заполнить максимум горизонтального пространства 
+ */
+.full-width
+{
+	box-sizing: border-box;
+	width: 100%;
+}
+
+/**
  * Имитация окна
  */
 .window
@@ -96,23 +105,6 @@ a.pseudo:visited
 	{
 		text-align: center;
 		padding-top: 1em;
-	}
-
-
-/**
- * Пара "метка-поле ввода"
- */
-.input-pair
-{
-	margin-bottom: .5em;
-}
-
-	/**
-	 * Элемент ввода
-	 */
-	.input-pair input
-	{
-		font-size: 9pt;
 	}
 
 /**

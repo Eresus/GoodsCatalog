@@ -177,6 +177,7 @@ class GoodsCatalog extends ContentPlugin
 			`title` varchar(255) NOT NULL default '' COMMENT 'Название',
 			`about` text NOT NULL default '' COMMENT 'Краткое описание',
 			`description` longtext NOT NULL default '' COMMENT 'Описание',
+			`cost` float NOT NULL default 0 COMMENT 'Цена',
 			`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла основной фотографии',
 			`special` bool NOT NULL default 0 COMMENT 'Спецпредложение',
 			`brand` int(10) unsigned default NULL COMMENT 'Привязка к бренду',
@@ -422,6 +423,20 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	private function adminAddGoodDialog()
 	{
+		/*
+		 * Имитируем использование старых форм на основе массивов.
+		 * Это требуется для правильного подключения WYSIWYG.
+		 */
+		$wysiwyg = $GLOBALS['Eresus']->extensions->load('forms', 'html');
+		$fakeForm = array('values' => array());
+		$fakeField = array(
+			'name' => 'description',
+			'value' => '',
+			'label' => '',
+			'height' => null,
+		);
+		$wysiwyg->forms_html($fakeForm, $fakeField);
+
 		// Данные для подстановки в шаблон
 		$data = $this->getHelper()->prepareTmplData();
 		$data['sectionId'] = arg('section', 'int');

@@ -8,17 +8,80 @@
 				<input type="hidden" name="mod" value="content" />
 				<input type="hidden" name="section" value="{$sectionId}" />
 				<input type="hidden" name="action" value="insert" />
-				<input type="hidden" name="submitURL" value="admin.php?mod=content&section={$sectionId}" />
+				<input type="hidden" name="submitURL" value="admin.php?mod=content&amp;section={$sectionId}" />
 			</div>
 
 			<table width="100%">
+				<colgroup>
+					<col width="10%" />
+					<col width="*" />
+				</colgroup>
 				<tr>
-					<td class="formLabel">Артикул</td>
+					<td class="formLabel">
+						<label for="catalog-article-input">Артикул</label>
+					</td>
 					<td>
-						<input type="text" name="article" id="catalog-article-input" maxlength="255" class="full-width" />
+						<input type="text" name="article" id="catalog-article-input" maxlength="255" />
 					</td>
 				</tr>
-
+				<tr>
+					<td class="formLabel">
+						<label for="catalog-title-input">Название</label>
+					</td>
+					<td>
+						<input type="text" name="title" id="catalog-title-input" maxlength="255" class="full-width" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<label for="catalog-about-input">Краткое описание</label><br />
+						<textarea name="about" id="catalog-about-input" cols="40" rows="5" class="full-width"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<label for="catalog-description-input">Описание</label><br />
+						<textarea name="wyswyg_description" id="wyswyg_description" cols="40" rows="8" class="wysiwyg full-width"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td class="formLabel">
+						<label for="catalog-cost-input">Цена</label>
+					</td>
+					<td>
+						<input type="text" name="cost" id="catalog-cost-input" maxlength="20" size="5" class="number" />
+					</td>
+				</tr>
+				{if $this->settings.mainPhotoEnabled}
+				<tr>
+					<td class="formLabel">
+						<label for="catalog-photo-input">Основная фотография</label>
+					</td>
+					<td>
+						<input type="file" name="photo" id="catalog-photo-input" />
+					</td>
+				</tr>
+				{/if}
+				<tr>
+					<td></td>
+					<td>
+						<label for="catalog-active-input">
+							<input type="checkbox" name="active" id="catalog-active-input" checked="checked" />
+							Показывать товар посетителям
+						</label>
+					</td>
+				</tr>
+				{if $this->settings.specialsEnabled}
+				<tr>
+					<td></td>
+					<td>
+						<label for="catalog-special-input">
+							<input type="checkbox" name="special" id="catalog-special-input" />
+							Этот товар &mdash; спецпредложение
+						</label>
+					</td>
+				</tr>
+				{/if}
 				
 			</table>
 
