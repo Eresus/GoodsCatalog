@@ -2,7 +2,7 @@
 /**
  * Каталог товаров
  *
- * Таблица автозагрузки классов
+ * Интерфейс управления брендами
  *
  * @version ${product.version}
  *
@@ -30,6 +30,43 @@
  *
  * $Id$
  */
-return array(
-	'GoodsCatalogBrandsAdminUI' => 'BrandsAdminUI.php',
-);
+
+
+/**
+ * Интерфейс управления брендами
+ *
+ * @package GoodsCatalog
+ */
+class GoodsCatalogBrandsAdminUI
+{
+	/**
+	 * Объект плагина
+	 *
+	 * @var GoodsCatalog
+	 */
+	private $plugin;
+
+	/**
+	 * Конструктор
+	 *
+	 * @param GoodsCatalog $plugin
+	 *
+	 * @return GoodsCatalogBrandsAI
+	 */
+	public function __construct(GoodsCatalog $plugin)
+	{
+		$this->plugin = $plugin;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает HTML интерфейса управления брендами
+	 *
+	 * @return string
+	 */
+	public function getHTML()
+	{
+		return '#';
+	}
+	//-----------------------------------------------------------------------------
+}

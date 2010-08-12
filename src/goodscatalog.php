@@ -8,8 +8,7 @@
  *
  * @copyright 2010, ООО "Два слона", http://dvaslona.ru/
  * @license http://www.gnu.org/licenses/gpl.txt	GPL License 3
- * @author Сергей Каспари <ghost@dvaslona.ru>
- * @author Timofey Finogenov
+ * @author Михаил Красильников <mk@3wstyle.ru>
  *
  * Данная программа является свободным программным обеспечением. Вы
  * вправе распространять ее и/или модифицировать в соответствии с
@@ -133,21 +132,19 @@ class GoodsCatalog extends ContentPlugin
 
 		parent::__construct();
 
-		if (!Core::getValue('core.template.templateDir'))
+		/* Настраиваем автозагрузку классов */
+		set_include_path(get_include_path() . PATH_SEPARATOR . $this->dirCode);
+		EresusClassAutoloader::add($this->dirCode . 'autoload.php');
+
+		/* В версии 2.13 надо настроить шаблонизатор */
+		if (version_compare(CMSVERSION, '2.13', '='))
 		{
 			Core::setValue('core.template.templateDir', $Eresus->froot);
-		}
-
-		if (!Core::getValue('core.template.compileDir'))
-		{
 			Core::setValue('core.template.compileDir', $Eresus->fdata . 'cache');
-		}
-
-		if (!Core::getValue('core.template.charset'))
-		{
 			Core::setValue('core.template.charset', 'windows-1251');
 		}
 
+		$this->listenEvents('adminOnMenuRender');
 	}
 	//-----------------------------------------------------------------------------
 
@@ -365,6 +362,40 @@ class GoodsCatalog extends ContentPlugin
 	//-----------------------------------------------------------------------------
 
 	/**
+	 * Добавляет пункта "Бренды" в меню "Расширения"
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	public function adminOnMenuRender()
+	{
+		$menuItem = array(
+			'access'  => EDITOR,
+			'link'  => $this->name . '&ref=brands',
+			'caption'  => 'Бренды',
+			'hint'  => 'Управление брендами'
+		);
+		$GLOBALS['page']->addMenuItem($this->title, $menuItem);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает контент дополнительных интерфейсов
+	 *
+	 * @return string  HTML
+	 *
+	 * @since 1.00
+	 */
+	public function adminRender()
+	{
+		$ui = new GoodsCatalogBrandsAdminUI($this);
+
+		return $ui->getHTML();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
 	 * Формирование HTML-кода АИ
 	 *
 	 * @return string  HTML
@@ -451,7 +482,6 @@ class GoodsCatalog extends ContentPlugin
 	}
 	//-----------------------------------------------------------------------------
 }
-
 
 
 
