@@ -2,7 +2,7 @@
 	<div class="title">Добавление товара</div>
 	<div class="content">
 
-		<form action="admin.php" method="post" enctype="multipart/form-data">
+		<form action="admin.php" method="post" enctype="multipart/form-data" id="catalogAddDialog">
 
 			<div class="hidden">
 				<input type="hidden" name="mod" value="content" />
@@ -101,7 +101,7 @@
 				<tr>
 					<td colspan="2" align="center">
 						<br />
-						<input type="submit" class="button" value="Добавить" onclick="formApplyClick('settings')" />
+						<input type="submit" class="button" value="Добавить" onclick="formApplyClick('catalogAddDialog')" />
 						<input type="button" class="button" value="Отменить" onclick="javascript:history.back();" />
 					</td>
 				</tr>
