@@ -14,7 +14,7 @@
 					<td class="formLabel">Показывать</td>
 					<td>
 						<input type="text" name="goodsPerPage" id="catalog-goodsPerPage-input"
-							value="{$this->settings.goodsPerPage}" maxlength="3" size="3" />
+							value="{$this->settings.goodsPerPage}" maxlength="3" size="3" class="number" />
 						товаров на одной странице
 					</td>
 				</tr>
@@ -73,15 +73,69 @@
 				<tr class="catalog-logoEnabled-related">
 					<td class="formLabel">Отступ</td>
 					<td>
-						<input type="text" name="logoVPadding" value="{$this->settings.logoVPadding}" maxlength="4" size="4"{if !$this->settings.logoEnabled} disabled="disabled"{/if} />
+						<input type="text" name="logoVPadding" value="{$this->settings.logoVPadding}" maxlength="4" size="4" class="number"{if !$this->settings.logoEnabled} disabled="disabled"{/if} />
 						точек по вертикали
 					</td>
 				</tr>
 				<tr class="catalog-logoEnabled-related">
 					<td class="formLabel">Отступ</td>
 					<td>
-						<input type="text" name="logoHPadding" value="{$this->settings.logoHPadding}" maxlength="4" size="4"{if !$this->settings.logoEnabled} disabled="disabled"{/if} />
+						<input type="text" name="logoHPadding" value="{$this->settings.logoHPadding}" maxlength="4" size="4" class="number"{if !$this->settings.logoEnabled} disabled="disabled"{/if} />
 						точек по горизонтали
+					</td>
+				</tr>
+
+				<tr><th colspan="2" class="formHeader">Фотографии товаров</th></tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="hidden" name="mainPhotoEnabled" value="" />
+						<label>
+							<input type="checkbox" name="mainPhotoEnabled" id="catalog-mainPhotoEnabled-input" value="1"{if $this->settings.mainPhotoEnabled} checked="checked"{/if} />
+							Включить Основную фотографию товара
+						</label>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="hidden" name="extPhotoEnabled" value="" />
+						<label>
+							<input type="checkbox" name="extPhotoEnabled" id="catalog-extPhotoEnabled-input" value="1"{if $this->settings.extPhotoEnabled} checked="checked"{/if} />
+							Включить Дополнительные фотографии товара
+						</label>
+					</td>
+				</tr>
+
+				<tr><th colspan="2" class="formHeader">Свойства фотографий</th></tr>
+				<tr class="catalog-photoEnabled-related">
+					<td class="formLabel">Макс. ширина</td>
+					<td>
+						<input type="text" name="photoMaxWidth" value="{$this->settings.photoMaxWidth}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotoEnabled} disabled="disabled"{/if} />
+						(точек)
+					</td>
+				</tr>
+				<tr class="catalog-photoEnabled-related">
+					<td class="formLabel">Макс. высота</td>
+					<td>
+						<input type="text" name="photoMaxHeight" value="{$this->settings.photoMaxHeight}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotoEnabled} disabled="disabled"{/if} />
+						(точек)
+					</td>
+				</tr>
+
+				<tr><th colspan="2" class="formHeader">Свойства миниатюр</th></tr>
+				<tr class="catalog-photoEnabled-related">
+					<td class="formLabel">Макс. ширина</td>
+					<td>
+						<input type="text" name="thumbWidth" value="{$this->settings.thumbWidth}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotoEnabled} disabled="disabled"{/if} />
+						(точек)
+					</td>
+				</tr>
+				<tr class="catalog-photoEnabled-related">
+					<td class="formLabel">Макс. высота</td>
+					<td>
+						<input type="text" name=thumbHeight" value="{$this->settings.thumbHeight}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotoEnabled} disabled="disabled"{/if} />
+						(точек)
 					</td>
 				</tr>
 
@@ -114,6 +168,26 @@
 			{
 				inputs.attr('disabled', 'disabled');
 			}
+		});
+		
+		jQuery("#catalog-mainPhotoEnabled-input,#catalog-extPhotoEnabled-input").click(function ()
+		{
+			var checks = jQuery("#catalog-mainPhotoEnabled-input,#catalog-extPhotoEnabled-input");
+			var inputs = jQuery("#catalog-settings-main .catalog-photoEnabled-related :input");
+			
+			for (var i = 0; i < checks.length; i++)
+			{
+				/* Если хотя бы один переключатель включен, активируем поля ввода */
+				if (checks.get(i).checked)
+				{
+					inputs.removeAttr('disabled');
+					return;
+				}
+			}
+
+			/* Если все переключатели выключены, деактивируем поля ввода */
+			inputs.attr('disabled', 'disabled');
+			
 		});
 		
 	});
