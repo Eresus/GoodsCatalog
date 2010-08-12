@@ -1,5 +1,6 @@
-#Thu Aug 12 14:45:01 MSD 2010
+#Thu Aug 12 15:22:11 MSD 2010
 eclipse.preferences.version=1
 encoding//src/goodscatalog.php=windows-1251
+encoding//src/goodscatalog/templates/goods-add.html=windows-1251
 encoding//src/goodscatalog/templates/goods-list.html=windows-1251
 encoding//src/goodscatalog/templates/settings.html=windows-1251

@@ -397,10 +397,17 @@ class GoodsCatalog extends ContentPlugin
 	{
 		switch (true)
 		{
+			case arg('action') == 'add':
+				$html = $this->adminAddGoodDialog();
+			break;
+
 			default:
 				$html = $this->adminRenderGoodsList();
 			break;
 		}
+
+		// Дополнительные стили
+		$GLOBALS['page']->linkStyles($this->urlCode . 'admin.css');
 
 		return $html;
 	}
@@ -425,7 +432,28 @@ class GoodsCatalog extends ContentPlugin
 		// Компилируем шаблон и данные
 		$html = $tmpl->compile($data);
 
-		$GLOBALS['page']->linkStyles($this->urlCode . 'admin.css');
+		return $html;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает диалог добавления товара
+	 *
+	 * @return string  HTML
+	 *
+	 * @since 1.00
+	 */
+	private function adminAddGoodDialog()
+	{
+		// Данные для подстановки в шаблон
+		$data = $this->adminGetTmplData();
+		$data['sectionId'] = arg('section', 'int');
+
+		// Создаём экземпляр шаблона
+		$tmpl = $this->adminGetTemplate('goods-add.html');
+
+		// Компилируем шаблон и данные
+		$html = $tmpl->compile($data);
 
 		return $html;
 	}
