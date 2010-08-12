@@ -354,13 +354,17 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function adminOnMenuRender()
 	{
-		$menuItem = array(
-			'access'  => EDITOR,
-			'link'  => $this->name . '&ref=brands',
-			'caption'  => 'Бренды',
-			'hint'  => 'Управление брендами'
-		);
-		$GLOBALS['page']->addMenuItem($this->title, $menuItem);
+		/* Добавляем пункт только если включена соответствующая опция */
+		if ($this->settings['brandsEnabled'])
+		{
+			$menuItem = array(
+				'access'  => EDITOR,
+				'link'  => $this->name . '&ref=brands',
+				'caption'  => 'Бренды',
+				'hint'  => 'Управление брендами'
+			);
+			$GLOBALS['page']->addMenuItem($this->title, $menuItem);
+		}
 	}
 	//-----------------------------------------------------------------------------
 
@@ -373,6 +377,13 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function adminRender()
 	{
+		if ($this->settings['brandsEnabled'] == false)
+		{
+			return ErrorBox('Функционал управления брендами отключен. ' .
+				'Вы можете включить его в <a href="admin.php?mod=plgmgr&id=' . $this->name .
+				'">настройках</a>.');
+		}
+
 		$ui = new GoodsCatalogBrandsAdminUI($this);
 
 		return $ui->getHTML();
