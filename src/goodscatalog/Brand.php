@@ -2,7 +2,7 @@
 /**
  * Каталог товаров
  *
- * Таблица автозагрузки классов
+ * ActiveRecord бренда
  *
  * @version ${product.version}
  *
@@ -30,11 +30,61 @@
  *
  * $Id$
  */
-return array(
-	'GoodsCatalogHelper' => 'Helper.php',
-	'GoodsCatalogAbstractActiveRecord' => 'AbstractActiveRecord.php',
-	'GoodsCatalogBrand' => 'Brand.php',
-	'GoodsCatalogGood' => 'Good.php',
-	'GoodsCatalogGoodsAdminUI' => 'GoodsAdminUI.php',
-	'GoodsCatalogBrandsAdminUI' => 'BrandsAdminUI.php',
-);
+
+
+/**
+ * ActiveRecord бренда
+ *
+ * @property string $title        Название
+ * @property bool   $active       Активность бренда
+ * @property string $description  Описание бренда
+ *
+ * @package GoodsCatalog
+ */
+class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
+{
+	/**
+	 * Метод возвращает имя таблицы БД
+	 *
+	 * @return string  Имя таблицы БД
+	 *
+	 * @since 1.00
+	 */
+	protected function getTableName()
+	{
+		return 'brands';
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Метод возвращает список полей записи и их атрибуты
+	 *
+	 * @return array
+	 *
+	 * @since 1.00
+	 */
+	protected function getFieldAttrs()
+	{
+		return array(
+			'id' => array(
+				'type' => 'int',
+			),
+			'active' => array(
+				'type' => 'bool',
+			),
+			'title' => array(
+				'type' => 'string',
+				'maxlength' => 4,
+			),
+			'description' => array(
+				'type' => 'string'
+			),
+			'ext' => array(
+				'type' => 'string',
+				'maxlength' => 4,
+			),
+		);
+	}
+	//-----------------------------------------------------------------------------
+
+}
