@@ -21,6 +21,39 @@
 		<mkdir dir="${build.dir}" />
 
 		<!--
+			Run unit tests
+		-->
+		<if>
+			<istrue value="${phpunit}" />
+			<then>
+			
+				<!-- coverage-setup database="${build.dir}/coverage.db">
+					<fileset dir="src">
+						<include name="**/*.php"/>
+					</fileset>
+				</coverage-setup -->
+			
+				<phpunit haltonfailure="true" haltonerror="true">
+					<formatter
+						type="${phpunit.format}"
+						usefile="${phpunit.save}"
+						outfile="${phpunit.output}"
+					/>
+					<batchtest name="AllTests">
+						<fileset dir="tests">
+							<include name="**/*Test.php" />
+						</fileset>
+					</batchtest>
+				</phpunit>
+				
+				<!-- coverage-report outfile="${build.dir}/coverage.xml">
+					<report todir="${build.dir}" styledir="/usr/share/php5/PEAR/data/phing/etc"/>
+				</coverage-report -->
+				
+			</then>
+		</if>
+		
+		<!--
 			Check sources for bad code
 		-->
 		<if>
