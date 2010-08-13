@@ -72,6 +72,10 @@ class GoodsCatalogBrandsAdminUI
 				$html = $this->renderAddDialog();
 			break;
 
+			case arg('action') == 'insert':
+				$this->addItem();
+			break;
+
 			default:
 				$html = $this->renderList();
 			break;
@@ -139,6 +143,24 @@ class GoodsCatalogBrandsAdminUI
 		$html = $tmpl->compile($data);
 
 		return $html;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Добавляет бренд
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	private function addItem()
+	{
+		$brand = new GoodsCatalogBrand($this->plugin);
+		$brand->title = arg('title');
+		$brand->active = true;
+		$brand->description = arg('description');
+		$brand->save();
+		die(strval(time()));
 	}
 	//-----------------------------------------------------------------------------
 }

@@ -3,4 +3,5 @@
 	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
 	<buildpathentry kind="src" path=""/>
 	<buildpathentry combineaccessrules="false" kind="prj" path="/eresus-cms-stable"/>
+	<buildpathentry kind="con" path="org.eclipse.dltk.USER_LIBRARY/PHPUnit"/>
 </buildpath>
