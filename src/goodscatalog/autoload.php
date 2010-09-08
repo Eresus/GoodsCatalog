@@ -30,11 +30,14 @@
  *
  * $Id$
  */
+
+$dir = dirname(__FILE__);
+
 return array(
-	'GoodsCatalogHelper' => 'Helper.php',
-	'GoodsCatalogAbstractActiveRecord' => 'AbstractActiveRecord.php',
-	'GoodsCatalogBrand' => 'Brand.php',
-	'GoodsCatalogGood' => 'Good.php',
-	'GoodsCatalogGoodsAdminUI' => 'GoodsAdminUI.php',
-	'GoodsCatalogBrandsAdminUI' => 'BrandsAdminUI.php',
+	'GoodsCatalogHelper' => $dir . '/classes/Helper.php',
+	'GoodsCatalogAbstractActiveRecord' => $dir . '/classes/AbstractActiveRecord.php',
+	'GoodsCatalogBrand' => $dir . '/classes/Brand.php',
+	'GoodsCatalogGood' => $dir . '/classes/Good.php',
+	'GoodsCatalogGoodsAdminUI' => $dir . '/classes/GoodsAdminUI.php',
+	'GoodsCatalogBrandsAdminUI' => $dir . '/classes/BrandsAdminUI.php',
 );

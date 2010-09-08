@@ -49,30 +49,6 @@ form table th
 }
 
 
-/**
- * Переключатель страниц
- */
-.pages
-{
-	margin: .3em .5em;
-}
-	/**
-	 * Обычные страницы
-	 */
-	.pages a
-	{
-		font-weight: bold;
-	}
-	/**
-	 * Текущая страница
-	 */
-	.pages b
-	{
-		background-color: #007acc;
-		color: #ffd700;
-		padding: 0 2px;
-	}
-
 .catalog-settings-logoPosition
 {
 	background-color: #fff;
@@ -83,4 +59,23 @@ form table th
 	{
 		margin: 2px;
 		padding: 0;
+	}
+
+/**
+ * Отдельный бренд в списке управления брендами
+ */
+.brand-list-item
+{
+	background-color: #fff;
+	padding: .1em 1em;
+}
+
+	.brand-list-item:hover
+	{
+		background-color: #def;
+	}
+	
+	.brand-list-item .controls
+	{
+		margin-top: .5em;
 	}
