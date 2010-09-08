@@ -36,6 +36,8 @@
  * Абстрактная реализация паттерна ActiveRecord
  *
  * @package GoodsCatalog
+ *
+ * @since 1.00
  */
 abstract class GoodsCatalogAbstractActiveRecord
 {
@@ -43,61 +45,70 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 * Объект плагина
 	 *
 	 * @var GoodsCatalog
+	 * @since 1.00
 	 */
-	private $plugin;
-
-	/**
-	 * Свойства полей
-	 *
-	 * @var array
-	 */
-	private $attrs;
+	private static $plugin;
 
 	/**
 	 * Значения полей
 	 *
 	 * @var array
+	 * @since 1.00
 	 */
 	private $rawData = array();
+
+	/**
+	 * Кэш значений свойств
+	 *
+	 * @var array
+	 * @since 1.00
+	 */
+	private $propertyCache = array();
 
 	/**
 	 * Признак новой записи
 	 *
 	 * @var bool
+	 * @since 1.00
 	 */
 	private $isNew = true;
 
 	/**
 	 * Конструктор
 	 *
-	 * @param GoodsCatalog $plugin
+	 * @param int $id  Идентификатор
 	 *
 	 * @return GoodsCatalogAbstractActiveRecord
+	 *
+	 * @since 1.00
 	 */
-	public function __construct(GoodsCatalog $plugin)
+	public function __construct($id = null)
 	{
-		$this->plugin = $plugin;
-		$this->attrs = $this->getFieldAttrs();
+		eresus_log(array(__METHOD__, get_class($this)), LOG_DEBUG, '(%s)', $id);
+		if ($id !== null)
+		{
+			$this->loadById($id);
+		}
 	}
 	//-----------------------------------------------------------------------------
 
 	/**
 	 * Метод должен возвращать имя таблицы БД
 	 *
-	 * @return string  Имя таблицы БД
+	 * @return string
 	 *
 	 * @since 1.00
 	 */
-	abstract protected function getTableName();
+	abstract public function getTableName();
 	//-----------------------------------------------------------------------------
 
 	/**
 	 * Метод должен возвращать список полей записи и их атрибуты
 	 *
-	 * Результат должен быть ассоциативным массивом, где ключами выступают имена полей, а значениями
+	 * Значение должно быть ассоциативным массивом, где ключами выступают имена полей, а значениями
 	 * массивы атрибутов этих полей. Возможны следующие атрибуты:
 	 *
-	 * - type - Тип поля: string, int, float, bool
+	 * - type - Тип поля: PDO::PARAM_STR, PDO::PARAM_INT, PDO::PARAM_BOOL
 	 * - pattern - PCRE для проверки значения
 	 * - maxlength - Для строковых полей, максимальное количество символов
 	 *
@@ -105,7 +116,42 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 *
 	 * @since 1.00
 	 */
-	abstract protected function getFieldAttrs();
+	abstract public function getAttrs();
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает полное имя таблицы (плагин_таблица)
+	 *
+	 * @return string
+	 *
+	 * @since 1.00
+	 */
+	public function getDbTable()
+	{
+		return self::plugin()->name . '_' . $this->getTableName();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает полное имя таблицы (для статических вызовов)
+	 *
+	 * @param string $className  Имя класса, потомка GoodsCatalogAbstractActiveRecord, для которого
+	 *                           надо получить имя таблицы
+	 * @return string
+	 *
+	 * @since 1.00
+	 */
+	public static function getDbTableStatic($className)
+	{
+		$stub = new $className();
+
+		if (!($stub instanceof GoodsCatalogAbstractActiveRecord))
+		{
+			throw new EresusTypeException();
+		}
+
+		return $stub->getDbTable();
+	}
 	//-----------------------------------------------------------------------------
 
 	/**
@@ -120,7 +166,286 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 */
 	public function __get($key)
 	{
-		if (!isset($this->attrs[$key]))
+		$getter = 'get' . $key;
+		if (method_exists($this, $getter))
+		{
+			return $this->$getter();
+		}
+
+		return $this->getProperty($key);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Задаёт значение поля
+	 *
+	 * @param string $key    Имя поля
+	 * @param mixed  $value  Значение поля
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	public function __set($key, $value)
+	{
+		$setter = 'set' . $key;
+		if (method_exists($this, $setter))
+		{
+			$this->$setter($value);
+		}
+		else
+		{
+			$this->setProperty($key, $value);
+		}
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает TRUE если эта запись ещё не добавлена в БД
+	 *
+	 * @return bool
+	 *
+	 * @since 1.00
+	 */
+	public function isNew()
+	{
+		return $this->isNew;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Сохраняет изменения в БД
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	public function save()
+	{
+		eresus_log(__METHOD__, LOG_DEBUG, '()');
+
+		$db = DB::getHandler();
+		if ($this->isNew())
+		{
+			$q = $db->createInsertQuery();
+			$q->insertInto($this->getDbTable());
+		}
+		else
+		{
+			$q = $db->createUpdateQuery();
+			$q->update($this->getDbTable())
+				->where($q->expr->eq('id', $q->bindValue($this->id,null, PDO::PARAM_INT)));
+		}
+
+		foreach ($this->attrs as $key => $attrs)
+		{
+			if (isset($this->rawData[$key]))
+			{
+				$q->set($key, $q->bindValue($this->rawData[$key], null, $attrs['type']));
+			}
+		}
+
+		DB::execute($q);
+
+		if ($this->isNew())
+		{
+			$this->id = $db->lastInsertId();
+		}
+
+		$this->isNew = false;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Удаляет запись
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	public function delete()
+	{
+		eresus_log(__METHOD__, LOG_DEBUG, '()');
+
+		$db = DB::getHandler();
+		if (!$this->isNew())
+		{
+			$q = $db->createDeleteQuery();
+			$q->deleteFrom($this->getDbTable())
+				->where($q->expr->eq('id', $q->bindValue($this->id,null, PDO::PARAM_INT)));
+
+			DB::execute($q);
+		}
+
+		$this->isNew = true;
+		$this->rawData = array();
+		$this->propertyCache = array();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Перемещает объект вверх по списку
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	public function moveUp()
+	{
+		if ($this->position == 0)
+		{
+			return;
+		}
+
+		$q = DB::getHandler()->createSelectQuery();
+		$e = $q->expr;
+		$q->select('*')->from($this->getDbTable())
+			->where($e->lAnd(
+				$e->eq('section', $q->bindValue($this->section, null, PDO::PARAM_INT)),
+				$e->lt('position', $q->bindValue($this->position, null, PDO::PARAM_INT))
+			))
+			->orderBy('position', ezcQuerySelect::DESC)
+			->limit(1);
+
+		$raw = DB::fetch($q);
+
+		if (!$raw)
+		{
+			return;
+		}
+
+		$class = get_class($this);
+		$swap = new $class;
+		$swap->loadFromArray($raw);
+
+		$pos = $this->position;
+		$this->position = $swap->position;
+		$swap->position = $pos;
+		$swap->save();
+		$this->save();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Перемещает объект вниз по списку
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	public function moveDown()
+	{
+		$q = DB::getHandler()->createSelectQuery();
+		$e = $q->expr;
+		$q->select('*')->from($this->getDbTable())
+			->where($e->lAnd(
+				$e->eq('section', $q->bindValue($this->section, null, PDO::PARAM_INT)),
+				$e->gt('position', $q->bindValue($this->position, null, PDO::PARAM_INT))
+			))
+			->orderBy('position', ezcQuerySelect::ASC)
+			->limit(1);
+
+		$raw = DB::fetch($q);
+
+		if (!$raw)
+		{
+			return;
+		}
+
+		$class = get_class($this);
+		$swap = new $class;
+		$swap->loadFromArray($raw);
+
+		$pos = $this->position;
+		$this->position = $swap->position;
+		$swap->position = $pos;
+		$swap->save();
+		$this->save();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает экземпляр основного класса плгина
+	 *
+	 * @param GoodsCatalog $plugin[optional]  Использовать этот экземпляр вместо автоопределения.
+	 *                                    Для модульных тестов.
+	 * @return GoodsCatalog
+	 *
+	 * @since 1.00
+	 */
+	protected static function plugin($plugin = null)
+	{
+		if ($plugin)
+		{
+			self::$plugin = $plugin;
+		}
+
+		if (!self::$plugin)
+		{
+			self::$plugin = $GLOBALS['Eresus']->plugins->load('goodscatalog');
+		}
+		return self::$plugin;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Устанавливает значение свойства
+	 *
+	 * Метод не инициирует вызов сеттеров, но обрабатывает значение фильтрами
+	 *
+	 * @param string $key    Имя свойства
+	 * @param mixed  $value  Значение
+	 * @return void
+	 *
+	 * @throws EresusPropertyNotExistsException
+	 * @since 1.00
+	 */
+	protected function setProperty($key, $value)
+	{
+		$attrs = $this->getAttrs();
+		if (!isset($attrs[$key]))
+		{
+			throw new EresusPropertyNotExistsException($key, get_class($this));
+		}
+
+		switch ($attrs[$key]['type'])
+		{
+			case PDO::PARAM_BOOL:
+				$value = $this->filterBool($value);
+			break;
+
+			case PDO::PARAM_INT:
+				$value = $this->filterInt($value);
+			break;
+
+			case PDO::PARAM_STR:
+				$value = $this->filterString($value, $attrs[$key]);
+			break;
+
+			default:
+				throw new EresusTypeException();
+			break;
+		}
+
+		$this->propertyCache[$key] = $this->rawData[$key] = $value;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает значение свойства
+	 *
+	 * Метод не инициирует вызов геттеров
+	 *
+	 * @param string $key  Имя свойства
+	 * @return mixed
+	 *
+	 * @throws EresusPropertyNotExistsException
+	 * @since 1.00
+	 */
+	protected function getProperty($key)
+	{
+		$attrs = $this->getAttrs();
+		if (!isset($attrs[$key]))
 		{
 			throw new EresusPropertyNotExistsException($key, get_class($this));
 		}
@@ -135,43 +460,46 @@ abstract class GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Задаёт значение поля
+	 * Загружает свойства из массива
 	 *
-	 * @param string $key    Имя поля
-	 * @param mixed  $value  Значение поля
-	 *
+	 * @param array $raw
 	 * @return void
 	 *
-	 * @throws EresusPropertyNotExistsException
 	 * @since 1.00
 	 */
-	public function __set($key, $value)
+	protected function loadFromArray($raw)
 	{
-		if (!isset($this->attrs[$key]))
+		$this->rawData = $raw;
+		$this->isNew = false;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Загружает запись из БД по её идентификатору
+	 *
+	 * @param int $id
+	 * @return void
+	 *
+	 * @throws DBQueryException
+	 * @since 1.00
+	 */
+	protected function loadById($id)
+	{
+		$db = DB::getHandler();
+		$q = $db->createSelectQuery();
+		$q->select('*')
+			->from($this->getDbTable())
+			->where($q->expr->eq('id', $q->bindValue($id,null, PDO::PARAM_INT)))
+			->limit(1);
+
+		$this->rawData = DB::fetch($q);
+
+		if (!$this->rawData)
 		{
-			throw new EresusPropertyNotExistsException($key, get_class($this));
+			throw new DomainException("Brand(#$id) not found");
 		}
 
-		switch ($this->attrs[$key]['type'])
-		{
-			case PDO::PARAM_BOOL:
-				$value = $this->filterBool($value);
-			break;
-
-			case PDO::PARAM_INT:
-				$value = $this->filterInt($value);
-			break;
-
-			case PDO::PARAM_STR:
-				$value = $this->filterString($value, $this->attrs[$key]);
-			break;
-
-			default:
-				throw new EresusTypeException();
-			break;
-		}
-
-		$this->rawData[$key] = $value;
+		$this->isNew = false;
 	}
 	//-----------------------------------------------------------------------------
 
@@ -225,47 +553,4 @@ abstract class GoodsCatalogAbstractActiveRecord
 	}
 	//-----------------------------------------------------------------------------
 
-	/**
-	 * Возвращает TRUE если эта запись ещё не добавлена в БД
-	 *
-	 * @return bool
-	 *
-	 * @since 1.00
-	 */
-	public function isNew()
-	{
-		return $this->isNew;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Сохраняет изменения в БД
-	 *
-	 * @return void
-	 *
-	 * @since 1.00
-	 */
-	public function save()
-	{
-		if ($this->isNew())
-		{
-			$q = DB::getHandler()->createInsertQuery();
-			$q->insertInto($this->plugin->name . '_' . $this->getTableName());
-		}
-
-		foreach ($this->attrs as $key => $attrs)
-		{
-			if (isset($this->rawData[$key]))
-			{
-				$q->set($key, $q->bindValue($this->rawData[$key], null, $attrs['type']));
-			}
-		}
-
-		DB::execute($q);
-
-		$this->id = $GLOBALS['Eresus']->db->getInsertedID();
-
-		$this->isNew = false;
-	}
-	//-----------------------------------------------------------------------------
 }

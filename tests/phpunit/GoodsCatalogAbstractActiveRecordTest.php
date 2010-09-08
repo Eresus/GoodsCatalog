@@ -32,7 +32,8 @@
  * $Id$
  */
 
-include_once dirname(__FILE__) . '/../../src/goodscatalog/AbstractActiveRecord.php';
+include_once dirname(__FILE__) . '/helpers.php';
+include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/AbstractActiveRecord.php';
 
 /**
  * @package GoodsCatalog
@@ -40,12 +41,53 @@ include_once dirname(__FILE__) . '/../../src/goodscatalog/AbstractActiveRecord.p
  */
 class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 {
+	private $fixture;
+
 	/**
 	 * Setup test enviroment
 	 */
 	protected function setUp()
 	{
-		$this->fixture = new GoodsCatalogAbstractActiveRecord_Stub(new GoodsCatalog());
+		// @codeCoverageIgnoreStart
+		$this->fixture = new GoodsCatalogAbstractActiveRecordTest_Stub();
+		// @codeCoverageIgnoreEnd
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем метод getDbTable
+	 * @covers GoodsCatalogAbstractActiveRecord::getDbTable
+	 */
+	public function testGetDbTable()
+	{
+		$GLOBALS['Eresus'] = new stdClass();
+		$GLOBALS['Eresus']->plugins = new PluginsStub();
+
+		$this->assertEquals('GoodsCatalog_mytable', $this->fixture->getDbTable());
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем метод getDbTableStatic
+	 * @covers GoodsCatalogAbstractActiveRecord::getDbTableStatic
+	 */
+	public function testGetDbTableStatic()
+	{
+		$GLOBALS['Eresus'] = new stdClass();
+		$GLOBALS['Eresus']->plugins = new PluginsStub();
+
+		$this->assertEquals('GoodsCatalog_mytable', GoodsCatalogAbstractActiveRecordTest_Stub::getDbTableStatic('GoodsCatalogAbstractActiveRecordTest_Stub'));
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем метод getDbTableStatic
+	 * @covers GoodsCatalogAbstractActiveRecord::getDbTableStatic
+	 * @expectedException EresusTypeException
+	 */
+	public function testGetDbTableStatic_fail()
+	{
+		$this->assertEquals('GoodsCatalog_mytable', GoodsCatalogAbstractActiveRecordTest_Stub::getDbTableStatic('stdClass'));
 	}
 	//-----------------------------------------------------------------------------
 
@@ -155,32 +197,51 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	}
 	//-----------------------------------------------------------------------------
 
+	/**
+	 * Проверяем вызов сеттера
+	 *
+	 */
+	public function testCallSetter()
+	{
+		$this->fixture->int2 = 123;
+		$this->assertTrue($this->fixture->_success);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем вызов геттера
+	 *
+	 */
+	public function testCallGetter()
+	{
+		$this->assertEquals(123, $this->fixture->int2);
+	}
+	//-----------------------------------------------------------------------------
+
 	/* */
 }
+
+/*******************************************************************************
+ *
+ * ЗАГЛУШКИ
+ *
+ *******************************************************************************/
 
 /**
  * @package GoodsCatalog
  * @subpackage Tests
  */
-class GoodsCatalogAbstractActiveRecord_Stub extends GoodsCatalogAbstractActiveRecord
+class GoodsCatalogAbstractActiveRecordTest_Stub extends GoodsCatalogAbstractActiveRecord
 {
-	/**
-	 * Метод возвращает имя таблицы БД
-	 *
-	 * @return string  Имя таблицы БД
-	 */
-	protected function getTableName()
+	public $_success = false;
+
+	public function getTableName()
 	{
-		return 'brands';
+		return 'mytable';
 	}
 	//-----------------------------------------------------------------------------
 
-	/**
-	 * Метод возвращает список полей записи и их атрибуты
-	 *
-	 * @return array
-	 */
-	protected function getFieldAttrs()
+	public function getAttrs()
 	{
 		return array(
 			'unsupported' => array('type' => null),
@@ -190,38 +251,23 @@ class GoodsCatalogAbstractActiveRecord_Stub extends GoodsCatalogAbstractActiveRe
 		);
 	}
 	//-----------------------------------------------------------------------------
-}
 
-
-
-/**
- * @package GoodsCatalog
- * @subpackage Tests
- */
-class GoodsCatalog
-{
-}
-
-/**
- * @package GoodsCatalog
- * @subpackage Tests
- */
-class EresusPropertyNotExistsException extends Exception
-{
-	function __construct($property = null, $class = null, $description = null, $previous = null)
+	protected function setInt2()
 	{
+		$this->_success = true;
+	}
+	//-----------------------------------------------------------------------------
+
+	protected function getInt2()
+	{
+		return 123;
 	}
 	//-----------------------------------------------------------------------------
 }
 
-/**
- * @package GoodsCatalog
- * @subpackage Tests
- */
-class EresusTypeException extends Exception
+
+function eresus_log()
 {
-	function __construct($var = null, $expectedType = null, $description = null, $previous = null)
-	{
-	}
-	//-----------------------------------------------------------------------------
+	;
 }
+//-----------------------------------------------------------------------------

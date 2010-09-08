@@ -48,7 +48,7 @@ class GoodsCatalog extends ContentPlugin
 	 * Требуемая версия ядра
 	 * @var string
 	 */
-	public $kernel = '2.14b';
+	public $kernel = '2.14';
 
 	/**
 	 * Название плагина
@@ -61,12 +61,6 @@ class GoodsCatalog extends ContentPlugin
 	 * @var string
 	 */
 	public $description = 'Простой каталог товаров';
-
-	/**
-	 * Тип плагина
-	 * @var string
-	 */
-	public $type = 'client,admin,content';
 
 	/**
 	 * Настройки плагина
@@ -130,8 +124,7 @@ class GoodsCatalog extends ContentPlugin
 	{
 		parent::__construct();
 
-		/* Настраиваем автозагрузку классов */
-		set_include_path(get_include_path() . PATH_SEPARATOR . $this->dirCode);
+		// Настраиваем автозагрузку классов
 		EresusClassAutoloader::add($this->dirCode . 'autoload.php');
 
 		$this->listenEvents('adminOnMenuRender');

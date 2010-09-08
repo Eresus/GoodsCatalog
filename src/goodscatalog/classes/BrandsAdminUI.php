@@ -76,6 +76,10 @@ class GoodsCatalogBrandsAdminUI
 				$this->addItem();
 			break;
 
+			case arg('toggle'):
+				$this->toggleItem();
+			break;
+
 			default:
 				$html = $this->renderList();
 			break;
@@ -97,8 +101,31 @@ class GoodsCatalogBrandsAdminUI
 	 */
 	private function renderList()
 	{
+		global $page;
+
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
+
+		/* Шаблоны адресов действий */
+		$data['urlEdit'] = str_replace('&', '&amp;', $page->url(array('id' => '%s')));
+		$data['urlToggle'] = str_replace('&', '&amp;', $page->url(array('toggle' => '%s')));
+		$data['urlDelete'] = str_replace('&', '&amp;', $page->url(array('delete' => '%s')));
+
+		// Определяем текущую страницу списка
+		$pg = arg('pg') ? arg('pg', 'int') : 1;
+		$maxCount = 10;
+		$startFrom = ($pg - 1) * $maxCount;
+
+		$data['brands'] = GoodsCatalogBrand::find($maxCount, $startFrom);
+		$totalPages = ceil(GoodsCatalogBrand::count() / $maxCount);
+		if ($totalPages > 1)
+		{
+			$data['pagination'] = new PaginationHelper($totalPages, $pg, $page->url(array('pg' => '%s')));
+		}
+		else
+		{
+			$data['pagination'] = null;
+		}
 
 		// Создаём экземпляр шаблона
 		$tmpl = $this->plugin->getHelper()->getAdminTemplate('brands-list.html');
@@ -107,6 +134,33 @@ class GoodsCatalogBrandsAdminUI
 		$html = $tmpl->compile($data);
 
 		return $html;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Переключает активность бренда
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	private function toggleItem()
+	{
+		$id = arg('toggle', 'int');
+
+		try
+		{
+			$brand = new GoodsCatalogBrand($id);
+			$brand->active = ! $brand->active;
+			$brand->save();
+		}
+		catch (DomainException $e)
+		{
+			ErrorMessage(iconv('utf8', 'cp1251', 'Неправильный адрес'));
+			$e = $e; // PHPMD hack
+		}
+
+		HTTP::goback();
 	}
 	//-----------------------------------------------------------------------------
 
@@ -156,11 +210,25 @@ class GoodsCatalogBrandsAdminUI
 	 */
 	private function addItem()
 	{
-		$brand = new GoodsCatalogBrand($this->plugin);
+		$brand = new GoodsCatalogBrand();
 		$brand->title = arg('title');
 		$brand->active = true;
 		$brand->description = arg('description');
-		$brand->save();
+		$brand->logo = 'logo'; // $_FILES['image'];
+		try
+		{
+			$brand->save();
+		}
+		catch (EresusRuntimeException $e)
+		{
+			ErrorMessage($e->getMessage());
+		}
+		catch (Exception $e)
+		{
+			Core::logException($e);
+			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при добавлении бренда.'));
+		}
+
 		HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');
 	}
 	//-----------------------------------------------------------------------------

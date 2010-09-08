@@ -78,7 +78,7 @@ class GoodsCatalogGoodsAdminUI
 		}
 
 		// Дополнительные стили
-		$GLOBALS['page']->linkStyles($this->plugin->urlCode . 'admin.css');
+		$GLOBALS['page']->linkStyles($this->plugin->getCodeURL() . 'admin.css');
 
 		return $html;
 	}

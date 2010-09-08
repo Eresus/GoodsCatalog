@@ -35,14 +35,35 @@
 /**
  * ActiveRecord бренда
  *
- * @property string $title        Название
- * @property bool   $active       Активность бренда
- * @property string $description  Описание бренда
+ * @property       string $title        Название
+ * @property       bool   $active       Активность бренда
+ * @property       string $description  Описание бренда
+ * @property-read  string $logoPath     Путь к файлу логотипа
+ * @property-write string $logo
  *
  * @package GoodsCatalog
  */
 class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 {
+	/**
+	 * Список поддерживаемых форматов
+	 * @var array
+	 */
+	private $supportedFormats = array(
+		'image/jpeg',
+		'image/jpg',
+		'image/pjpeg',
+		'image/png',
+		'image/gif',
+	);
+
+	/**
+	 * Описание файла для загрузки
+	 *
+	 * @var array
+	 */
+	private $upload;
+
 	/**
 	 * Метод возвращает имя таблицы БД
 	 *
@@ -50,7 +71,7 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	 *
 	 * @since 1.00
 	 */
-	protected function getTableName()
+	public function getTableName()
 	{
 		return 'brands';
 	}
@@ -63,7 +84,7 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	 *
 	 * @since 1.00
 	 */
-	protected function getFieldAttrs()
+	public function getAttrs()
 	{
 		return array(
 			'id' => array(
@@ -87,4 +108,228 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	}
 	//-----------------------------------------------------------------------------
 
+	/**
+	 * Сохраняет изменения в БД
+	 *
+	 * @return void
+	 *
+	 * @uses serveUpload
+	 * @since 1.00
+	 */
+	public function save()
+	{
+		eresus_log(__METHOD__, LOG_DEBUG, '()');
+
+		// Запоминаем состояние isNew, потому что флаг будет сброшен в parent::save()
+		$wasNew = $this->isNew();
+		// Записываем в БД чтобы получить идентификатор для использования в имени файла
+		parent::save();
+
+		if ($this->upload)
+		{
+			try
+			{
+				$this->serveUpload();
+			}
+			catch (Exception $e)
+			{
+				if ($wasNew)
+				{
+					$this->delete();
+				}
+				throw $e;
+			}
+		}
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Считает количество брендов
+	 *
+	 * @param bool $activeOnly[optional]  Считать только активные или все
+	 *
+	 * @return int
+	 *
+	 * @since 1.00
+	 */
+	public static function count($activeOnly = false)
+	{
+		eresus_log(__METHOD__, LOG_DEBUG, '()');
+
+		$q = DB::getHandler()->createSelectQuery();
+		$q->select('count(DISTINCT id) as `count`')
+			->from(self::getDbTableStatic(__CLASS__));
+
+		if ($activeOnly)
+		{
+			$e = $q->expr;
+			$q->where($e->eq('active', $q->bindValue(true, null, PDO::PARAM_BOOL)));
+		}
+
+		$result = DB::fetch($q);
+		return $result['count'];
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Выбирает бренды из БД
+	 *
+	 * @param int              $limit[optional]       Вернуть не более $limit брендов
+	 * @param int              $offset[optional]      Пропустить $offset первых брендов
+	 * @param bool             $activeOnly[optional]  Искать только активные бренды
+	 *
+	 * @return array(GoodsCatalogBrand)
+	 *
+	 * @since 1.00
+	 */
+	public static function find($limit = null, $offset = null, $activeOnly = false)
+	{
+		eresus_log(__METHOD__, LOG_DEBUG, '(%d, %d, %d)', $limit, $offset, $activeOnly);
+
+		$q = DB::getHandler()->createSelectQuery();
+
+		if ($activeOnly)
+		{
+			$e = $q->expr;
+			$q->where($e->eq('active', $q->bindValue(true, null, PDO::PARAM_BOOL)));
+		}
+
+		$result = self::load($q, $limit, $offset);
+
+		return $result;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Сеттер свойства $logo
+	 *
+	 * @param string $value
+	 * //param array $value
+	 */
+	protected function setLogo($value)
+	{
+		$this->upload = $value;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Геттер свойства $logoPath
+	 *
+	 * @return string
+	 *
+	 * @since 1.00
+	 */
+	protected function getLogoPath()
+	{
+		return self::plugin()->getDataDir() . 'brands/' . $this->id . '.' . $this->ext;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Выбирает бренды из БД
+	 *
+	 * @param ezcQuerySelect $query             Запрос
+	 * @param int            $limit[optional]   Вернуть не более $limit брендов
+	 * @param int            $offset[optional]  Пропустить $offset первых брендов
+	 *
+	 * @return array(GoodsCatalogBrand)
+	 *
+	 * @since 1.00
+	 */
+	private static function load($query, $limit = null, $offset = null)
+	{
+		eresus_log(__METHOD__, LOG_DEBUG, '("%s", %d, %d)', $query, $limit, $offset);
+
+		$query->select('*')->from(self::getDbTableStatic(__CLASS__))
+			->orderBy('title');
+
+		if ($limit !== null)
+		{
+			if ($offset !== null)
+			{
+				$query->limit($limit, $offset);
+			}
+			else
+			{
+				$query->limit($limit);
+			}
+
+		}
+
+		$raw = DB::fetchAll($query);
+		$result = array();
+		if (count($raw))
+		{
+			foreach ($raw as $item)
+			{
+				$image = new GoodsCatalogBrand();
+				$image->loadFromArray($item);
+				$result []= $image;
+			}
+		}
+
+		return $result;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Обслуживает загрузку изображения
+	 *
+	 * @return void
+	 *
+	 * @throws EresusRuntimeException Если формат файла не поддерживается
+	 * @throws EresusFsRuntimeException Если загрузка не удалась
+	 * @since 1.07
+	 */
+	private function serveUpload()
+	{
+		$fileInfo = $_FILES[$this->upload];
+		if ($fileInfo['error'] == UPLOAD_ERR_NO_FILE)
+		{
+			return;
+		}
+
+		$this->ext = strtolower(substr(strrchr($fileInfo['name'], '.'), 1));
+
+		if (!in_array($fileInfo['type'], $this->supportedFormats))
+		{
+			throw new EresusRuntimeException("Unsupported file type: {$fileInfo['type']}",
+				iconv('utf8', 'cp1251', "Неподдерживаемый тип файла: {$fileInfo['type']}."));
+		}
+
+		if (!upload($this->upload, $this->logoPath))
+		{
+			throw new EresusFsRuntimeException();
+		}
+
+		useLib('glib');
+
+		/*
+		 * Если изображение слишком больше - уменьшаем
+		 */
+		$info = @getimagesize($this->logoPath);
+		if (
+			$info[0] > self::plugin()->settings['brandLogoMaxWidth'] ||
+			$info[1] > self::plugin()->settings['brandLogoMaxHeight']
+		)
+		{
+			$oldName = $this->logoPath;
+			$this->ext = 'jpg';
+			thumbnail(
+				$oldName,
+				$this->logoPath,
+				self::plugin()->settings['brandLogoMaxWidth'],
+				self::plugin()->settings['brandLogoMaxHeight']
+			);
+			if ($oldName != $this->logoPath)
+			{
+				filedelete($oldName);
+			}
+		}
+
+		$this->upload = null;
+
+		parent::save();
+	}
+	//-----------------------------------------------------------------------------
 }
