@@ -1,5 +1,5 @@
-<div class="window" style="width: 600px; float: left;">
-	<div class="title">Добавление бренда</div>
+<div class="box ui-widget-content" style="min-width: 600px; float:left">
+	<div class="header">Добавление бренда</div>
 	<div class="content">
 
 		<form action="admin.php" method="post" enctype="multipart/form-data" id="catalogAddDialog">
@@ -30,27 +30,23 @@
 					</td>
 					<td>
 						<input type="file" name="photo" id="catalog-logo-input" />
-						<div class="minor">Формат JPEG, PNG или GIF. Размер файла не более {ini_get('upload_max_filesize')}</div>
+						<div class="ui-minor">Формат JPEG, PNG или GIF. Размер файла не более {ini_get('upload_max_filesize')}</div>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2">
 						<label for="wyswyg_description">Описание</label><br />
-						<textarea name="wyswyg_description" id="wyswyg_description" cols="40" rows="8" class="wysiwyg full-width"></textarea>
+						<textarea name="wyswyg_description" id="wyswyg_description" cols="40" rows="20" class="wysiwyg tinymce_default full-width"></textarea>
 					</td>
 				</tr>
 				
 			</table>
 
-			<table width="100%">
-				<tr>
-					<td colspan="2" align="center">
-						<br />
-						<input type="submit" class="button" value="Добавить" onclick="formApplyClick('catalogAddDialog')" />
-						<input type="button" class="button" value="Отменить" onclick="javascript:history.back();" />
-					</td>
-				</tr>
-			</table>
+			<div class="ui-button-box">
+				<br />
+				<button type="submit" onclick="formApplyClick('catalogAddDialog')">Добавить</button>
+				<button type="button" class="cancel" onclick="history.back();">Отменить</button>
+			</div>
 		</form>
 	</div>
 </div>

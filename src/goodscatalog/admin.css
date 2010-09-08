@@ -16,44 +16,6 @@
  */
 
 /**
- * Содержимое чего бы то ни было
- */
-.content
-{
-	padding: .2em .3em;
-}
-
-/**
- * Псевдо-ссылка
- */
-a.pseudo,
-a.pseudo:visited
-{
-	border-bottom: dashed 1px blue;
-}
-	a.pseudo:hover
-	{
-		border-bottom: dashed 1px red;
-	}
-
-/**
- * Второстепенные элементы
- */
-.minor
-{
-	color: #888;
-	font-size: 95%;
-}
-
-/**
- * Нижняя граница плавающих элементов
- */
-.float-margin
-{
-	clear: both;
-}
-
-/**
  * Элемент должен заполнить максимум горизонтального пространства 
  */
 .full-width
@@ -63,51 +25,6 @@ a.pseudo:visited
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 }
-
-/**
- * Имитация окна
- */
-.window
-{
-	background-color: #eee;
-	color: #000;
-	border: solid 1px #aaa;
-	margin: .2em;
-	padding: 1px;
-	font-size: 9pt;
-	line-height:1.54em;
-}
-
-	/**
-	 * Заголовок окна
-	 */
-	.window .title
-	{
-		background: #007acc url(../../core/img/hbg.gif) repeat-x;
-		color: white;
-		text-align: center;
-		font-weight: bold;
-		height: 20px;
-		line-height: 20px;
-		border: solid 1px #aaa;
-	}
-
-	/**
-	 * Содержимое окна
-	 */
-	.window .content
-	{
-		padding: 5px;
-	}
-
-	/**
-	 * Область кнопок
-	 */
-	.window .buttons
-	{
-		text-align: center;
-		padding-top: 1em;
-	}
 
 /**
  * Поле для ввода чилса

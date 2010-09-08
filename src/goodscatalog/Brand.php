@@ -67,20 +67,20 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	{
 		return array(
 			'id' => array(
-				'type' => 'int',
+				'type' => PDO::PARAM_INT,
 			),
 			'active' => array(
-				'type' => 'bool',
+				'type' => PDO::PARAM_BOOL,
 			),
 			'title' => array(
-				'type' => 'string',
-				'maxlength' => 4,
+				'type' => PDO::PARAM_STR,
+				'maxlength' => 255,
 			),
 			'description' => array(
-				'type' => 'string'
+				'type' => PDO::PARAM_STR,
 			),
 			'ext' => array(
-				'type' => 'string',
+				'type' => PDO::PARAM_STR,
 				'maxlength' => 4,
 			),
 		);

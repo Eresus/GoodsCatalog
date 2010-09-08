@@ -82,7 +82,7 @@ class GoodsCatalogBrandsAdminUI
 		}
 
 		// Дополнительные стили
-		$GLOBALS['page']->linkStyles($this->plugin->urlCode . 'admin.css');
+		$GLOBALS['page']->linkStyles($this->plugin->getCodeURL() . 'admin.css');
 
 		return $html;
 	}
@@ -152,6 +152,7 @@ class GoodsCatalogBrandsAdminUI
 	 * @return void
 	 *
 	 * @since 1.00
+	 * @uses HTTP::redirect
 	 */
 	private function addItem()
 	{
@@ -160,7 +161,7 @@ class GoodsCatalogBrandsAdminUI
 		$brand->active = true;
 		$brand->description = arg('description');
 		$brand->save();
-		die(strval(time()));
+		HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');
 	}
 	//-----------------------------------------------------------------------------
 }

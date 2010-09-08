@@ -48,7 +48,7 @@ class GoodsCatalog extends ContentPlugin
 	 * Требуемая версия ядра
 	 * @var string
 	 */
-	public $kernel = '2.13';
+	public $kernel = '2.14b';
 
 	/**
 	 * Название плагина
@@ -128,23 +128,52 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function __construct()
 	{
-		global $Eresus;
-
 		parent::__construct();
 
 		/* Настраиваем автозагрузку классов */
 		set_include_path(get_include_path() . PATH_SEPARATOR . $this->dirCode);
 		EresusClassAutoloader::add($this->dirCode . 'autoload.php');
 
-		/* В версии 2.13 надо настроить шаблонизатор */
-		if (version_compare(CMSVERSION, '2.13', '='))
-		{
-			Core::setValue('core.template.templateDir', $Eresus->froot);
-			Core::setValue('core.template.compileDir', $Eresus->fdata . 'cache');
-			Core::setValue('core.template.charset', 'windows-1251');
-		}
-
 		$this->listenEvents('adminOnMenuRender');
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает URL директории файлов плагина
+	 *
+	 * @return string
+	 *
+	 * @since 1.00
+	 */
+	public function getCodeURL()
+	{
+		return $this->urlCode;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает путь к директории данных плагина
+	 *
+	 * @return string
+	 *
+	 * @since 1.00
+	 */
+	public function getDataDir()
+	{
+		return $this->dirData;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает URL директории данных плагина
+	 *
+	 * @return string
+	 *
+	 * @since 1.00
+	 */
+	public function getDataURL()
+	{
+		return $this->urlData;
 	}
 	//-----------------------------------------------------------------------------
 

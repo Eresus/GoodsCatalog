@@ -152,7 +152,76 @@ abstract class GoodsCatalogAbstractActiveRecord
 			throw new EresusPropertyNotExistsException($key, get_class($this));
 		}
 
+		switch ($this->attrs[$key]['type'])
+		{
+			case PDO::PARAM_BOOL:
+				$value = $this->filterBool($value);
+			break;
+
+			case PDO::PARAM_INT:
+				$value = $this->filterInt($value);
+			break;
+
+			case PDO::PARAM_STR:
+				$value = $this->filterString($value, $this->attrs[$key]);
+			break;
+
+			default:
+				throw new EresusTypeException();
+			break;
+		}
+
 		$this->rawData[$key] = $value;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Фильтрует значения типа 'bool'
+	 *
+	 * @param mixed $value
+	 *
+	 * @return bool
+	 *
+	 * @since 1.00
+	 */
+	private function filterBool($value)
+	{
+		return (boolean) $value;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Фильтрует значения типа 'int'
+	 *
+	 * @param mixed $value
+	 *
+	 * @return int
+	 *
+	 * @since 1.00
+	 */
+	private function filterInt($value)
+	{
+		return intval($value);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Фильтрует значения типа 'string'
+	 *
+	 * @param mixed $value
+	 * @param array $attrs
+	 *
+	 * @return string
+	 *
+	 * @since 1.00
+	 */
+	private function filterString($value, $attrs)
+	{
+		if (isset($attrs['maxlength']))
+		{
+			$value = substr($value, 0, $attrs['maxlength']);
+		}
+		return $value;
 	}
 	//-----------------------------------------------------------------------------
 
@@ -180,8 +249,23 @@ abstract class GoodsCatalogAbstractActiveRecord
 	{
 		if ($this->isNew())
 		{
-			$this->plugin->dbInsert($this->getTableName(), $this->rawData);
+			$q = DB::getHandler()->createInsertQuery();
+			$q->insertInto($this->plugin->name . '_' . $this->getTableName());
 		}
+
+		foreach ($this->attrs as $key => $attrs)
+		{
+			if (isset($this->rawData[$key]))
+			{
+				$q->set($key, $q->bindValue($this->rawData[$key], null, $attrs['type']));
+			}
+		}
+
+		DB::execute($q);
+
+		$this->id = $GLOBALS['Eresus']->db->getInsertedID();
+
+		$this->isNew = false;
 	}
 	//-----------------------------------------------------------------------------
 }

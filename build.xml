@@ -1,17 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
+ Phing build file for GoodsCatalog
+
  $Id$
  -->
 
 <project name="goodscatalog" default="build" basedir="./">
 
 	<property file="build.properties" />
-
+	
 	<!--
 	=====================================================================
-		Prepare for build
-  =====================================================================
-  -->
+	Filesets definitions
+	=====================================================================
+	-->
+	
+	<!-- Source files -->
+	<fileset dir="src" id="files.sources">
+		<include name="**" />
+		<exclude name=".svn" />
+	</fileset>
+	
+		<!-- PHP source files -->
+		<fileset dir="src" id="files.sources.php">
+			<include name="**/.php" />
+		</fileset>
+
+	<!-- Unit tests -->
+	<fileset dir="tests/phpunit" id="files.tests.unit">
+		<include name="**/*Test.php" />
+	</fileset>
+	
+	<!--
+	=====================================================================
+	Prepare for build
+	=====================================================================
+	-->
 
 	<target name="prepare" depends="clean" description="Prepare for build">
 
@@ -20,6 +44,10 @@
 		<echo msg="Create build directory..." level="info" />
 		<mkdir dir="${build.dir}" />
 
+		<phplint>
+			<fileset refid="files.sources.php" />
+		</phplint>
+				
 		<!--
 			Run unit tests
 		-->
@@ -27,28 +55,17 @@
 			<istrue value="${phpunit}" />
 			<then>
 			
-				<!-- coverage-setup database="${build.dir}/coverage.db">
-					<fileset dir="src">
-						<include name="**/*.php"/>
-					</fileset>
-				</coverage-setup -->
-			
 				<phpunit haltonfailure="true" haltonerror="true">
 					<formatter
 						type="${phpunit.format}"
 						usefile="${phpunit.save}"
-						outfile="${phpunit.output}"
+						todir="${phpunit.output.dir}"
+						outfile="${phpunit.output.file}"
 					/>
 					<batchtest name="AllTests">
-						<fileset dir="tests">
-							<include name="**/*Test.php" />
-						</fileset>
+						<fileset refid="files.tests.unit" />
 					</batchtest>
 				</phpunit>
-				
-				<!-- coverage-report outfile="${build.dir}/coverage.xml">
-					<report todir="${build.dir}" styledir="/usr/share/php5/PEAR/data/phing/etc"/>
-				</coverage-report -->
 				
 			</then>
 		</if>
@@ -64,10 +81,7 @@
 						type="${phpmd.format}"
 						outfile="${phpmd.output}"
 					/>
-					<fileset dir="src">
-						<include name="**/*.php" />
-						<exclude name=".svn" />
-					</fileset>
+					<fileset refid="files.sources.php" />
 				</phpmd>
 			</then>
 		</if>
@@ -86,10 +100,7 @@
 						type="${phpcs.format}"
 						outfile="${phpcs.output}"
 					/>
-					<fileset dir="src">
-						<include name="**/*.php" />
-						<exclude name=".svn" />
-					</fileset>
+					<fileset refid="files.sources.php" />
 				</phpcodesniffer>
 			</then>
 		</if>
@@ -100,9 +111,9 @@
 
 	<!--
 	=====================================================================
-		Clean up after build
-  =====================================================================
-  -->
+	Clean up after build
+	=====================================================================
+	-->
 
 	<target name="clean" description="Clean up build">
 
@@ -114,9 +125,7 @@
 			<then>
 				<delete includeemptydirs="true" failonerror="true">
 					<fileset dir="${build.dir}">
-						<include name="**/*" />
-						<exclude name=".svn" />
-						<exclude name=".svn/*" />
+						<include name="**" />
 					</fileset>
 				</delete>
 			</then>
@@ -127,29 +136,62 @@
 
 	<!--
 	=====================================================================
-		Build project
-  =====================================================================
-  -->
+	Build project
+	=====================================================================
+	-->
 
 	<target name="build" depends="prepare" description="Build project">
 
 		<copy todir="${build.dir}">
-			<fileset dir="src">
-				<include name="**" />
-				<exclude name=".svn" />
-			</fileset>
+			<fileset refid="files.sources" />
 			<filterchain>
 			    <expandproperties />
 		  </filterchain>
 		</copy>
 
+		<!--
+			Build documentation
+		-->
+		<if>
+			<istrue value="${docs}" />
+			<then>
+				<phingcall target="docs" />
+			</then>
+		</if>
+
 	</target>
 
 	<!--
 	=====================================================================
-		Build distributive
-  =====================================================================
-  -->
+	Build documentation
+	=====================================================================
+	-->
+	<target name="docs" description="Generate documentation">
+
+		<echo msg="Generating documentation..." level="info" />
+
+		<phpdoc title="API Documentation"
+		  destdir="${docs.dir}"
+		  sourcecode="no"
+			parseprivate="true"
+		  output="${docs.converter}">
+		   <fileset dir="${build.dir}">
+		      <include name="**/*.php" />
+		   </fileset>
+		   <projdocfileset dir=".">
+		      <include name="README" />
+		      <include name="INSTALL" />
+		      <include name="CHANGELOG" />
+		   </projdocfileset>
+		</phpdoc>
+
+	</target>
+
+	<!--
+	=====================================================================
+	Build distributive
+	=====================================================================
+	-->
 
 	<target name="distr" depends="build" description="Build distributive">
 

@@ -32,7 +32,7 @@
  * $Id$
  */
 
-include_once dirname(__FILE__) . '/../src/goodscatalog/AbstractActiveRecord.php';
+include_once dirname(__FILE__) . '/../../src/goodscatalog/AbstractActiveRecord.php';
 
 /**
  * @package GoodsCatalog
@@ -67,7 +67,7 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetUnsetProperty()
 	{
-		$this->assertNull($this->fixture->id);
+		$this->assertNull($this->fixture->int);
 	}
 	//-----------------------------------------------------------------------------
 
@@ -84,13 +84,64 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Проверяем установку и чтение
+	 * Проверяем установку свойства неподдерживаемого типа
+	 *
+	 * @expectedException EresusTypeException
+	 */
+	public function testSetUnsupportedType()
+	{
+		$this->fixture->unsupported = null;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем установку и чтение полей типа 'bool'
 	 *
 	 */
-	public function testSetGet()
+	public function testSetGetBool()
 	{
-		$this->fixture->id = 123;
-		$this->assertEquals(123, $this->fixture->id);
+		$this->fixture->bool = true;
+		$this->assertTrue($this->fixture->bool);
+		$this->fixture->bool = false;
+		$this->assertFalse($this->fixture->bool);
+		$this->fixture->bool = 'yes';
+		$this->assertTrue($this->fixture->bool);
+		$this->fixture->bool = null;
+		$this->assertFalse($this->fixture->bool);
+		$this->fixture->bool = '0';
+		$this->assertFalse($this->fixture->bool);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем установку и чтение полей типа 'int'
+	 *
+	 */
+	public function testSetGetInt()
+	{
+		$this->fixture->int = 100;
+		$this->assertEquals(100, $this->fixture->int);
+		$this->fixture->int = '101';
+		$this->assertEquals(101, $this->fixture->int);
+		$this->fixture->int = '102abc';
+		$this->assertEquals(102, $this->fixture->int);
+		$this->fixture->int = 'abc103';
+		$this->assertEquals(0, $this->fixture->int);
+		$this->fixture->int = '104a105';
+		$this->assertEquals(104, $this->fixture->int);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем установку и чтение полей типа 'string'
+	 *
+	 */
+	public function testSetGetString()
+	{
+		$this->fixture->string = 'test1';
+		$this->assertEquals('test1', $this->fixture->string);
+		$this->fixture->string = '0123456789abc';
+		$this->assertEquals('0123456789', $this->fixture->string);
 	}
 	//-----------------------------------------------------------------------------
 
@@ -132,19 +183,10 @@ class GoodsCatalogAbstractActiveRecord_Stub extends GoodsCatalogAbstractActiveRe
 	protected function getFieldAttrs()
 	{
 		return array(
-			'id' => array(
-				'type' => 'int',
-			),
-			'active' => array(
-				'type' => 'bool',
-			),
-			'description' => array(
-				'type' => 'string'
-			),
-			'ext' => array(
-				'type' => 'string',
-				'maxlength' => 4,
-			),
+			'unsupported' => array('type' => null),
+			'bool' => array('type' => PDO::PARAM_BOOL),
+			'int' => array('type' => PDO::PARAM_INT),
+			'string' => array('type' => PDO::PARAM_STR, 'maxlength' => 10),
 		);
 	}
 	//-----------------------------------------------------------------------------
@@ -168,7 +210,18 @@ class EresusPropertyNotExistsException extends Exception
 {
 	function __construct($property = null, $class = null, $description = null, $previous = null)
 	{
-		;
+	}
+	//-----------------------------------------------------------------------------
+}
+
+/**
+ * @package GoodsCatalog
+ * @subpackage Tests
+ */
+class EresusTypeException extends Exception
+{
+	function __construct($var = null, $expectedType = null, $description = null, $previous = null)
+	{
 	}
 	//-----------------------------------------------------------------------------
 }

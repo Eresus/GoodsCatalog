@@ -1,5 +1,5 @@
-<div class="window" style="width: 600px; float: left;">
-	<div class="title">Настройки каталога товаров</div>
+<div class="box ui-widget-content" style="width: 600px;">
+	<div class="header">Настройки каталога товаров</div>
 	<div class="content">
 
 		<form name="settings" id="settings" action="admin.php?mod=plgmgr&id={$this->name}" method="post" enctype="multipart/form-data">
@@ -60,13 +60,13 @@
 					<td>
 						<div>
 						{if $logoExists}
-						<img src="{$this->urlData}logo.png" alt="Логотип" />
+						<img src="{$this->getDataURL()}logo.png" alt="Логотип" />
 						{else}
 						<strong>не загружен</strong>
 						{/if}
 						</div>
 						<input type="file" name="logoImage" {if !$this->settings.logoEnabled} disabled="disabled"{/if} />
-						<div class="minor">Логотип должен быть в формате <a href="http://ru.wikipedia.org/wiki/PNG">PNG</a>.</div>
+						<div class="ui-minor">Логотип должен быть в формате <a href="http://ru.wikipedia.org/wiki/PNG">PNG</a>.</div>
 						
 					</td>
 				</tr>
@@ -182,15 +182,12 @@
 				
 			</table>
 
-			<table width="100%">
-				<tr>
-					<td colspan="2" align="center">
-						<br />
-						<input type="submit" class="button" value="Сохранить" onclick="formApplyClick('settings')" />
-						<input type="button" class="button" value="Закрыть" onclick="javascript:history.back();" />
-					</td>
-				</tr>
-			</table>
+			<div class="ui-button-box">
+				<br />
+				<button type="submit" onclick="formApplyClick('settings')">Сохранить</button>
+				<button type="button" class="cancel" onclick="history.back();">Закрыть</button>
+			</div>
+			
 		</form>
 	</div>
 </div>
