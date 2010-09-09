@@ -80,13 +80,18 @@ class GoodsCatalogBrandsAdminUI
 				$this->toggleItem();
 			break;
 
+			case arg('delete'):
+				$this->deleteItem();
+			break;
+
 			default:
 				$html = $this->renderList();
 			break;
 		}
 
-		// Дополнительные стили
+		/* Дополнительные файлы */
 		$GLOBALS['page']->linkStyles($this->plugin->getCodeURL() . 'admin.css');
+		$GLOBALS['page']->linkScripts($this->plugin->getCodeURL() . 'admin.js');
 
 		return $html;
 	}
@@ -151,8 +156,52 @@ class GoodsCatalogBrandsAdminUI
 		try
 		{
 			$brand = new GoodsCatalogBrand($id);
-			$brand->active = ! $brand->active;
-			$brand->save();
+
+			try
+			{
+				$brand->active = ! $brand->active;
+				$brand->save();
+			}
+			catch (Exception $e)
+			{
+				ErrorMessage(iconv('utf8', 'cp1251', 'Не удалось сохранить изменения: ') .
+					$e->getMessage());
+			}
+		}
+		catch (DomainException $e)
+		{
+			ErrorMessage(iconv('utf8', 'cp1251', 'Неправильный адрес'));
+			$e = $e; // PHPMD hack
+		}
+
+		HTTP::goback();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Удаляет бренд
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	private function deleteItem()
+	{
+		$id = arg('delete', 'int');
+
+		try
+		{
+			$brand = new GoodsCatalogBrand($id);
+
+			try
+			{
+				$brand->delete();
+			}
+			catch (Exception $e)
+			{
+				ErrorMessage(iconv('utf8', 'cp1251', 'Не удалось удалить бренд: ') .
+					$e->getMessage());
+			}
 		}
 		catch (DomainException $e)
 		{
