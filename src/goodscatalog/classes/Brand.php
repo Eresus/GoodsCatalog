@@ -144,6 +144,27 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
+	 * (non-PHPdoc)
+	 * @see src/goodscatalog/classes/GoodsCatalogAbstractActiveRecord::delete()
+	 */
+	public function delete()
+	{
+		$filename = $this->logoPath;
+
+		if (is_file($filename))
+		{
+			@$result = unlink($filename);
+			if (!$result)
+			{
+				ErrorMessage("Can not delete file $filename");
+			}
+		}
+
+		parent::delete();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
 	 * Считает количество брендов
 	 *
 	 * @param bool $activeOnly[optional]  Считать только активные или все
