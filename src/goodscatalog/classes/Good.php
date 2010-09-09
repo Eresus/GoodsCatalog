@@ -2,7 +2,7 @@
 /**
  * Каталог товаров
  *
- * ActiveRecord бренда
+ * ActiveRecord товара
  *
  * @version ${product.version}
  *
@@ -33,32 +33,30 @@
 
 
 /**
- * ActiveRecord бренда
+ * ActiveRecord товара
  *
- * @property       int    $id           Идентификатор
- * @property       bool   $active       Активность бренда
- * @property       string $title        Название
- * @property       string $description  Описание бренда
- * @property-read  string $logoPath     Путь к файлу логотипа
- * @property-read  string $logoURL      URL файла логотипа
- * @property-write string $logo         Свойство для загрузки нового логотипа
+ * @property       int                   $id           Идентификатор
+ * @property       int                   $section      Идентификатор раздела сайта
+ * @property       bool                  $active       Активность товара
+ * @property       int                   $position     Порядковый номер
+ * @property       string                $article      Артикул
+ * @property       string                $title        Название
+ * @property       string                $about        Краткое описание
+ * @property       string                $description  Описание
+ * @property       float                 $cost         Цена
+ * @property-read  string                $photoPath    Путь к основной фотографии
+ * @property-read  string                $photoURL     URL основной фотографии
+ * @property-write string                $photo        Свойство для загрузки основной фотографии
+ * @property-read  string                $thumbPath    Путь к миниатюре
+ * @property-read  string                $thumbURL     URL иниатюры
+ * @property       bool                  $special      Спецпредложение
+ * @property-read  GoodsCatalogBrand     $brand        Бренд или null
+ * @property-write GoodsCatalogBrand|int $brand        Бренд или его идентификатор
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
+class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 {
-	/**
-	 * Список поддерживаемых форматов
-	 * @var array
-	 */
-	private $supportedFormats = array(
-		'image/jpeg',
-		'image/jpg',
-		'image/pjpeg',
-		'image/png',
-		'image/gif',
-	);
-
 	/**
 	 * Описание файла для загрузки
 	 *
@@ -75,7 +73,7 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	 */
 	public function getTableName()
 	{
-		return 'brands';
+		return 'goods';
 	}
 	//-----------------------------------------------------------------------------
 
@@ -92,21 +90,46 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 			'id' => array(
 				'type' => PDO::PARAM_INT,
 			),
+			'section' => array(
+				'type' => PDO::PARAM_INT,
+			),
 			'active' => array(
 				'type' => PDO::PARAM_BOOL,
+			),
+			'position' => array(
+				'type' => PDO::PARAM_INT,
+			),
+			'article' => array(
+				'type' => PDO::PARAM_STR,
+				'maxlength' => 255,
 			),
 			'title' => array(
 				'type' => PDO::PARAM_STR,
 				'maxlength' => 255,
 			),
+			'about' => array(
+				'type' => PDO::PARAM_STR,
+				'maxlength' => 65535,
+			),
 			'description' => array(
 				'type' => PDO::PARAM_STR,
+				'maxlength' => 4294967295,
+			),
+			'cost' => array(
+				'type' => PDO::PARAM_STR,
+				'maxlength' => 10,
 			),
 			'ext' => array(
 				'type' => PDO::PARAM_STR,
 				'maxlength' => 4,
 			),
-		);
+			'special' => array(
+				'type' => PDO::PARAM_BOOL,
+			),
+			'brand' => array(
+				'type' => PDO::PARAM_INT,
+			),
+			);
 	}
 	//-----------------------------------------------------------------------------
 
@@ -121,6 +144,18 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	public function save()
 	{
 		eresus_log(__METHOD__, LOG_DEBUG, '()');
+
+		if ($this->isNew())
+		{
+			/* Вычисляем порядковый номер */
+			$q = DB::getHandler()->createSelectQuery();
+			$e = $q->expr;
+			$q->select($q->alias($e->max('position'), 'maxval'))
+				->from($this->getDbTable())
+				->where($e->eq('section', $q->bindValue($this->section, null, PDO::PARAM_INT)));
+			$result = DB::fetch($q);
+			$this->position = $result['maxval'] + 1;
+		}
 
 		// Запоминаем состояние isNew, потому что флаг будет сброшен в parent::save()
 		$wasNew = $this->isNew();
@@ -152,7 +187,7 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	 */
 	public function delete()
 	{
-		$filename = $this->logoPath;
+		/*$filename = $this->photoPath;
 
 		if (is_file($filename))
 		{
@@ -162,7 +197,7 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 				ErrorMessage("Can not delete file $filename");
 			}
 		}
-
+	*/
 		parent::delete();
 	}
 	//-----------------------------------------------------------------------------
@@ -225,29 +260,29 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Сеттер свойства $logo
+	 * Сеттер свойства $photo
 	 *
 	 * @param string $value
 	 * //param array $value
 	 */
-	protected function setLogo($value)
+	protected function setPhoto($value)
 	{
 		$this->upload = $value;
 	}
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Геттер свойства $logoPath
+	 * Геттер свойства $photoPath
 	 *
 	 * @return string
 	 *
 	 * @since 1.00
 	 */
-	protected function getLogoPath()
+	protected function getPhotoPath()
 	{
 		if ($this->ext)
 		{
-			return self::plugin()->getDataDir() . 'brands/' . $this->id . '.' . $this->ext;
+			return self::plugin()->getDataDir() . 'goods/' . $this->id . '/main.' . $this->ext;
 		}
 		else
 		{
@@ -257,17 +292,57 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Геттер свойства $logoURL
+	 * Геттер свойства $photoURL
 	 *
 	 * @return string
 	 *
 	 * @since 1.00
 	 */
-	protected function getLogoURL()
+	protected function getPhotoURL()
 	{
 		if ($this->ext)
 		{
-			return self::plugin()->getDataURL() . 'brands/' . $this->id . '.' . $this->ext;
+			return self::plugin()->getDataURL() . 'brands/' . $this->id . '/main.' . $this->ext;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Геттер свойства $thumbPath
+	 *
+	 * @return string
+	 *
+	 * @since 1.00
+	 */
+	protected function getthumbPath()
+	{
+		if ($this->ext)
+		{
+			return self::plugin()->getDataDir() . 'goods/' . $this->id . '/main-thmb.jpg';
+		}
+		else
+		{
+			return null;
+		}
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Геттер свойства $thumbURL
+	 *
+	 * @return string
+	 *
+	 * @since 1.00
+	 */
+	protected function getthumbURL()
+	{
+		if ($this->ext)
+		{
+			return self::plugin()->getDataURL() . 'brands/' . $this->id . '/main-thmb.jpg';
 		}
 		else
 		{
@@ -313,9 +388,9 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 		{
 			foreach ($raw as $item)
 			{
-				$image = new GoodsCatalogBrand();
-				$image->loadFromArray($item);
-				$result []= $image;
+				$photo = new GoodsCatalogBrand();
+				$photo->loadFromArray($item);
+				$result []= $photo;
 			}
 		}
 
@@ -334,23 +409,26 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	 */
 	private function serveUpload()
 	{
-		$fileInfo = $_FILES[$this->upload];
-		if ($fileInfo['error'] == UPLOAD_ERR_NO_FILE)
+		if (!isset($_FILES[$this->upload]) || $_FILES[$this->upload]['error'] == UPLOAD_ERR_NO_FILE)
 		{
 			return;
 		}
+		$fileInfo = $_FILES[$this->upload];
 
 		$this->ext = strtolower(substr(strrchr($fileInfo['name'], '.'), 1));
 
-		if (!in_array($fileInfo['type'], $this->supportedFormats))
+		$this->checkFormat($fileInfo['type']);
+
+		$dirCreated = self::plugin()->mkdir('goods/' . $this->id);
+
+		if (!$dirCreated)
 		{
-			throw new EresusRuntimeException("Unsupported file type: {$fileInfo['type']}",
-				iconv('utf8', 'cp1251', "Неподдерживаемый тип файла: {$fileInfo['type']}."));
+			throw new EresusFsRuntimeException('Can not create directory.');
 		}
 
-		if (!upload($this->upload, $this->logoPath))
+		if (!upload($this->upload, $this->photoPath))
 		{
-			throw new EresusFsRuntimeException();
+			throw new EresusFsRuntimeException('Upload failed.');
 		}
 
 		useLib('glib');
@@ -358,29 +436,92 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 		/*
 		 * Если изображение слишком больше - уменьшаем
 		 */
-		$info = @getimagesize($this->logoPath);
+		@$info = getimagesize($this->photoPath);
 		if (
-			$info[0] > self::plugin()->settings['brandLogoMaxWidth'] ||
-			$info[1] > self::plugin()->settings['brandLogoMaxHeight']
+			$info[0] > self::plugin()->settings['photoMaxWidth'] ||
+			$info[1] > self::plugin()->settings['photoMaxHeight']
 		)
 		{
-			$oldName = $this->logoPath;
+			$oldName = $this->photoPath;
 			$this->ext = 'jpg';
 			thumbnail(
 				$oldName,
-				$this->logoPath,
-				self::plugin()->settings['brandLogoMaxWidth'],
-				self::plugin()->settings['brandLogoMaxHeight']
+				$this->photoPath,
+				self::plugin()->settings['photoMaxWidth'],
+				self::plugin()->settings['photoMaxHeight']
 			);
-			if ($oldName != $this->logoPath)
+			if ($oldName != $this->photoPath)
 			{
 				filedelete($oldName);
 			}
 		}
 
+		if (self::plugin()->settings['logoEnabled'])
+		{
+			$this->overlayLogo($this->photoPath);
+		}
+
+		thumbnail(
+			$this->photoPath,
+			$this->thumbPath,
+			self::plugin()->settings['thumbWidth'],
+			self::plugin()->settings['thumbHeight']
+		);
+
 		$this->upload = null;
 
 		parent::save();
+	}
+	//-----------------------------------------------------------------------------
+	/**
+	 * Накладывает логотип
+	 *
+	 * @param string $file
+	 *
+	 * @return void
+	 */
+	private function overlayLogo($file)
+	{
+		$src = imageCreateFromFile($file);
+		imagealphablending($src, true);
+		$logo = imageCreateFromPNG(self::plugin()->getDataDir() . 'logo.png');
+		imagealphablending($logo, true);
+
+		$settings = self::plugin()->settings;
+
+		if ($logo)
+		{
+			$sw = imageSX($src);
+			$sh = imageSY($src);
+			$lw = imageSX($logo);
+			$lh = imageSY($logo);
+
+			switch ($settings['logoPosition'])
+			{
+				case 'TL':
+					$x = $settings['logoHPadding'];
+					$y = $settings['logoVPadding'];
+				break;
+				case 'TR':
+					$x = $sw - $lw - $settings['logoHPadding'];
+					$y = $settings['logoVPadding'];
+				break;
+				case 'BL':
+					$x = $settings['logoHPadding'];
+					$y = $sh - $lh - $settings['logoVPadding'];
+				break;
+				case 'BR':
+					$x = $sw - $lw - $settings['logoHPadding'];
+					$y = $sh - $lh - $settings['logoVPadding'];
+				break;
+			}
+			imagesavealpha($src, true);
+			imagecopy ($src, $logo, $x, $y, 0, 0, $lw, $lh);
+			imagesavealpha($src, true);
+			imageSaveToFile($src, $file, IMG_JPG);
+			imageDestroy($logo);
+			imageDestroy($src);
+		}
 	}
 	//-----------------------------------------------------------------------------
 }

@@ -1,14 +1,13 @@
-<div class="window" style="width: 600px; float: left;">
-	<div class="title">Добавление товара</div>
+<div class="box ui-widget-content" style="min-width: 600px; float: left;">
+	<div class="header">Добавление товара</div>
 	<div class="content">
 
 		<form action="admin.php" method="post" enctype="multipart/form-data" id="catalogAddDialog">
 
 			<div class="hidden">
 				<input type="hidden" name="mod" value="content" />
-				<input type="hidden" name="section" value="{$sectionId}" />
+				<input type="hidden" name="section" value="{$section}" />
 				<input type="hidden" name="action" value="insert" />
-				<input type="hidden" name="submitURL" value="admin.php?mod=content&amp;section={$sectionId}" />
 			</div>
 
 			<table width="100%">
@@ -59,7 +58,7 @@
 					</td>
 					<td>
 						<input type="file" name="photo" id="catalog-photo-input" />
-						<div class="minor">Формат JPEG, PNG или GIF. Размер файла не более {ini_get('upload_max_filesize')}</div>
+						<div class="ui-minor">Формат JPEG, PNG или GIF. Размер файла не более {ini_get('upload_max_filesize')}</div>
 					</td>
 				</tr>
 				{/if}
@@ -67,7 +66,7 @@
 					<td></td>
 					<td>
 						<label for="catalog-active-input">
-							<input type="checkbox" name="active" id="catalog-active-input" checked="checked" />
+							<input type="checkbox" name="active" value="1" id="catalog-active-input" checked="checked" />
 							Показывать товар посетителям
 						</label>
 					</td>
@@ -77,7 +76,7 @@
 					<td></td>
 					<td>
 						<label for="catalog-special-input">
-							<input type="checkbox" name="special" id="catalog-special-input" />
+							<input type="checkbox" name="special" value="1" id="catalog-special-input" />
 							Этот товар &mdash; спецпредложение
 						</label>
 					</td>
@@ -91,6 +90,9 @@
 					<td>
 						<select name="brand" id="catalog-brand-input">
 							<option value="">(не относится ни к одному бренду)</option>
+							{foreach $brands brand}
+							<option value="{$brand->id}">{$brand->title|escape}</option>
+							{/foreach}
 						</select>
 					</td>
 				</tr>
@@ -98,15 +100,12 @@
 				
 			</table>
 
-			<table width="100%">
-				<tr>
-					<td colspan="2" align="center">
-						<br />
-						<input type="submit" class="button" value="Добавить" onclick="formApplyClick('catalogAddDialog')" />
-						<input type="button" class="button" value="Отменить" onclick="javascript:history.back();" />
-					</td>
-				</tr>
-			</table>
+			<div class="ui-button-box">
+				<br />
+				<button type="submit">Добавить</button>
+				<button type="button" class="cancel" onclick="history.back();">Отменить</button>
+			</div>
+			
 		</form>
 	</div>
 </div>

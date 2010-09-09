@@ -74,6 +74,18 @@ abstract class GoodsCatalogAbstractActiveRecord
 	private $isNew = true;
 
 	/**
+	 * Список поддерживаемых форматов
+	 * @var array
+	 */
+	private $supportedFormats = array(
+		'image/jpeg',
+		'image/jpg',
+		'image/pjpeg',
+		'image/png',
+		'image/gif',
+	);
+
+	/**
 	 * Конструктор
 	 *
 	 * @param int $id  Идентификатор
@@ -500,6 +512,22 @@ abstract class GoodsCatalogAbstractActiveRecord
 		}
 
 		$this->isNew = false;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяет формат изображения файла
+	 *
+	 * @param string $mime
+	 * @return void
+	 */
+	protected function checkFormat($mime)
+	{
+		if (!in_array($mime, $this->supportedFormats))
+		{
+			throw new EresusRuntimeException("Unsupported file type: $mime",
+				iconv('utf8', 'cp1251', "Неподдерживаемый тип файла: $mime."));
+		}
 	}
 	//-----------------------------------------------------------------------------
 
