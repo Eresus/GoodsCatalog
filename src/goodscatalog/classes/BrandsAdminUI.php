@@ -68,10 +68,6 @@ class GoodsCatalogBrandsAdminUI
 	{
 		switch (true)
 		{
-			case arg('action') == 'add':
-				$html = $this->renderAddDialog();
-			break;
-
 			case arg('action') == 'insert':
 				$this->addItem();
 			break;
@@ -84,6 +80,18 @@ class GoodsCatalogBrandsAdminUI
 				$this->deleteItem();
 			break;
 
+			case arg('update'):
+				$this->updateItem();
+			break;
+
+			case arg('action') == 'add':
+				$html = $this->renderAddDialog();
+			break;
+
+			case arg('id'):
+				$html = $this->renderEditDialog();
+			break;
+
 			default:
 				$html = $this->renderList();
 			break;
@@ -94,6 +102,20 @@ class GoodsCatalogBrandsAdminUI
 		$GLOBALS['page']->linkScripts($this->plugin->getCodeURL() . 'admin.js');
 
 		return $html;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Помещает в сессию сообщение о неправильном адресе
+	 *
+	 * @param Exception $e
+	 */
+	private function reportBadURL(Exception $e)
+	{
+		ErrorMessage(iconv('utf8', 'cp1251', 'Неправильный адрес'));
+
+		return;
+		$e = $e; // PHPMD hack
 	}
 	//-----------------------------------------------------------------------------
 
@@ -170,8 +192,7 @@ class GoodsCatalogBrandsAdminUI
 		}
 		catch (DomainException $e)
 		{
-			ErrorMessage(iconv('utf8', 'cp1251', 'Неправильный адрес'));
-			$e = $e; // PHPMD hack
+			$this->reportBadURL($e);
 		}
 
 		HTTP::goback();
@@ -205,8 +226,7 @@ class GoodsCatalogBrandsAdminUI
 		}
 		catch (DomainException $e)
 		{
-			ErrorMessage(iconv('utf8', 'cp1251', 'Неправильный адрес'));
-			$e = $e; // PHPMD hack
+			$this->reportBadURL($e);
 		}
 
 		HTTP::goback();
@@ -276,6 +296,96 @@ class GoodsCatalogBrandsAdminUI
 		{
 			Core::logException($e);
 			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при добавлении бренда.'));
+		}
+
+		HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает разметку диалога изменения бренда
+	 *
+	 * @return string  HTML
+	 *
+	 * @since 1.00
+	 */
+	private function renderEditDialog()
+	{
+		$id = arg('id', 'int');
+
+		try
+		{
+			$brand = new GoodsCatalogBrand($id);
+		}
+		catch (DomainException $e)
+		{
+			$this->reportBadURL($e);
+			return;
+		}
+
+		/*
+		 * Имитируем использование старых форм на основе массивов.
+		 * Это требуется для правильного подключения WYSIWYG.
+		 */
+		$wysiwyg = $GLOBALS['Eresus']->extensions->load('forms', 'html');
+		$fakeForm = array('values' => array());
+		$fakeField = array(
+			'name' => 'description',
+			'value' => '',
+			'label' => '',
+			'height' => null,
+		);
+		$wysiwyg->forms_html($fakeForm, $fakeField);
+
+		// Данные для подстановки в шаблон
+		$data = $this->plugin->getHelper()->prepareTmplData();
+		$data['brand'] = $brand;
+
+		// Создаём экземпляр шаблона
+		$tmpl = $this->plugin->getHelper()->getAdminTemplate('brands-edit.html');
+
+		// Компилируем шаблон и данные
+		$html = $tmpl->compile($data);
+
+		return $html;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Изменяет бренд
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 * @uses HTTP::redirect
+	 */
+	private function updateItem()
+	{
+		$id = arg('update', 'int');
+		try
+		{
+			$brand = new GoodsCatalogBrand($id);
+		}
+		catch (DomainException $e)
+		{
+			$this->reportBadURL($e);
+		}
+
+		$brand->title = arg('title');
+		$brand->description = arg('description');
+		$brand->logo = 'logo'; // $_FILES['image'];
+		try
+		{
+			$brand->save();
+		}
+		catch (EresusRuntimeException $e)
+		{
+			ErrorMessage($e->getMessage());
+		}
+		catch (Exception $e)
+		{
+			Core::logException($e);
+			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при изменении бренда.'));
 		}
 
 		HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');

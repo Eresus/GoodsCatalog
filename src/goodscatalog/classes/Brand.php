@@ -39,6 +39,7 @@
  * @property       bool   $active       Активность бренда
  * @property       string $description  Описание бренда
  * @property-read  string $logoPath     Путь к файлу логотипа
+ * @property-read  string $logoURL      URL файла логотипа
  * @property-write string $logo
  *
  * @package GoodsCatalog
@@ -242,7 +243,34 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	 */
 	protected function getLogoPath()
 	{
-		return self::plugin()->getDataDir() . 'brands/' . $this->id . '.' . $this->ext;
+		if ($this->ext)
+		{
+			return self::plugin()->getDataDir() . 'brands/' . $this->id . '.' . $this->ext;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Геттер свойства $logoURL
+	 *
+	 * @return string
+	 *
+	 * @since 1.00
+	 */
+	protected function getLogoURL()
+	{
+		if ($this->ext)
+		{
+			return self::plugin()->getDataURL() . 'brands/' . $this->id . '.' . $this->ext;
+		}
+		else
+		{
+			return null;
+		}
 	}
 	//-----------------------------------------------------------------------------
 
