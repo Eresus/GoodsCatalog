@@ -37,88 +37,8 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogBrandsAdminUI
+class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 {
-	/**
-	 * Объект плагина
-	 *
-	 * @var GoodsCatalog
-	 */
-	private $plugin;
-
-	/**
-	 * Конструктор
-	 *
-	 * @param GoodsCatalog $plugin
-	 *
-	 * @return GoodsCatalogBrandsAI
-	 */
-	public function __construct(GoodsCatalog $plugin)
-	{
-		$this->plugin = $plugin;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Возвращает HTML интерфейса управления брендами
-	 *
-	 * @return string
-	 */
-	public function getHTML()
-	{
-		switch (true)
-		{
-			case arg('action') == 'insert':
-				$this->addItem();
-			break;
-
-			case arg('toggle'):
-				$this->toggleItem();
-			break;
-
-			case arg('delete'):
-				$this->deleteItem();
-			break;
-
-			case arg('update'):
-				$this->updateItem();
-			break;
-
-			case arg('action') == 'add':
-				$html = $this->renderAddDialog();
-			break;
-
-			case arg('id'):
-				$html = $this->renderEditDialog();
-			break;
-
-			default:
-				$html = $this->renderList();
-			break;
-		}
-
-		/* Дополнительные файлы */
-		$GLOBALS['page']->linkStyles($this->plugin->getCodeURL() . 'admin.css');
-		$GLOBALS['page']->linkScripts($this->plugin->getCodeURL() . 'admin.js');
-
-		return $html;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Помещает в сессию сообщение о неправильном адресе
-	 *
-	 * @param Exception $e
-	 */
-	private function reportBadURL(Exception $e)
-	{
-		ErrorMessage(iconv('utf8', 'cp1251', 'Неправильный адрес'));
-
-		return;
-		$e = $e; // PHPMD hack
-	}
-	//-----------------------------------------------------------------------------
-
 	/**
 	 * Возвращает разметку интерфейса списка брендов
 	 *
@@ -126,7 +46,7 @@ class GoodsCatalogBrandsAdminUI
 	 *
 	 * @since 1.00
 	 */
-	private function renderList()
+	protected function renderList()
 	{
 		global $page;
 
@@ -171,7 +91,7 @@ class GoodsCatalogBrandsAdminUI
 	 *
 	 * @since 1.00
 	 */
-	private function toggleItem()
+	protected function toggleItem()
 	{
 		$id = arg('toggle', 'int');
 
@@ -206,7 +126,7 @@ class GoodsCatalogBrandsAdminUI
 	 *
 	 * @since 1.00
 	 */
-	private function deleteItem()
+	protected function deleteItem()
 	{
 		$id = arg('delete', 'int');
 
@@ -240,7 +160,7 @@ class GoodsCatalogBrandsAdminUI
 	 *
 	 * @since 1.00
 	 */
-	private function renderAddDialog()
+	protected function renderAddDialog()
 	{
 		/*
 		 * Имитируем использование старых форм на основе массивов.
@@ -277,7 +197,7 @@ class GoodsCatalogBrandsAdminUI
 	 * @since 1.00
 	 * @uses HTTP::redirect
 	 */
-	private function addItem()
+	protected function addItem()
 	{
 		$brand = new GoodsCatalogBrand();
 		$brand->title = arg('title');
@@ -309,7 +229,7 @@ class GoodsCatalogBrandsAdminUI
 	 *
 	 * @since 1.00
 	 */
-	private function renderEditDialog()
+	protected function renderEditDialog()
 	{
 		$id = arg('id', 'int');
 
@@ -359,7 +279,7 @@ class GoodsCatalogBrandsAdminUI
 	 * @since 1.00
 	 * @uses HTTP::redirect
 	 */
-	private function updateItem()
+	protected function updateItem()
 	{
 		$id = arg('update', 'int');
 		try
