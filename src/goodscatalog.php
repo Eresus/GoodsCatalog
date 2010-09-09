@@ -368,6 +368,16 @@ class GoodsCatalog extends ContentPlugin
 	//-----------------------------------------------------------------------------
 
 	/**
+	 * (non-PHPdoc)
+	 * @see main/core/Plugin::mkdir()
+	 */
+	public function mkdir($name)
+	{
+		return parent::mkdir($name);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
 	 * Добавляет пункта "Бренды" в меню "Расширения"
 	 *
 	 * @return void

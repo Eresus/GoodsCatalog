@@ -37,53 +37,8 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogGoodsAdminUI
+class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 {
-	/**
-	 * Объект плагина
-	 *
-	 * @var GoodsCatalog
-	 */
-	private $plugin;
-
-	/**
-	 * Конструктор
-	 *
-	 * @param GoodsCatalog $plugin
-	 *
-	 * @return GoodsCatalogGoodsAI
-	 */
-	public function __construct(GoodsCatalog $plugin)
-	{
-		$this->plugin = $plugin;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Возвращает HTML интерфейса управления брендами
-	 *
-	 * @return string
-	 */
-	public function getHTML()
-	{
-		switch (true)
-		{
-			case arg('action') == 'add':
-				$html = $this->renderAddGoodDialog();
-			break;
-
-			default:
-				$html = $this->renderGoodsList();
-			break;
-		}
-
-		// Дополнительные стили
-		$GLOBALS['page']->linkStyles($this->plugin->getCodeURL() . 'admin.css');
-
-		return $html;
-	}
-	//-----------------------------------------------------------------------------
-
 	/**
 	 * Отрисовывает интерфейс списка товаров
 	 *
@@ -91,11 +46,11 @@ class GoodsCatalogGoodsAdminUI
 	 *
 	 * @since 1.00
 	 */
-	private function renderGoodsList()
+	protected function renderList()
 	{
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
-		$data['sectionId'] = arg('section', 'int');
+		$data['section'] = arg('section', 'int');
 
 		// Создаём экземпляр шаблона
 		$tmpl = $this->plugin->getHelper()->getAdminTemplate('goods-list.html');
@@ -114,7 +69,7 @@ class GoodsCatalogGoodsAdminUI
 	 *
 	 * @since 1.00
 	 */
-	private function renderAddGoodDialog()
+	protected function renderAddDialog()
 	{
 		/*
 		 * Имитируем использование старых форм на основе массивов.
@@ -132,7 +87,8 @@ class GoodsCatalogGoodsAdminUI
 
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
-		$data['sectionId'] = arg('section', 'int');
+		$data['section'] = arg('section', 'int');
+		$data['brands'] = GoodsCatalogBrand::find(null, null, true);
 
 		// Создаём экземпляр шаблона
 		$tmpl = $this->plugin->getHelper()->getAdminTemplate('goods-add.html');
@@ -141,6 +97,45 @@ class GoodsCatalogGoodsAdminUI
 		$html = $tmpl->compile($data);
 
 		return $html;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Добавляет товар
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 * @uses HTTP::redirect
+	 */
+	protected function addItem()
+	{
+		$good = new GoodsCatalogGood();
+		$good->section = arg('section', 'int');
+		$good->article = arg('article');
+		$good->title = arg('title');
+		$good->about = arg('about');
+		$good->description = arg('description');
+		$good->cost = arg('cost');
+		$good->active = arg('active', 'int');
+		$good->special = arg('special', 'int');
+		$good->description = arg('description');
+		$good->brand = arg('brand', 'int');
+		$good->photo = 'photo'; // $_FILES['photo'];
+		try
+		{
+			$good->save();
+		}
+		catch (EresusRuntimeException $e)
+		{
+			ErrorMessage($e->getMessage());
+		}
+		catch (Exception $e)
+		{
+			Core::logException($e);
+			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при добавлении товара.'));
+		}
+		HTTP::redirect('admin.php?mod=content&section=' . $good->section);
 	}
 	//-----------------------------------------------------------------------------
 }
