@@ -48,9 +48,34 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	 */
 	protected function renderList()
 	{
+		global $page;
+
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
 		$data['section'] = arg('section', 'int');
+
+		/* Шаблоны адресов действий */
+		$data['urlEdit'] = str_replace('&', '&amp;', $page->url(array('id' => '%s')));
+		$data['urlToggle'] = str_replace('&', '&amp;', $page->url(array('toggle' => '%s')));
+		$data['urlUp'] = str_replace('&', '&amp;', $page->url(array('up' => '%s')));
+		$data['urlDown'] = str_replace('&', '&amp;', $page->url(array('down' => '%s')));
+		$data['urlDelete'] = str_replace('&', '&amp;', $page->url(array('delete' => '%s')));
+
+		// Определяем текущую страницу списка
+		$pg = arg('pg') ? arg('pg', 'int') : 1;
+		$maxCount = $this->plugin->settings['goodsPerPage'];
+		$startFrom = ($pg - 1) * $maxCount;
+
+		$data['goods'] = GoodsCatalogGood::find($data['section'], $maxCount, $startFrom);
+		$totalPages = ceil(GoodsCatalogGood::count($data['section']) / $maxCount);
+		if ($totalPages > 1)
+		{
+			$data['pagination'] = new PaginationHelper($totalPages, $pg, $page->url(array('pg' => '%s')));
+		}
+		else
+		{
+			$data['pagination'] = null;
+		}
 
 		// Создаём экземпляр шаблона
 		$tmpl = $this->plugin->getHelper()->getAdminTemplate('goods-list.html');
