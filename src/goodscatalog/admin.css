@@ -97,7 +97,12 @@ form table th
 {
 	background-color: #fff;
 }
-	
+
+.goods-list-item:hover td
+{
+	background-color: #def;
+}
+
 .goods-list-item .article,
 .goods-list-item .cost
 {
