@@ -40,6 +40,16 @@
 class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 {
 	/**
+	 * (non-PHPdoc)
+	 * @see src/goodscatalog/classes/GoodsCatalogAbstractAdminUI::getActiveRecordClass()
+	 */
+	protected function getActiveRecordClass()
+	{
+		return 'GoodsCatalogBrand';
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
 	 * Возвращает разметку интерфейса списка брендов
 	 *
 	 * @return string  HTML
@@ -81,41 +91,6 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 		$html = $tmpl->compile($data);
 
 		return $html;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Переключает активность бренда
-	 *
-	 * @return void
-	 *
-	 * @since 1.00
-	 */
-	protected function toggleItem()
-	{
-		$id = arg('toggle', 'int');
-
-		try
-		{
-			$brand = new GoodsCatalogBrand($id);
-
-			try
-			{
-				$brand->active = ! $brand->active;
-				$brand->save();
-			}
-			catch (Exception $e)
-			{
-				ErrorMessage(iconv('utf8', 'cp1251', 'Не удалось сохранить изменения: ') .
-					$e->getMessage());
-			}
-		}
-		catch (DomainException $e)
-		{
-			$this->reportBadURL($e);
-		}
-
-		HTTP::goback();
 	}
 	//-----------------------------------------------------------------------------
 

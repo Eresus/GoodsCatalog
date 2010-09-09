@@ -40,6 +40,16 @@
 class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 {
 	/**
+	 * (non-PHPdoc)
+	 * @see src/goodscatalog/classes/GoodsCatalogAbstractAdminUI::getActiveRecordClass()
+	 */
+	protected function getActiveRecordClass()
+	{
+		return 'GoodsCatalogGood';
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
 	 * Отрисовывает интерфейс списка товаров
 	 *
 	 * @return string  HTML
