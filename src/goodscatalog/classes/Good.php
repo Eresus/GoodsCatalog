@@ -187,17 +187,26 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 */
 	public function delete()
 	{
-		/*$filename = $this->photoPath;
-
-		if (is_file($filename))
+		if (is_file($this->photoPath))
 		{
-			@$result = unlink($filename);
+			@$result = unlink($this->photoPath);
 			if (!$result)
 			{
-				ErrorMessage("Can not delete file $filename");
+				ErrorMessage("Can not delete file {$this->photoPath}");
 			}
 		}
-	*/
+
+		if (is_file($this->thumbPath))
+		{
+			@$result = unlink($this->thumbPath);
+			if (!$result)
+			{
+				ErrorMessage("Can not delete file {$this->thumbPath}");
+			}
+		}
+
+		rmdir(dirname($this->photoPath));
+
 		parent::delete();
 	}
 	//-----------------------------------------------------------------------------

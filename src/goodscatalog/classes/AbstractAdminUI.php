@@ -101,7 +101,11 @@ abstract class GoodsCatalogAbstractAdminUI
 			break;
 
 			default:
-				$html = $this->renderList();
+				$html = $this->extendedActions();
+				if ($html === false)
+				{
+					$html = $this->renderList();
+				}
 			break;
 		}
 
@@ -132,6 +136,17 @@ abstract class GoodsCatalogAbstractAdminUI
 
 		return;
 		$e = $e; // PHPMD hack
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Потомки могут перекрывать этот метод для добавления дополнительных действий над объектами
+	 *
+	 * return string|false  HTML или FALSE если ни одно действие не выполнено
+	 */
+	protected function extendedActions()
+	{
+		return false;
 	}
 	//-----------------------------------------------------------------------------
 

@@ -50,6 +50,29 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	//-----------------------------------------------------------------------------
 
 	/**
+	 * (non-PHPdoc)
+	 * @see src/goodscatalog/classes/GoodsCatalogAbstractAdminUI::extendedActions()
+	 */
+	protected function extendedActions()
+	{
+		switch (true)
+		{
+			case arg('up'):
+				$this->moveUp();
+			break;
+
+			case arg('down'):
+				$this->moveDown();
+			break;
+
+			default:
+				return false;
+			break;
+		}
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
 	 * Отрисовывает интерфейс списка товаров
 	 *
 	 * @return string  HTML
@@ -171,6 +194,82 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при добавлении товара.'));
 		}
 		HTTP::redirect('admin.php?mod=content&section=' . $good->section);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Удаляет товар
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	protected function deleteItem()
+	{
+		$id = arg('delete', 'int');
+
+		try
+		{
+			$good = new GoodsCatalogGood($id);
+
+			try
+			{
+				$good->delete();
+			}
+			catch (Exception $e)
+			{
+				ErrorMessage(iconv('utf8', 'cp1251', 'Не удалось удалить товар: ') .
+					$e->getMessage());
+			}
+		}
+		catch (DomainException $e)
+		{
+			$this->reportBadURL($e);
+		}
+
+		HTTP::goback();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Перемещение товара вверх по списку
+	 *
+	 * @return void
+	 */
+	private function moveUp()
+	{
+		try
+		{
+			$good = new GoodsCatalogGood(arg('up', 'int'));
+		}
+		catch (DomainException $e)
+		{
+			$this->reportBadURL($e);
+		}
+
+		$good->moveUp();
+		HTTP::goback();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Перемещение товара вниз по списку
+	 *
+	 * @return void
+	 */
+	private function moveDown()
+	{
+		try
+		{
+			$good = new GoodsCatalogGood(arg('down', 'int'));
+		}
+		catch (DomainException $e)
+		{
+			$this->reportBadURL($e);
+		}
+
+		$good->moveDown();
+		HTTP::goback();
 	}
 	//-----------------------------------------------------------------------------
 }
