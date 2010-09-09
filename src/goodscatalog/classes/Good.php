@@ -205,25 +205,32 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	/**
 	 * Считает количество брендов
 	 *
+	 * @param int  $section               Идентификатор раздела
 	 * @param bool $activeOnly[optional]  Считать только активные или все
 	 *
 	 * @return int
 	 *
 	 * @since 1.00
 	 */
-	public static function count($activeOnly = false)
+	public static function count($section, $activeOnly = false)
 	{
-		eresus_log(__METHOD__, LOG_DEBUG, '()');
+		eresus_log(__METHOD__, LOG_DEBUG, '(%d, %d)', $section, $activeOnly);
 
 		$q = DB::getHandler()->createSelectQuery();
 		$q->select('count(DISTINCT id) as `count`')
 			->from(self::getDbTableStatic(__CLASS__));
 
+		$e = $q->expr;
+		$condition = $e->eq('section', $q->bindValue($section, null, PDO::PARAM_INT));
 		if ($activeOnly)
 		{
-			$e = $q->expr;
-			$q->where($e->eq('active', $q->bindValue(true, null, PDO::PARAM_BOOL)));
+			$condition = $e->lAnd(
+				$condition,
+				$e->eq('active', $q->bindValue(true, null, PDO::PARAM_BOOL))
+			);
 		}
+
+		$q->where($condition);
 
 		$result = DB::fetch($q);
 		return $result['count'];
@@ -233,25 +240,28 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	/**
 	 * Выбирает бренды из БД
 	 *
-	 * @param int              $limit[optional]       Вернуть не более $limit брендов
-	 * @param int              $offset[optional]      Пропустить $offset первых брендов
-	 * @param bool             $activeOnly[optional]  Искать только активные бренды
+	 * @param int  $section               Идентификатор раздела
+	 * @param int  $limit[optional]       Вернуть не более $limit брендов
+	 * @param int  $offset[optional]      Пропустить $offset первых брендов
+	 * @param bool $activeOnly[optional]  Искать только активные бренды
 	 *
 	 * @return array(GoodsCatalogBrand)
 	 *
 	 * @since 1.00
 	 */
-	public static function find($limit = null, $offset = null, $activeOnly = false)
+	public static function find($section, $limit = null, $offset = null, $activeOnly = false)
 	{
-		eresus_log(__METHOD__, LOG_DEBUG, '(%d, %d, %d)', $limit, $offset, $activeOnly);
+		eresus_log(__METHOD__, LOG_DEBUG, '(%d, %d, %d, %d)', $section, $limit, $offset, $activeOnly);
 
 		$q = DB::getHandler()->createSelectQuery();
+		$e = $q->expr;
 
+		$where = $e->eq('section', $q->bindValue($section, null, PDO::PARAM_INT));
 		if ($activeOnly)
 		{
-			$e = $q->expr;
-			$q->where($e->eq('active', $q->bindValue(true, null, PDO::PARAM_BOOL)));
+			$where = $e->lAnd($where, $e->eq('active', $q->bindValue(true, null, PDO::PARAM_BOOL)));
 		}
+		$q->where($where);
 
 		$result = self::load($q, $limit, $offset);
 
@@ -302,7 +312,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	{
 		if ($this->ext)
 		{
-			return self::plugin()->getDataURL() . 'brands/' . $this->id . '/main.' . $this->ext;
+			return self::plugin()->getDataURL() . 'goods/' . $this->id . '/main.' . $this->ext;
 		}
 		else
 		{
@@ -318,7 +328,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 *
 	 * @since 1.00
 	 */
-	protected function getthumbPath()
+	protected function getThumbPath()
 	{
 		if ($this->ext)
 		{
@@ -338,11 +348,11 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 *
 	 * @since 1.00
 	 */
-	protected function getthumbURL()
+	protected function getThumbURL()
 	{
 		if ($this->ext)
 		{
-			return self::plugin()->getDataURL() . 'brands/' . $this->id . '/main-thmb.jpg';
+			return self::plugin()->getDataURL() . 'goods/' . $this->id . '/main-thmb.jpg';
 		}
 		else
 		{
@@ -352,7 +362,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Выбирает бренды из БД
+	 * Выбирает товары из БД
 	 *
 	 * @param ezcQuerySelect $query             Запрос
 	 * @param int            $limit[optional]   Вернуть не более $limit брендов
@@ -367,7 +377,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 		eresus_log(__METHOD__, LOG_DEBUG, '("%s", %d, %d)', $query, $limit, $offset);
 
 		$query->select('*')->from(self::getDbTableStatic(__CLASS__))
-			->orderBy('title');
+			->orderBy('position');
 
 		if ($limit !== null)
 		{
@@ -386,11 +396,11 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 		$result = array();
 		if (count($raw))
 		{
-			foreach ($raw as $item)
+			foreach ($raw as $array)
 			{
-				$photo = new GoodsCatalogBrand();
-				$photo->loadFromArray($item);
-				$result []= $photo;
+				$item = new self();
+				$item->loadFromArray($array);
+				$result []= $item;
 			}
 		}
 

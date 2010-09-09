@@ -79,3 +79,34 @@ form table th
 	{
 		margin-top: .5em;
 	}
+
+/**
+ * Заголовок таблицы списка товаров
+ */
+.goods-list th
+{
+	background-color: #007acc;
+	border-color: #08d #05a #05A #06b;
+	border-style: solid;
+	border-width: 1px;
+	color: #fff;
+	padding: 1px 5px;	
+}
+
+.goods-list-item td
+{
+	background-color: #fff;
+}
+	
+.goods-list-item .article,
+.goods-list-item .cost
+{
+	text-align: right;
+	padding-right: .2em;
+}
+
+.goods-list-item .photo,
+.goods-list-item .special
+{
+	text-align: center;
+}
