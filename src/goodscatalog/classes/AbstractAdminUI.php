@@ -37,7 +37,7 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogAbstractAdminUI
+abstract class GoodsCatalogAbstractAdminUI
 {
 	/**
 	 * Объект плагина
@@ -45,6 +45,13 @@ class GoodsCatalogAbstractAdminUI
 	 * @var GoodsCatalog
 	 */
 	protected $plugin;
+
+	/**
+	 * Класс AR
+	 *
+	 * @var string
+	 */
+	private $activeRecordClass;
 
 	/**
 	 * Конструктор
@@ -56,6 +63,7 @@ class GoodsCatalogAbstractAdminUI
 	public function __construct(GoodsCatalog $plugin)
 	{
 		$this->plugin = $plugin;
+		$this->activeRecordClass = $this->getActiveRecordClass();
 	}
 	//-----------------------------------------------------------------------------
 
@@ -106,6 +114,14 @@ class GoodsCatalogAbstractAdminUI
 	//-----------------------------------------------------------------------------
 
 	/**
+	 * Метод должен возвращать имя класса активной записи
+	 *
+	 * @return string
+	 */
+	abstract protected function getActiveRecordClass();
+	//-----------------------------------------------------------------------------
+
+	/**
 	 * Помещает в сессию сообщение о неправильном адресе
 	 *
 	 * @param Exception $e
@@ -119,4 +135,38 @@ class GoodsCatalogAbstractAdminUI
 	}
 	//-----------------------------------------------------------------------------
 
+	/**
+	 * Переключает активность бренда
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	protected function toggleItem()
+	{
+		$id = arg('toggle', 'int');
+
+		try
+		{
+			$item = new $this->activeRecordClass($id);
+
+			try
+			{
+				$item->active = ! $item->active;
+				$item->save();
+			}
+			catch (Exception $e)
+			{
+				ErrorMessage(iconv('utf8', 'cp1251', 'Не удалось сохранить изменения: ') .
+					$e->getMessage());
+			}
+		}
+		catch (DomainException $e)
+		{
+			$this->reportBadURL($e);
+		}
+
+		HTTP::goback();
+	}
+	//-----------------------------------------------------------------------------
 }
