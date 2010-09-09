@@ -34,10 +34,11 @@
 $dir = dirname(__FILE__);
 
 return array(
-	'GoodsCatalogHelper' => $dir . '/classes/Helper.php',
 	'GoodsCatalogAbstractActiveRecord' => $dir . '/classes/AbstractActiveRecord.php',
+	'GoodsCatalogAbstractAdminUI' => $dir . '/classes/AbstractAdminUI.php',
 	'GoodsCatalogBrand' => $dir . '/classes/Brand.php',
+	'GoodsCatalogBrandsAdminUI' => $dir . '/classes/BrandsAdminUI.php',
+	'GoodsCatalogHelper' => $dir . '/classes/Helper.php',
 	'GoodsCatalogGood' => $dir . '/classes/Good.php',
 	'GoodsCatalogGoodsAdminUI' => $dir . '/classes/GoodsAdminUI.php',
-	'GoodsCatalogBrandsAdminUI' => $dir . '/classes/BrandsAdminUI.php',
 );
