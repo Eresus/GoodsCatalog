@@ -55,7 +55,7 @@
 			<istrue value="${phpunit}" />
 			<then>
 			
-				<phpunit haltonfailure="true" haltonerror="true">
+				<phpunit haltonfailure="true">
 					<formatter
 						type="${phpunit.format}"
 						usefile="${phpunit.save}"

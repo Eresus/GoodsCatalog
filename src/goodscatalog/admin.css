@@ -115,3 +115,17 @@ form table th
 {
 	text-align: center;
 }
+
+a.good-photo-preview img
+{
+	background-color: #eee;
+	border: solid 1px #888;
+	display: none;
+	padding: 1px;
+}
+
+a.good-photo-preview:hover img 
+{
+	display: inline;
+	position: absolute;
+}

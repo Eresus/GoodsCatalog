@@ -1,4 +1,4 @@
-#Thu Sep 09 11:22:57 MSD 2010
+#Thu Sep 09 16:43:33 MSD 2010
 eclipse.preferences.version=1
 encoding//src/goodscatalog.php=windows-1251
 encoding//src/goodscatalog/admin.js=windows-1251
@@ -6,5 +6,6 @@ encoding//src/goodscatalog/templates/brands-add.html=windows-1251
 encoding//src/goodscatalog/templates/brands-edit.html=windows-1251
 encoding//src/goodscatalog/templates/brands-list.html=windows-1251
 encoding//src/goodscatalog/templates/goods-add.html=windows-1251
+encoding//src/goodscatalog/templates/goods-edit.html=windows-1251
 encoding//src/goodscatalog/templates/goods-list.html=windows-1251
 encoding//src/goodscatalog/templates/settings.html=windows-1251

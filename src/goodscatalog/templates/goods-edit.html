@@ -1,13 +1,12 @@
 <div class="box ui-widget-content" style="min-width: 600px; float: left;">
-	<div class="header">Добавление товара</div>
+	<div class="header">Свойства товара</div>
 	<div class="content">
 
-		<form action="admin.php" method="post" enctype="multipart/form-data" id="catalogAddDialog">
+		<form action="admin.php" method="post" enctype="multipart/form-data">
 
 			<div class="hidden">
 				<input type="hidden" name="mod" value="content" />
-				<input type="hidden" name="section" value="{$section}" />
-				<input type="hidden" name="action" value="insert" />
+				<input type="hidden" name="update" value="{$good->id}" />
 			</div>
 
 			<table width="100%">
@@ -20,7 +19,7 @@
 						<label for="catalog-article-input">Артикул</label>
 					</td>
 					<td>
-						<input type="text" name="article" id="catalog-article-input" maxlength="255" />
+						<input type="text" name="article" id="catalog-article-input" value="{$good->article|escape}" maxlength="255" />
 					</td>
 				</tr>
 				<tr>
@@ -28,19 +27,19 @@
 						<label for="catalog-title-input">Название</label>
 					</td>
 					<td>
-						<input type="text" name="title" id="catalog-title-input" maxlength="255" class="full-width" />
+						<input type="text" name="title" id="catalog-title-input" value="{$good->title|escape}" maxlength="255" class="full-width" />
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2">
 						<label for="catalog-about-input">Краткое описание</label><br />
-						<textarea name="about" id="catalog-about-input" cols="40" rows="5" class="full-width"></textarea>
+						<textarea name="about" id="catalog-about-input" cols="40" rows="5" class="full-width">{$good->about|escape}</textarea>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2">
 						<label for="wyswyg_description">Описание</label><br />
-						<textarea name="wyswyg_description" id="wyswyg_description" cols="40" rows="8" class="tinymce_default wysiwyg full-width"></textarea>
+						<textarea name="wyswyg_description" id="wyswyg_description" cols="40" rows="8" class="tinymce_default wysiwyg full-width">{$good->description|escape}</textarea>
 					</td>
 				</tr>
 				<tr>
@@ -48,13 +47,16 @@
 						<label for="catalog-cost-input">Цена</label>
 					</td>
 					<td>
-						<input type="text" name="cost" id="catalog-cost-input" maxlength="20" size="5" class="number" />
+						<input type="text" name="cost" id="catalog-cost-input" value="{$good->cost|escape}"  maxlength="20" size="5" class="number" />
 					</td>
 				</tr>
 				{if $this->settings.mainPhotoEnabled}
 				<tr>
+					<td></td><td>{if $good->thumbURL}<a href="#" class="pseudo good-photo-preview">Показать основное фото<img src="{$good->thumbURL}" alt="" /></a>{/if}</td>
+				</tr>
+				<tr>
 					<td class="formLabel">
-						<label for="catalog-photo-input">Основная фотография</label>
+						<label for="catalog-photo-input">Заменить фотографию</label>
 					</td>
 					<td>
 						<input type="file" name="photo" id="catalog-photo-input" />
@@ -66,7 +68,7 @@
 					<td></td>
 					<td>
 						<label for="catalog-active-input">
-							<input type="checkbox" name="active" value="1" id="catalog-active-input" checked="checked" />
+							<input type="checkbox" name="active" value="1" id="catalog-active-input"{if $good->active} checked="checked"{/if} />
 							Показывать товар посетителям
 						</label>
 					</td>
@@ -76,7 +78,7 @@
 					<td></td>
 					<td>
 						<label for="catalog-special-input">
-							<input type="checkbox" name="special" value="1" id="catalog-special-input" />
+							<input type="checkbox" name="special" value="1" id="catalog-special-input"{if $good->special} checked="checked"{/if} />
 							Этот товар &mdash; спецпредложение
 						</label>
 					</td>
@@ -91,18 +93,30 @@
 						<select name="brand" id="catalog-brand-input">
 							<option value="">(не относится ни к одному бренду)</option>
 							{foreach $brands brand}
-							<option value="{$brand->id}">{$brand->title|escape}</option>
+							<option value="{$brand->id}"{if $good->brand->id == $brand->id} selected="selected"{/if}>{$brand->title|escape}</option>
 							{/foreach}
 						</select>
 					</td>
 				</tr>
 				{/if}
+				<tr>
+					<td class="formLabel">
+						<label for="catalog-section-input">Раздел</label>
+					</td>
+					<td>
+						<select name="section" id="catalog-section-input">
+							{foreach $sections section}
+							<option value="{$section.id}"{if $good->section == $section.id} selected="selected"{/if}{if !$section.selectable} disabled="disabled"{/if}>{$section.padding} {$section.caption|escape}</option>
+							{/foreach}
+						</select>
+					</td>
+				</tr>
 				
 			</table>
 
 			<div class="ui-button-box">
 				<br />
-				<button type="submit">Добавить</button>
+				<button type="submit">Сохранить</button>
 				<button type="button" class="cancel" onclick="history.back();">Отменить</button>
 			</div>
 			
