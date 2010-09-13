@@ -232,6 +232,99 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	//-----------------------------------------------------------------------------
 
 	/**
+	 * Возвращает разметку диалога изменения товара
+	 *
+	 * @return string  HTML
+	 *
+	 * @since 1.00
+	 */
+	protected function renderEditDialog()
+	{
+		$id = arg('id', 'int');
+
+		try
+		{
+			$good = new GoodsCatalogGood($id);
+		}
+		catch (DomainException $e)
+		{
+			$this->reportBadURL($e);
+			return;
+		}
+
+		/*
+		 * Имитируем использование старых форм на основе массивов.
+		 * Это требуется для правильного подключения WYSIWYG.
+		 */
+		$wysiwyg = $GLOBALS['Eresus']->extensions->load('forms', 'html');
+		$fakeForm = array('values' => array());
+		$fakeField = array(
+			'name' => 'description',
+			'value' => '',
+			'label' => '',
+			'height' => null,
+		);
+		$wysiwyg->forms_html($fakeForm, $fakeField);
+
+		// Данные для подстановки в шаблон
+		$data = $this->plugin->getHelper()->prepareTmplData();
+		$data['good'] = $good;
+		$data['brands'] = GoodsCatalogBrand::find(null, null, true);
+
+		$data['sections'] = $this->buildSectionTree();
+
+		// Создаём экземпляр шаблона
+		$tmpl = $this->plugin->getHelper()->getAdminTemplate('goods-edit.html');
+
+		// Компилируем шаблон и данные
+		$html = $tmpl->compile($data);
+
+		return $html;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Изменяет бренд
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 * @uses HTTP::redirect
+	 */
+	protected function updateItem()
+	{
+		$id = arg('update', 'int');
+		try
+		{
+			$brand = new GoodsCatalogBrand($id);
+		}
+		catch (DomainException $e)
+		{
+			$this->reportBadURL($e);
+		}
+
+		$brand->title = arg('title');
+		$brand->description = arg('description');
+		$brand->logo = 'logo'; // $_FILES['image'];
+		try
+		{
+			$brand->save();
+		}
+		catch (EresusRuntimeException $e)
+		{
+			ErrorMessage($e->getMessage());
+		}
+		catch (Exception $e)
+		{
+			Core::logException($e);
+			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при изменении бренда.'));
+		}
+
+		HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
 	 * Перемещение товара вверх по списку
 	 *
 	 * @return void
@@ -270,6 +363,37 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 
 		$good->moveDown();
 		HTTP::goback();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает массив разделов
+	 *
+	 * @param int $root[optional]  Идентификатор корневого раздела
+	 *
+	 * @return array
+	 *
+	 * @since 1.00
+	 */
+	private function buildSectionTree($root = 0)
+	{
+		global $Eresus;
+
+		$sections = $Eresus->sections->children(0);
+		$result = array();
+		foreach ($sections as $section)
+		{
+			$children = $this->buildSectionTree($section['id']);
+			if ($section['type'] == $this->plugin->name || $children)
+			{
+				$result []= $section;
+				if ($children)
+				{
+					$result = array_merge($result, $children);
+				}
+			}
+		}
+		return $result;
 	}
 	//-----------------------------------------------------------------------------
 }
