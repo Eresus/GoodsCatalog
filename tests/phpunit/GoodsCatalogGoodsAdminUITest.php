@@ -32,93 +32,81 @@
  * $Id$
  */
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+include_once dirname(__FILE__) . '/helpers.php';
+include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/AbstractAdminUI.php';
+include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/GoodsAdminUI.php';
 
 /**
  * @package GoodsCatalog
  * @subpackage Tests
  */
-class EresusPropertyNotExistsException extends Exception
+class GoodsCatalogGoodsAdminUITest extends PHPUnit_Framework_TestCase
 {
-	function __construct($property = null, $class = null, $description = null, $previous = null)
+	private $fixture;
+
+	/**
+	 * Setup test enviroment
+	 */
+	protected function setUp()
 	{
+		// @codeCoverageIgnoreStart
+		$this->fixture = new GoodsCatalogGoodsAdminUI(new GoodsCatalog());
+		// @codeCoverageIgnoreEnd
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем метод getDbTable
+	 * @covers GoodsCatalogAbstractActiveRecord::getDbTable
+	 */
+	public function testGetDbTable()
+	{
+		$GLOBALS['Eresus'] = new stdClass();
+		$GLOBALS['Eresus']->sections = new GoodsCatalogGoodsAdminUITest_SectionsStub();
+
+		$buildSectionTree = new ReflectionMethod('GoodsCatalogGoodsAdminUI', 'buildSectionTree');
+		$buildSectionTree->setAccessible(true);
+
+		$expected = array(
+			array('id' => 1, 'type' => 'default', 'padding' => '', 'selectable' => false),
+			array('id' => 11, 'type' => 'goodscatalog', 'padding' => '-', 'selectable' => true),
+			array('id' => 12, 'type' => 'goodscatalog', 'padding' => '-', 'selectable' => true),
+			array('id' => 2, 'type' => 'goodscatalog', 'padding' => '', 'selectable' => true),
+			);
+
+		$this->assertEquals($expected, $buildSectionTree->invoke($this->fixture, 0));
+	}
+	//-----------------------------------------------------------------------------
+
+	/* */
+}
+
+/*******************************************************************************
+ *
+ * ЗАГЛУШКИ
+ *
+ *******************************************************************************/
+
+class GoodsCatalogGoodsAdminUITest_SectionsStub
+{
+	public function children($id)
+	{
+		switch ($id)
+		{
+			case 0:
+				return array(
+					array('id' => 1, 'type' => 'default'),
+					array('id' => 2, 'type' => 'goodscatalog')
+				);
+			break;
+			case 1:
+				return array(
+					array('id' => 11, 'type' => 'goodscatalog'),
+					array('id' => 12, 'type' => 'goodscatalog')
+				);
+			break;
+		}
+		return array();
 	}
 	//-----------------------------------------------------------------------------
 }
-
-
-
-/**
- * @package GoodsCatalog
- * @subpackage Tests
- */
-class EresusTypeException extends Exception
-{
-	function __construct($var = null, $expectedType = null, $description = null, $previous = null)
-	{
-	}
-	//-----------------------------------------------------------------------------
-}
-
-
-
-/**
- * @package GoodsCatalog
- * @subpackage Tests
- */
-class PluginsStub
-{
-	public $plugin;
-
-	public function __construct()
-	{
-		$this->plugin = new GoodsCatalog();
-	}
-	//-----------------------------------------------------------------------------
-
-	public function __destruct()
-	{
-		unset($this->plugin);
-	}
-	//-----------------------------------------------------------------------------
-
-	public function load($name)
-	{
-		return $this->plugin;
-	}
-	//-----------------------------------------------------------------------------
-}
-
-
-
-/**
- * @package GoodsCatalog
- * @subpackage Tests
- */
-class GoodsCatalog
-{
-	public $name = 'goodscatalog';
-
-	public $settings = array(
-		'showItemMode' => 'default'
-	);
-
-	public function getDataURL()
-	{
-		return 'http://example.org/data/name/';
-	}
-	//-----------------------------------------------------------------------------
-
-	public function clientListURL()
-	{
-		return 'http://example.org/name/';
-	}
-	//-----------------------------------------------------------------------------
-}
-
-
-function eresus_log()
-{
-	;
-}
-//-----------------------------------------------------------------------------

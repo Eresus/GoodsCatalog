@@ -284,7 +284,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Изменяет бренд
+	 * Изменяет товар
 	 *
 	 * @return void
 	 *
@@ -296,19 +296,33 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		$id = arg('update', 'int');
 		try
 		{
-			$brand = new GoodsCatalogBrand($id);
+			$good = new GoodsCatalogGood($id);
 		}
 		catch (DomainException $e)
 		{
 			$this->reportBadURL($e);
 		}
 
-		$brand->title = arg('title');
-		$brand->description = arg('description');
-		$brand->logo = 'logo'; // $_FILES['image'];
+		$good->article = arg('article');
+		$good->title = arg('title');
+		$good->about = arg('about');
+		$good->description = arg('description');
+		$good->cost = arg('cost');
+		$good->active = arg('active', 'int');
+		$good->special = arg('special', 'int');
+		$good->description = arg('description');
+		$good->brand = arg('brand', 'int');
+		$good->photo = 'photo'; // $_FILES['photo'];
+
+		if (arg('section') != $good->section)
+		{
+			$oldSection = $good->section;
+			$good->section = arg('section', 'int');
+		}
+
 		try
 		{
-			$brand->save();
+			$good->save();
 		}
 		catch (EresusRuntimeException $e)
 		{
@@ -317,10 +331,10 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		catch (Exception $e)
 		{
 			Core::logException($e);
-			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при изменении бренда.'));
+			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при изменении товара.'));
 		}
 
-		HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');
+		HTTP::redirect('admin.php?mod=content&section=' . $good->section);
 	}
 	//-----------------------------------------------------------------------------
 
@@ -369,23 +383,26 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	/**
 	 * Возвращает массив разделов
 	 *
-	 * @param int $root[optional]  Идентификатор корневого раздела
+	 * @param int $root[optional]   Идентификатор корневого раздела
+	 * @param int $level[optional]  Уровень раздела
 	 *
 	 * @return array
 	 *
 	 * @since 1.00
 	 */
-	private function buildSectionTree($root = 0)
+	private function buildSectionTree($root = 0, $level = 0)
 	{
 		global $Eresus;
 
-		$sections = $Eresus->sections->children(0);
+		$sections = $Eresus->sections->children($root);
 		$result = array();
 		foreach ($sections as $section)
 		{
-			$children = $this->buildSectionTree($section['id']);
-			if ($section['type'] == $this->plugin->name || $children)
+			$section['selectable'] = $section['type'] == $this->plugin->name;
+			$children = $this->buildSectionTree($section['id'], $level + 1);
+			if ($section['selectable'] || $children)
 			{
+				$section['padding'] = str_repeat('-', $level);
 				$result []= $section;
 				if ($children)
 				{

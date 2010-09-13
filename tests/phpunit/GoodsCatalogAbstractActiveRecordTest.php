@@ -63,7 +63,7 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 		$GLOBALS['Eresus'] = new stdClass();
 		$GLOBALS['Eresus']->plugins = new PluginsStub();
 
-		$this->assertEquals('GoodsCatalog_mytable', $this->fixture->getDbTable());
+		$this->assertEquals('goodscatalog_mytable', $this->fixture->getDbTable());
 	}
 	//-----------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 		$GLOBALS['Eresus'] = new stdClass();
 		$GLOBALS['Eresus']->plugins = new PluginsStub();
 
-		$this->assertEquals('GoodsCatalog_mytable', GoodsCatalogAbstractActiveRecordTest_Stub::getDbTableStatic('GoodsCatalogAbstractActiveRecordTest_Stub'));
+		$this->assertEquals('goodscatalog_mytable', GoodsCatalogAbstractActiveRecordTest_Stub::getDbTableStatic('GoodsCatalogAbstractActiveRecordTest_Stub'));
 	}
 	//-----------------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetDbTableStatic_fail()
 	{
-		$this->assertEquals('GoodsCatalog_mytable', GoodsCatalogAbstractActiveRecordTest_Stub::getDbTableStatic('stdClass'));
+		$this->assertEquals('goodscatalog_mytable', GoodsCatalogAbstractActiveRecordTest_Stub::getDbTableStatic('stdClass'));
 	}
 	//-----------------------------------------------------------------------------
 
@@ -264,10 +264,3 @@ class GoodsCatalogAbstractActiveRecordTest_Stub extends GoodsCatalogAbstractActi
 	}
 	//-----------------------------------------------------------------------------
 }
-
-
-function eresus_log()
-{
-	;
-}
-//-----------------------------------------------------------------------------

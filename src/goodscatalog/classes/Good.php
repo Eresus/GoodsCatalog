@@ -371,6 +371,47 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
+	 * Геттер свойства $brand
+	 *
+	 * @return GoodsCatalogBrand
+	 *
+	 * @since 1.00
+	 */
+	protected function getBrand()
+	{
+		try {
+			$brand = new GoodsCatalogBrand($this->getProperty('brand'));
+		}
+		catch (DomainException $e)
+		{
+			return null;
+			$e = $e; // PHPMD hack
+		}
+
+		return $brand;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Сеттер свойства $brand
+	 *
+	 * @param int|GoodsCatalogBrand $value
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	protected function setBrand($value)
+	{
+		if ($value instanceof GoodsCatalogBrand)
+		{
+			$value = $value->id;
+		}
+		$this->setProperty('brand', intval($value));
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
 	 * Выбирает товары из БД
 	 *
 	 * @param ezcQuerySelect $query             Запрос
