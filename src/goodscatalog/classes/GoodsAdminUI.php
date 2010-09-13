@@ -303,6 +303,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			$this->reportBadURL($e);
 		}
 
+		$good->section = arg('section', 'int');
 		$good->article = arg('article');
 		$good->title = arg('title');
 		$good->about = arg('about');
@@ -313,12 +314,6 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		$good->description = arg('description');
 		$good->brand = arg('brand', 'int');
 		$good->photo = 'photo'; // $_FILES['photo'];
-
-		if (arg('section') != $good->section)
-		{
-			$oldSection = $good->section;
-			$good->section = arg('section', 'int');
-		}
 
 		try
 		{

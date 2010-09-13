@@ -65,6 +65,13 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	private $upload;
 
 	/**
+	 * Свойство для отслеживания изменения раздела
+	 *
+	 * @var int
+	 */
+	private $originalSection = null;
+
+	/**
 	 * Метод возвращает имя таблицы БД
 	 *
 	 * @return string  Имя таблицы БД
@@ -145,7 +152,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	{
 		eresus_log(__METHOD__, LOG_DEBUG, '()');
 
-		if ($this->isNew())
+		if ($this->isNew() || ! is_null($this->originalSection))
 		{
 			/* Вычисляем порядковый номер */
 			$q = DB::getHandler()->createSelectQuery();
@@ -408,6 +415,25 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 			$value = $value->id;
 		}
 		$this->setProperty('brand', intval($value));
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Сеттер свойства $section
+	 *
+	 * @param int $value
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	protected function setSection($value)
+	{
+		if (is_null($this->originalSection))
+		{
+			$this->originalSection = $this->section;
+		}
+		$this->setProperty('section', $value);
 	}
 	//-----------------------------------------------------------------------------
 
