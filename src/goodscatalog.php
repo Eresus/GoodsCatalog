@@ -244,7 +244,6 @@ class GoodsCatalog extends ContentPlugin
 
 		/* Создаём директорию кэша */
 		$umask = umask(0000);
-		@mkdir($Eresus->fdata . 'cache', 0777);
 		umask($umask);
 
 	}
