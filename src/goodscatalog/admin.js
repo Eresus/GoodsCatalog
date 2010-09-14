@@ -30,7 +30,15 @@
  * $Id$
  */
 
+/**
+ * Реестр переменных каталога
+ */
+var GoodsCatalog = {
+	// Признак изменения данных в диалоге
+	dialogDataChanged: false
+};
 
+/* Запросы подтверждения на удаление объектов */
 jQuery('#content .goods-list-item a.delete').live('click', function (e)
 {
 	return confirm("Подтверждаете удаление товара?");
@@ -45,3 +53,7 @@ jQuery('#content .brand-list-item a.delete').live('click', function (e)
 {
 	return confirm("Подтверждаете удаление бренда?");
 });
+
+
+
+//jQuerycatalogEdit-main

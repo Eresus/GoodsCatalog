@@ -280,7 +280,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		);
 		$wysiwyg->forms_html($fakeForm, $fakeField);
 
-		$form = new EresusForm('ext/' . $this->plugin->name . '/templates/goods-edit.html' ,
+		$form = new EresusForm('ext/' . $this->plugin->name . '/templates/goods-edit-form.html' ,
 			LOCALE_CHARSET);
 
 		// Данные для подстановки в шаблон
@@ -309,7 +309,14 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			$form->setValue('urlDelete', str_replace('&', '&amp;', $page->url(array('photo_delete' => '%s'))));
 		}
 
-		$html = $form->compile();
+		$data['form'] = $form->compile();
+		$data['listURL'] = str_replace('&', '&amp;', $page->url(array('id' => false)));
+
+		// Создаём экземпляр шаблона
+		$tmpl = $this->plugin->getHelper()->getAdminTemplate('goods-edit.html');
+
+		// Компилируем шаблон и данные
+		$html = $tmpl->compile($data);
 
 		return $html;
 	}
