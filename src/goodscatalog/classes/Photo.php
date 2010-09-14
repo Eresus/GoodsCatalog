@@ -187,8 +187,6 @@ class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
 			}
 		}
 
-		rmdir(dirname($this->photoPath));
-
 		parent::delete();
 	}
 	//-----------------------------------------------------------------------------

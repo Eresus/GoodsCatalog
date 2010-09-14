@@ -468,6 +468,10 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 				return $this->movePhotoDown();
 			break;
 
+			case arg('photo_delete'):
+				return $this->deletePhoto();
+			break;
+
 			default:
 				return false;
 			break;
@@ -580,4 +584,37 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	}
 	//-----------------------------------------------------------------------------
 
+	/**
+	 * Удаляет фотографию
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 */
+	private function deletePhoto()
+	{
+		$id = arg('photo_delete', 'int');
+
+		try
+		{
+			$photo = new GoodsCatalogPhoto($id);
+
+			try
+			{
+				$photo->delete();
+			}
+			catch (Exception $e)
+			{
+				ErrorMessage(iconv('utf8', 'cp1251', 'Не удалось удалить фотографию: ') .
+					$e->getMessage());
+			}
+		}
+		catch (DomainException $e)
+		{
+			$this->reportBadURL($e);
+		}
+
+		HTTP::goback();
+	}
+	//-----------------------------------------------------------------------------
 }
