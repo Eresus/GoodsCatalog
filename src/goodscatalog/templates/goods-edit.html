@@ -135,6 +135,30 @@
 				<div class="ui-button-box">
 					<a class="ui-button" href="admin.php?mod=content&amp;section={$good->section}&amp;id={$good->id}&amp;action=photo_add">Добавить фотографию</a>
 				</div>
+				{if count($photos) > 0}
+				<table class="catalog-photo-list ui-widget ui-widget-content">
+					{foreach $photos photo}
+					<tr class="goods-list-item">
+						<td class="controls">
+							<a href="{sprintf($urlEdit, $photo->id)}" title="Изменить">
+								<img src="{$Eresus->root}{$theme->getIcon('item-edit.png')}" alt="[изменить]" />
+							</a>
+							<a href="{sprintf($urlUp, $photo->id)}" title="Поднять">
+								<img src="{$Eresus->root}{$theme->getIcon('move-up.png')}" alt="[поднять]" />
+							</a>
+							<a href="{sprintf($urlDown, $photo->id)}" title="Опустить">
+								<img src="{$Eresus->root}{$theme->getIcon('move-down.png')}" alt="[опустить]" />
+							</a>
+							&nbsp;
+							<a href="{sprintf($urlDelete, $photo->id)}" title="Удалить" class="delete">
+								<img src="{$Eresus->root}{$theme->getIcon('item-delete.png')}" alt="[удалить]" />
+							</a>
+						</td>
+						<td class="photo">{if $photo->thumbURL}<img src="{$photo->thumbURL}" alt="" />{/if}</td>
+					</tr>
+					{/foreach}
+				</table>
+				{/if}
 			</fc:tab>
 			{/if}
 
