@@ -36,6 +36,11 @@ jQuery('#content .goods-list-item a.delete').live('click', function (e)
 	return confirm("Подтверждаете удаление товара?");
 });
 
+jQuery('#content .photo-list-item a.delete').live('click', function (e)
+{
+	return confirm("Подтверждаете удаление фотогарфии?");
+});
+
 jQuery('#content .brand-list-item a.delete').live('click', function (e)
 {
 	return confirm("Подтверждаете удаление бренда?");
