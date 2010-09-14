@@ -252,6 +252,18 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			return;
 		}
 
+		if ($this->plugin->settings['extPhotosEnabled'])
+		{
+			$ext = $this->photoActions($good);
+			if ($ext !== false)
+			{
+				return $ext;
+			}
+		}
+		/*
+		 * Основные свойства
+		 */
+
 		/*
 		 * Имитируем использование старых форм на основе массивов.
 		 * Это требуется для правильного подключения WYSIWYG.
@@ -266,18 +278,30 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		);
 		$wysiwyg->forms_html($fakeForm, $fakeField);
 
+		$form = new EresusForm('ext/' . $this->plugin->name . '/templates/goods-edit.html' ,
+			LOCALE_CHARSET);
+
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
-		$data['good'] = $good;
-		$data['brands'] = GoodsCatalogBrand::find(null, null, true);
+		foreach ($data as $key => $value)
+		{
+			$form->setValue($key, $value);
+		}
 
-		$data['sections'] = $this->buildSectionTree();
+		$form->setValue('good', $good);
+		$form->setValue('brands', GoodsCatalogBrand::find(null, null, true));
 
-		// Создаём экземпляр шаблона
-		$tmpl = $this->plugin->getHelper()->getAdminTemplate('goods-edit.html');
+		$form->setValue('sections', $this->buildSectionTree());
 
-		// Компилируем шаблон и данные
-		$html = $tmpl->compile($data);
+		/*
+		 * Дополнительные фотографии
+		 */
+		if ($this->plugin->settings['extPhotosEnabled'])
+		{
+			$form->setValue('photos', GoodsCatalogPhoto::find($good->id));
+		}
+
+		$html = $form->compile();
 
 		return $html;
 	}
@@ -406,6 +430,95 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			}
 		}
 		return $result;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Действия с дополнительными фотографиями
+	 *
+	 * @param GoodsCatalogGood $good
+	 *
+	 * @return string|false
+	 */
+	private function photoActions($good)
+	{
+		switch (true)
+		{
+			case arg('action') == 'photo_add':
+				return $this->renderPhotoAddDialog($good);
+			break;
+
+			case arg('action') == 'photo_insert':
+				return $this->addPhoto($good);
+			break;
+
+			default:
+				return false;
+			break;
+		}
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает диалог добавления дополнительной фотографии
+	 *
+	 * @param GoodsCatalogGood $good
+	 */
+	private function renderPhotoAddDialog($good)
+	{
+		// Данные для подстановки в шаблон
+		$data = $this->plugin->getHelper()->prepareTmplData();
+		$data['good'] = $good;
+
+		// Создаём экземпляр шаблона
+		$tmpl = $this->plugin->getHelper()->getAdminTemplate('photo-add.html');
+
+		// Компилируем шаблон и данные
+		$html = $tmpl->compile($data);
+
+		return $html;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Добавляет дополнительную фотографию
+	 *
+	 * @param GoodsCatalogGood $good
+	 *
+	 * @return void
+	 *
+	 * @since 1.00
+	 * @uses HTTP::redirect
+	 */
+	protected function addPhoto($good)
+	{
+		for ($i = 1; $i <= 5; $i++)
+		{
+			$name = 'file' . $i;
+			if (!isset($_FILES[$name]) || $_FILES[$name]['error'] == UPLOAD_ERR_NO_FILE)
+			{
+				continue;
+			}
+			$photo = new GoodsCatalogPhoto();
+			$photo->good = $good->id;
+			$photo->photo = $name; // $_FILES[$name];
+			try
+			{
+				$photo->save();
+			}
+			catch (EresusRuntimeException $e)
+			{
+				ErrorMessage($e->getMessage());
+			}
+			catch (Exception $e)
+			{
+				Core::logException($e);
+				ErrorMessage(iconv('utf8', 'cp1251',
+					'Произошла внутренняя ошибка при добавлении фотографии.'));
+			}
+		}
+
+		HTTP::redirect('admin.php?mod=content&section=' . $good->section . '&id=' . $good->id);
 	}
 	//-----------------------------------------------------------------------------
 }

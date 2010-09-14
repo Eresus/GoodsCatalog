@@ -41,4 +41,5 @@ return array(
 	'GoodsCatalogHelper' => $dir . '/classes/Helper.php',
 	'GoodsCatalogGood' => $dir . '/classes/Good.php',
 	'GoodsCatalogGoodsAdminUI' => $dir . '/classes/GoodsAdminUI.php',
+	'GoodsCatalogPhoto' => $dir . '/classes/Photo.php',
 );
