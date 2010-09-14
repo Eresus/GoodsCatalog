@@ -56,6 +56,23 @@ class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
 	private $upload;
 
 	/**
+	 * Конструктор
+	 *
+	 * @param int $id  Идентификатор
+	 *
+	 * @return GoodsCatalogPhoto
+	 *
+	 * @since 1.00
+	 */
+	public function __construct($id = null)
+	{
+		$this->ownerProperty = 'good';
+
+		parent::__construct($id);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
 	 * Метод возвращает имя таблицы БД
 	 *
 	 * @return string  Имя таблицы БД

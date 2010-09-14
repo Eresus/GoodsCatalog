@@ -240,6 +240,8 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	 */
 	protected function renderEditDialog()
 	{
+		global $page;
+
 		$id = arg('id', 'int');
 
 		try
@@ -299,6 +301,12 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		if ($this->plugin->settings['extPhotosEnabled'])
 		{
 			$form->setValue('photos', GoodsCatalogPhoto::find($good->id));
+
+			/* Шаблоны адресов действий */
+			$form->setValue('urlEdit', str_replace('&', '&amp;', $page->url(array('photo_id' => '%s'))));
+			$form->setValue('urlUp', str_replace('&', '&amp;', $page->url(array('photo_up' => '%s'))));
+			$form->setValue('urlDown', str_replace('&', '&amp;', $page->url(array('photo_down' => '%s'))));
+			$form->setValue('urlDelete', str_replace('&', '&amp;', $page->url(array('photo_delete' => '%s'))));
 		}
 
 		$html = $form->compile();
@@ -452,6 +460,14 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 				return $this->addPhoto($good);
 			break;
 
+			case arg('photo_up'):
+				return $this->movePhotoUp();
+			break;
+
+			case arg('photo_down'):
+				return $this->movePhotoDown();
+			break;
+
 			default:
 				return false;
 			break;
@@ -521,4 +537,47 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		HTTP::redirect('admin.php?mod=content&section=' . $good->section . '&id=' . $good->id);
 	}
 	//-----------------------------------------------------------------------------
+
+	/**
+	 * Перемещение фотографии вверх по списку
+	 *
+	 * @return void
+	 */
+	private function movePhotoUp()
+	{
+		try
+		{
+			$photo = new GoodsCatalogPhoto(arg('photo_up', 'int'));
+		}
+		catch (DomainException $e)
+		{
+			$this->reportBadURL($e);
+		}
+
+		$photo->moveUp();
+		HTTP::goback();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Перемещение фотографии вниз по списку
+	 *
+	 * @return void
+	 */
+	private function movePhotoDown()
+	{
+		try
+		{
+			$photo = new GoodsCatalogPhoto(arg('photo_down', 'int'));
+		}
+		catch (DomainException $e)
+		{
+			$this->reportBadURL($e);
+		}
+
+		$photo->moveDown();
+		HTTP::goback();
+	}
+	//-----------------------------------------------------------------------------
+
 }
