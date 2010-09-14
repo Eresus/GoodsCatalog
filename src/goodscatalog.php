@@ -230,11 +230,11 @@ class GoodsCatalog extends ContentPlugin
 			`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
 			`active` bool NOT NULL default 0 COMMENT 'Активность',
 			`position` int(10) unsigned NOT NULL default '0' COMMENT 'Порядковый номер',
-			`goods` int(10) unsigned default 0 COMMENT 'Привязка к товару',
+			`good` int(10) unsigned default 0 COMMENT 'Привязка к товару',
 			`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла',
 			PRIMARY KEY  (`id`),
-			KEY `admin_list` (`goods`, `position`),
-			KEY `client_list` (`active`, `goods`, `position`)
+			KEY `admin_list` (`good`, `position`),
+			KEY `client_list` (`active`, `good`, `position`)
 		";
 		$this->dbCreateTable($sql, 'photos');
 

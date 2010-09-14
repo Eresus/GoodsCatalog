@@ -2,7 +2,7 @@
 /**
  * Каталог товаров
  *
- * ActiveRecord товара
+ * ActiveRecord фотографии
  *
  * @version ${product.version}
  *
@@ -33,29 +33,20 @@
 
 
 /**
- * ActiveRecord товара
+ * ActiveRecord фотографии
  *
  * @property       int                   $id           Идентификатор
- * @property       int                   $section      Идентификатор раздела сайта
- * @property       bool                  $active       Активность товара
+ * @property       GoodsCatalogGood      $good         Товар
  * @property       int                   $position     Порядковый номер
- * @property       string                $article      Артикул
- * @property       string                $title        Название
- * @property       string                $about        Краткое описание
- * @property       string                $description  Описание
- * @property       float                 $cost         Цена
  * @property-read  string                $photoPath    Путь к основной фотографии
  * @property-read  string                $photoURL     URL основной фотографии
  * @property-write string                $photo        Свойство для загрузки основной фотографии
  * @property-read  string                $thumbPath    Путь к миниатюре
  * @property-read  string                $thumbURL     URL иниатюры
- * @property       bool                  $special      Спецпредложение
- * @property-read  GoodsCatalogBrand     $brand        Бренд или null
- * @property-write GoodsCatalogBrand|int $brand        Бренд или его идентификатор
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
+class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
 {
 	/**
 	 * Описание файла для загрузки
@@ -63,13 +54,6 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 * @var array
 	 */
 	private $upload;
-
-	/**
-	 * Свойство для отслеживания изменения раздела
-	 *
-	 * @var int
-	 */
-	private $originalSection = null;
 
 	/**
 	 * Метод возвращает имя таблицы БД
@@ -80,7 +64,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 */
 	public function getTableName()
 	{
-		return 'goods';
+		return 'photos';
 	}
 	//-----------------------------------------------------------------------------
 
@@ -97,46 +81,20 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 			'id' => array(
 				'type' => PDO::PARAM_INT,
 			),
-			'section' => array(
-				'type' => PDO::PARAM_INT,
-			),
 			'active' => array(
 				'type' => PDO::PARAM_BOOL,
 			),
 			'position' => array(
 				'type' => PDO::PARAM_INT,
 			),
-			'article' => array(
-				'type' => PDO::PARAM_STR,
-				'maxlength' => 255,
-			),
-			'title' => array(
-				'type' => PDO::PARAM_STR,
-				'maxlength' => 255,
-			),
-			'about' => array(
-				'type' => PDO::PARAM_STR,
-				'maxlength' => 65535,
-			),
-			'description' => array(
-				'type' => PDO::PARAM_STR,
-				'maxlength' => 4294967295,
-			),
-			'cost' => array(
-				'type' => PDO::PARAM_STR,
-				'maxlength' => 10,
+			'good' => array(
+				'type' => PDO::PARAM_INT,
 			),
 			'ext' => array(
 				'type' => PDO::PARAM_STR,
 				'maxlength' => 4,
 			),
-			'special' => array(
-				'type' => PDO::PARAM_BOOL,
-			),
-			'brand' => array(
-				'type' => PDO::PARAM_INT,
-			),
-			);
+		);
 	}
 	//-----------------------------------------------------------------------------
 
@@ -152,14 +110,14 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	{
 		eresus_log(__METHOD__, LOG_DEBUG, '()');
 
-		if ($this->isNew() || ! is_null($this->originalSection))
+		if ($this->isNew())
 		{
 			/* Вычисляем порядковый номер */
 			$q = DB::getHandler()->createSelectQuery();
 			$e = $q->expr;
 			$q->select($q->alias($e->max('position'), 'maxval'))
 				->from($this->getDbTable())
-				->where($e->eq('section', $q->bindValue($this->section, null, PDO::PARAM_INT)));
+				->where($e->eq('good', $q->bindValue($this->getProperty('good'), null, PDO::PARAM_INT)));
 			$result = DB::fetch($q);
 			$this->position = $result['maxval'] + 1;
 		}
@@ -219,25 +177,25 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Считает количество брендов
+	 * Считает количество фотографий
 	 *
-	 * @param int  $section               Идентификатор раздела
+	 * @param int  $good                  Идентификатор товара
 	 * @param bool $activeOnly[optional]  Считать только активные или все
 	 *
 	 * @return int
 	 *
 	 * @since 1.00
 	 */
-	public static function count($section, $activeOnly = false)
+	public static function count($good, $activeOnly = false)
 	{
-		eresus_log(__METHOD__, LOG_DEBUG, '(%d, %d)', $section, $activeOnly);
+		eresus_log(__METHOD__, LOG_DEBUG, '(%d, %d)', $good, $activeOnly);
 
 		$q = DB::getHandler()->createSelectQuery();
 		$q->select('count(DISTINCT id) as `count`')
 			->from(self::getDbTableStatic(__CLASS__));
 
 		$e = $q->expr;
-		$condition = $e->eq('section', $q->bindValue($section, null, PDO::PARAM_INT));
+		$condition = $e->eq('good', $q->bindValue($good, null, PDO::PARAM_INT));
 		if ($activeOnly)
 		{
 			$condition = $e->lAnd(
@@ -254,25 +212,25 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Выбирает бренды из БД
+	 * Выбирает фотографии из БД
 	 *
-	 * @param int  $section               Идентификатор раздела
-	 * @param int  $limit[optional]       Вернуть не более $limit брендов
-	 * @param int  $offset[optional]      Пропустить $offset первых брендов
-	 * @param bool $activeOnly[optional]  Искать только активные бренды
+	 * @param int  $good                  Идентификатор товара
+	 * @param int  $limit[optional]       Вернуть не более $limit фотографий
+	 * @param int  $offset[optional]      Пропустить $offset первых фотографий
+	 * @param bool $activeOnly[optional]  Искать только активные фотографии
 	 *
-	 * @return array(GoodsCatalogBrand)
+	 * @return array(GoodsCatalogPhoto)
 	 *
 	 * @since 1.00
 	 */
-	public static function find($section, $limit = null, $offset = null, $activeOnly = false)
+	public static function find($good, $limit = null, $offset = null, $activeOnly = false)
 	{
-		eresus_log(__METHOD__, LOG_DEBUG, '(%d, %d, %d, %d)', $section, $limit, $offset, $activeOnly);
+		eresus_log(__METHOD__, LOG_DEBUG, '(%d, %d, %d, %d)', $good, $limit, $offset, $activeOnly);
 
 		$q = DB::getHandler()->createSelectQuery();
 		$e = $q->expr;
 
-		$where = $e->eq('section', $q->bindValue($section, null, PDO::PARAM_INT));
+		$where = $e->eq('good', $q->bindValue($good, null, PDO::PARAM_INT));
 		if ($activeOnly)
 		{
 			$where = $e->lAnd($where, $e->eq('active', $q->bindValue(true, null, PDO::PARAM_BOOL)));
@@ -308,7 +266,8 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	{
 		if ($this->ext)
 		{
-			return self::plugin()->getDataDir() . 'goods/' . $this->id . '/main.' . $this->ext;
+			return self::plugin()->getDataDir() . 'goods/' . $this->getProperty('good') . '/' .
+				$this->id . '.' . $this->ext;
 		}
 		else
 		{
@@ -328,7 +287,8 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	{
 		if ($this->ext)
 		{
-			return self::plugin()->getDataURL() . 'goods/' . $this->id . '/main.' . $this->ext;
+			return self::plugin()->getDataURL() . 'goods/' . $this->getProperty('good') . '/' .
+				$this->id . '.' . $this->ext;
 		}
 		else
 		{
@@ -348,7 +308,8 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	{
 		if ($this->ext)
 		{
-			return self::plugin()->getDataDir() . 'goods/' . $this->id . '/main-thmb.jpg';
+			return self::plugin()->getDataDir() . 'goods/' . $this->getProperty('good') . '/' .
+				$this->id . '-thmb.jpg';
 		}
 		else
 		{
@@ -368,7 +329,8 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	{
 		if ($this->ext)
 		{
-			return self::plugin()->getDataURL() . 'goods/' . $this->id . '/main-thmb.jpg';
+			return self::plugin()->getDataURL() . 'goods/' . $this->getProperty('good') . '/' .
+				$this->id . '-thmb.jpg';
 		}
 		else
 		{
@@ -378,16 +340,16 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Геттер свойства $brand
+	 * Геттер свойства $good
 	 *
-	 * @return GoodsCatalogBrand
+	 * @return GoodsCatalogGood
 	 *
 	 * @since 1.00
 	 */
-	protected function getBrand()
+	protected function getGood()
 	{
 		try {
-			$brand = new GoodsCatalogBrand($this->getProperty('brand'));
+			$good = new GoodsCatalogGood($this->getProperty('good'));
 		}
 		catch (DomainException $e)
 		{
@@ -395,45 +357,26 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 			$e = $e; // PHPMD hack
 		}
 
-		return $brand;
+		return $good;
 	}
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Сеттер свойства $brand
+	 * Сеттер свойства $good
 	 *
-	 * @param int|GoodsCatalogBrand $value
+	 * @param int|GoodsCatalogGood $value
 	 *
 	 * @return void
 	 *
 	 * @since 1.00
 	 */
-	protected function setBrand($value)
+	protected function setGood($value)
 	{
-		if ($value instanceof GoodsCatalogBrand)
+		if ($value instanceof GoodsCatalogGood)
 		{
 			$value = $value->id;
 		}
-		$this->setProperty('brand', intval($value));
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Сеттер свойства $section
-	 *
-	 * @param int $value
-	 *
-	 * @return void
-	 *
-	 * @since 1.00
-	 */
-	protected function setSection($value)
-	{
-		if (is_null($this->originalSection) || $value != $this->section	)
-		{
-			$this->originalSection = $this->section;
-		}
-		$this->setProperty('section', $value);
+		$this->setProperty('good', intval($value));
 	}
 	//-----------------------------------------------------------------------------
 
@@ -559,6 +502,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 		parent::save();
 	}
 	//-----------------------------------------------------------------------------
+
 	/**
 	 * Накладывает логотип
 	 *
