@@ -305,8 +305,10 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			/* Шаблоны адресов действий */
 			$form->setValue('urlEdit', str_replace('&', '&amp;', $page->url(array('photo_id' => '%s'))));
 			$form->setValue('urlUp', str_replace('&', '&amp;', $page->url(array('photo_up' => '%s'))));
-			$form->setValue('urlDown', str_replace('&', '&amp;', $page->url(array('photo_down' => '%s'))));
-			$form->setValue('urlDelete', str_replace('&', '&amp;', $page->url(array('photo_delete' => '%s'))));
+			$form->setValue('urlDown',
+				str_replace('&', '&amp;', $page->url(array('photo_down' => '%s'))));
+			$form->setValue('urlDelete',
+				str_replace('&', '&amp;', $page->url(array('photo_delete' => '%s'))));
 		}
 
 		$data['form'] = $form->compile();
@@ -368,7 +370,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при изменении товара.'));
 		}
 
-		HTTP::redirect('admin.php?mod=content&section=' . $good->section);
+		HTTP::goback();
 	}
 	//-----------------------------------------------------------------------------
 

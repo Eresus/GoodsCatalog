@@ -180,8 +180,6 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function install()
 	{
-		global $Eresus;
-
 		parent::install();
 
 		/*
