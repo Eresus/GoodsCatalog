@@ -57,7 +57,17 @@ extends GoodsCatalogAbstractUI
 	 */
 	public function getHTML()
 	{
-		$html = $this->renderList();
+		global $page;
+
+		if ($page->topic)
+		{
+			$html = $this->renderItem();
+		}
+		else
+		{
+			$html = $this->renderList();
+		}
+
 		return $html;
 	}
 	//-----------------------------------------------------------------------------
@@ -100,6 +110,45 @@ extends GoodsCatalogAbstractUI
 
 		// Компилируем шаблон и данные
 		$html = $tmpl->compile($data);
+
+		return $html;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает разметку описания товара
+	 *
+	 * @return string  HTML
+	 *
+	 * @since 1.00
+	 */
+	private function renderItem()
+	{
+		global $page;
+
+		try
+		{
+			$good = new GoodsCatalogGood(intval($page->topic));
+		}
+		catch (DomainException $e)
+		{
+			$page->httpError(404);
+			$e = $e; // PHPMD hack
+		}
+		// Данные для подстановки в шаблон
+		$data = $this->plugin->getHelper()->prepareTmplData();
+		$data['good'] = $good;
+
+		// Создаём экземпляр шаблона
+		$tmpl = $this->plugin->getHelper()->getClientTemplate('goods-item.html');
+
+		// Компилируем шаблон и данные
+		$html = $tmpl->compile($data);
+
+		$this->plugin->getHelper()->linkJQuery();
+		$this->plugin->getHelper()->linkJQueryUI();
+		$page->linkScripts($this->plugin->getCodeURL() . 'client.js');
+		$page->linkStyles($this->plugin->getCodeURL() . 'client.css');
 
 		return $html;
 	}
