@@ -33,6 +33,7 @@
  */
 
 include_once dirname(__FILE__) . '/helpers.php';
+include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/AbstractUI.php';
 include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/AbstractAdminUI.php';
 include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/GoodsAdminUI.php';
 

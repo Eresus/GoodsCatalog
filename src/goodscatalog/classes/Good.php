@@ -52,6 +52,7 @@
  * @property       bool                  $special      Спецпредложение
  * @property-read  GoodsCatalogBrand     $brand        Бренд или null
  * @property-write GoodsCatalogBrand|int $brand        Бренд или его идентификатор
+ * @property-read  string                $clientURL    URL страницы товара в клиентском интерфейсе
  *
  * @package GoodsCatalog
  */
@@ -434,6 +435,19 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 			$this->originalSection = $this->section;
 		}
 		$this->setProperty('section', $value);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Геттер свойства $clientURL
+	 *
+	 * @return string
+	 *
+	 * @since 1.00
+	 */
+	protected function getClientURL()
+	{
+		return $GLOBALS['page']->clientURL($this->section) . $this->id . '/';
 	}
 	//-----------------------------------------------------------------------------
 
