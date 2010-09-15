@@ -86,24 +86,20 @@ extends GoodsCatalogAbstractUI
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
 		// Определяем текущую страницу списка
-		//$pg = arg('pg') ? arg('pg', 'int') : 1;
+		$pg = $page->subpage ? $page->subpage : 1;
 		$maxCount = $this->plugin->settings['goodsPerPage'];
-		$startFrom = 0; //($pg - 1) * $maxCount;
+		$startFrom = ($pg - 1) * $maxCount;
 
 		$data['goods'] = GoodsCatalogGood::find($page->id, $maxCount, $startFrom, true);
-		/*
-
-		$data['goods'] = GoodsCatalogGood::find($data['section'], $maxCount, $startFrom);
-		$totalPages = ceil(GoodsCatalogGood::count($data['section']) / $maxCount);
+		$totalPages = ceil(GoodsCatalogGood::count($page->id / $maxCount));
 		if ($totalPages > 1)
 		{
-			$data['pagination'] = new PaginationHelper($totalPages, $pg, $page->url(array('pg' => '%s')));
+			$data['pagination'] = new PaginationHelper($totalPages, $pg);
 		}
 		else
 		{
 			$data['pagination'] = null;
 		}
-		*/
 
 		// Создаём экземпляр шаблона
 		$tmpl = $this->plugin->getHelper()->getClientTemplate('goods-list.html');
@@ -138,6 +134,11 @@ extends GoodsCatalogAbstractUI
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
 		$data['good'] = $good;
+		$data['listURL'] = $page->clientURL($page->id);
+		if ($page instanceof TClientUI && $page->subpage)
+		{
+			$data['listURL'] .= 'p' . $page->subpage . '/';
+		}
 
 		// Создаём экземпляр шаблона
 		$tmpl = $this->plugin->getHelper()->getClientTemplate('goods-item.html');

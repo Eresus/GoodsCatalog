@@ -461,7 +461,15 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 */
 	protected function getClientURL()
 	{
-		return $GLOBALS['page']->clientURL($this->section) . $this->id . '/';
+		$page = $GLOBALS['page'];
+
+		$url = $page->clientURL($this->section);
+		if ($page instanceof TClientUI && $page->subpage)
+		{
+			$url .= 'p' . $page->subpage . '/';
+		}
+
+		return  $url . $this->id . '/';
 	}
 	//-----------------------------------------------------------------------------
 
