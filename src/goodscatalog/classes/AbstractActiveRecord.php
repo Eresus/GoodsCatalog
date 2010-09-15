@@ -319,7 +319,8 @@ abstract class GoodsCatalogAbstractActiveRecord
 		$e = $q->expr;
 		$q->select('*')->from($this->getDbTable())
 			->where($e->lAnd(
-				$e->eq($this->ownerProperty, $q->bindValue($this->getProperty($this->ownerProperty), null, PDO::PARAM_INT)),
+				$e->eq($this->ownerProperty,
+					$q->bindValue($this->getProperty($this->ownerProperty), null, PDO::PARAM_INT)),
 				$e->lt('position', $q->bindValue($this->position, null, PDO::PARAM_INT))
 			))
 			->orderBy('position', ezcQuerySelect::DESC)
@@ -357,7 +358,8 @@ abstract class GoodsCatalogAbstractActiveRecord
 		$e = $q->expr;
 		$q->select('*')->from($this->getDbTable())
 			->where($e->lAnd(
-				$e->eq($this->ownerProperty, $q->bindValue($this->getProperty($this->ownerProperty), null, PDO::PARAM_INT)),
+				$e->eq($this->ownerProperty,
+					$q->bindValue($this->getProperty($this->ownerProperty), null, PDO::PARAM_INT)),
 				$e->gt('position', $q->bindValue($this->position, null, PDO::PARAM_INT))
 			))
 			->orderBy('position', ezcQuerySelect::ASC)

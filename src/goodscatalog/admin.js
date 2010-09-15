@@ -55,5 +55,22 @@ jQuery('#content .brand-list-item a.delete').live('click', function (e)
 });
 
 
+/**
+ * Отслеживание изменений на вкладке "Основные совйства товара"
+ */
+jQuery('#catalogEdit-main :input').live('change', function ()
+{
+	GoodsCatalog.dialogDataChanged = true;
+});
 
-//jQuerycatalogEdit-main
+jQuery(document).ready(function () 
+{
+	jQuery('#catalogEdit-btn-images a').click(function (e) 
+	{
+		if (GoodsCatalog.dialogDataChanged)
+		{
+			alert('На вкладке "Основные свойства" есть несохранённые изменения. Сохраните их прежде чем перейти к дополнительным фотографиям.');
+			jQuery(e).stopPropagation().preventDefault();
+		}
+	});
+});
