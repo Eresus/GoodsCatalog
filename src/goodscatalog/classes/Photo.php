@@ -40,6 +40,7 @@
  * @property       int                   $position     Порядковый номер
  * @property-read  string                $photoPath    Путь к основной фотографии
  * @property-read  string                $photoURL     URL основной фотографии
+ * @property-read  string                $clientPopup  URL для показа во всплывающем блоке
  * @property-write string                $photo        Свойство для загрузки основной фотографии
  * @property-read  string                $thumbPath    Путь к миниатюре
  * @property-read  string                $thumbURL     URL иниатюры
@@ -304,6 +305,26 @@ class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
 		{
 			return self::plugin()->getDataURL() . 'goods/' . $this->getProperty('good') . '/' .
 				$this->id . '.' . $this->ext;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Геттер свойства $clientPopup
+	 *
+	 * @return string
+	 *
+	 * @since 1.00
+	 */
+	protected function getClientPopup()
+	{
+		if ($this->photoURL)
+		{
+			return $this->photoURL . '#catalog-popup';
 		}
 		else
 		{

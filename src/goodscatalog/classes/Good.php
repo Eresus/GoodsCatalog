@@ -35,24 +35,25 @@
 /**
  * ActiveRecord товара
  *
- * @property       int                   $id           Идентификатор
- * @property       int                   $section      Идентификатор раздела сайта
- * @property       bool                  $active       Активность товара
- * @property       int                   $position     Порядковый номер
- * @property       string                $article      Артикул
- * @property       string                $title        Название
- * @property       string                $about        Краткое описание
- * @property       string                $description  Описание
- * @property       float                 $cost         Цена
- * @property-read  string                $photoPath    Путь к основной фотографии
- * @property-read  string                $photoURL     URL основной фотографии
- * @property-write string                $photo        Свойство для загрузки основной фотографии
- * @property-read  string                $thumbPath    Путь к миниатюре
- * @property-read  string                $thumbURL     URL иниатюры
- * @property       bool                  $special      Спецпредложение
- * @property-read  GoodsCatalogBrand     $brand        Бренд или null
- * @property-write GoodsCatalogBrand|int $brand        Бренд или его идентификатор
- * @property-read  string                $clientURL    URL страницы товара в клиентском интерфейсе
+ * @property       int                      $id           Идентификатор
+ * @property       int                      $section      Идентификатор раздела сайта
+ * @property       bool                     $active       Активность товара
+ * @property       int                      $position     Порядковый номер
+ * @property       string                   $article      Артикул
+ * @property       string                   $title        Название
+ * @property       string                   $about        Краткое описание
+ * @property       string                   $description  Описание
+ * @property       float                    $cost         Цена
+ * @property-read  string                   $photoPath    Путь к основной фотографии
+ * @property-read  string                   $photoURL     URL основной фотографии
+ * @property-write string                   $photo        Свойство для загрузки основной фотографии
+ * @property-read  string                   $thumbPath    Путь к миниатюре
+ * @property-read  string                   $thumbURL     URL иниатюры
+ * @property       bool                     $special      Спецпредложение
+ * @property-read  GoodsCatalogBrand        $brand        Бренд или null
+ * @property-write GoodsCatalogBrand|int    $brand        Бренд или его идентификатор
+ * @property-read  array(GoodsCatalogPhoto) $photos       Дополнительные фотографии
+ * @property-read  string                   $clientURL    URL страницы товара в КИ
  *
  * @package GoodsCatalog
  */
@@ -435,6 +436,19 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 			$this->originalSection = $this->section;
 		}
 		$this->setProperty('section', $value);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Геттер свойства $photos
+	 *
+	 * @return array
+	 *
+	 * @since 1.00
+	 */
+	protected function getPhotos()
+	{
+		return GoodsCatalogPhoto::find($this->id);
 	}
 	//-----------------------------------------------------------------------------
 
