@@ -434,4 +434,19 @@ class GoodsCatalog extends ContentPlugin
 	}
 	//-----------------------------------------------------------------------------
 
+	/**
+	 * Формирование HTML-кода КИ
+	 *
+	 * @return string  HTML
+	 *
+	 * @since 1.00
+	 */
+	public function clientRenderContent()
+	{
+		$ui = new GoodsCatalogGoodsClientUI($this);
+
+		return $ui->getHTML();
+	}
+	//-----------------------------------------------------------------------------
+
 }

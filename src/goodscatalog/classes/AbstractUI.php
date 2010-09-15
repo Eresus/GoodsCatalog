@@ -2,7 +2,7 @@
 /**
  * Каталог товаров
  *
- * Таблица автозагрузки классов
+ * Абстрактный интерфейс
  *
  * @version ${product.version}
  *
@@ -31,17 +31,56 @@
  * $Id$
  */
 
-$dir = dirname(__FILE__);
 
-return array(
-	'GoodsCatalogAbstractActiveRecord' => $dir . '/classes/AbstractActiveRecord.php',
-	'GoodsCatalogAbstractAdminUI' => $dir . '/classes/AbstractAdminUI.php',
-	'GoodsCatalogAbstractUI' => $dir . '/classes/AbstractUI.php',
-	'GoodsCatalogBrand' => $dir . '/classes/Brand.php',
-	'GoodsCatalogBrandsAdminUI' => $dir . '/classes/BrandsAdminUI.php',
-	'GoodsCatalogHelper' => $dir . '/classes/Helper.php',
-	'GoodsCatalogGood' => $dir . '/classes/Good.php',
-	'GoodsCatalogGoodsAdminUI' => $dir . '/classes/GoodsAdminUI.php',
-	'GoodsCatalogGoodsClientUI' => $dir . '/classes/GoodsClientUI.php',
-	'GoodsCatalogPhoto' => $dir . '/classes/Photo.php',
-);
+/**
+ * Абстрактный интерфейс
+ *
+ * @package GoodsCatalog
+ */
+abstract class GoodsCatalogAbstractUI
+{
+	/**
+	 * Объект плагина
+	 *
+	 * @var GoodsCatalog
+	 */
+	protected $plugin;
+
+	/**
+	 * Класс AR
+	 *
+	 * @var string
+	 */
+	private $activeRecordClass;
+
+	/**
+	 * Конструктор
+	 *
+	 * @param GoodsCatalog $plugin
+	 *
+	 * @return GoodsCatalogBrandsAI
+	 */
+	public function __construct(GoodsCatalog $plugin)
+	{
+		$this->plugin = $plugin;
+		$this->activeRecordClass = $this->getActiveRecordClass();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Должен возвращать HTML интерфейса
+	 *
+	 * @return string
+	 */
+	abstract public function getHTML();
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Метод должен возвращать имя класса активной записи
+	 *
+	 * @return string
+	 */
+	abstract protected function getActiveRecordClass();
+	//-----------------------------------------------------------------------------
+
+}

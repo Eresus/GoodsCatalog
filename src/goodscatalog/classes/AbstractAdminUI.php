@@ -38,37 +38,10 @@
  * @package GoodsCatalog
  */
 abstract class GoodsCatalogAbstractAdminUI
+extends GoodsCatalogAbstractUI
 {
 	/**
-	 * Объект плагина
-	 *
-	 * @var GoodsCatalog
-	 */
-	protected $plugin;
-
-	/**
-	 * Класс AR
-	 *
-	 * @var string
-	 */
-	private $activeRecordClass;
-
-	/**
-	 * Конструктор
-	 *
-	 * @param GoodsCatalog $plugin
-	 *
-	 * @return GoodsCatalogBrandsAI
-	 */
-	public function __construct(GoodsCatalog $plugin)
-	{
-		$this->plugin = $plugin;
-		$this->activeRecordClass = $this->getActiveRecordClass();
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Возвращает HTML интерфейса управления брендами
+	 * Возвращает HTML интерфейса управления
 	 *
 	 * @return string
 	 */
@@ -118,14 +91,6 @@ abstract class GoodsCatalogAbstractAdminUI
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Метод должен возвращать имя класса активной записи
-	 *
-	 * @return string
-	 */
-	abstract protected function getActiveRecordClass();
-	//-----------------------------------------------------------------------------
-
-	/**
 	 * Помещает в сессию сообщение о неправильном адресе
 	 *
 	 * @param Exception $e
@@ -151,7 +116,7 @@ abstract class GoodsCatalogAbstractAdminUI
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Переключает активность бренда
+	 * Переключает активность объекта
 	 *
 	 * @return void
 	 *
