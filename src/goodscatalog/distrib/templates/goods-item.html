@@ -27,3 +27,17 @@
 <a href="{$photo->clientPopup}"><img src="{$photo->thumbURL}" /></a>
 {/foreach}
 {/if}
+
+{if $this->settings.brandsEnabled and $good->brand}
+<h2>Бренд</h2>
+<dl>
+	<dt>Название</dt>
+	<dd>{$good->brand->title}</dd>
+
+	<dt>Описание</dt>
+	<dd>{$good->brand->description}</dd>
+
+	<dt>Логотип</dt>
+	<dd>{if $good->brand->logoURL}<img src="{$good->brand->logoURL}" alt="" />{else}Нет логотипа{/if}</dd>
+</dl>
+{/if}
