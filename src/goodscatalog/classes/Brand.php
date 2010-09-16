@@ -48,25 +48,6 @@
 class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 {
 	/**
-	 * Список поддерживаемых форматов
-	 * @var array
-	 */
-	private $supportedFormats = array(
-		'image/jpeg',
-		'image/jpg',
-		'image/pjpeg',
-		'image/png',
-		'image/gif',
-	);
-
-	/**
-	 * Описание файла для загрузки
-	 *
-	 * @var array
-	 */
-	private $upload;
-
-	/**
 	 * Метод возвращает имя таблицы БД
 	 *
 	 * @return string  Имя таблицы БД
@@ -107,42 +88,6 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 				'maxlength' => 4,
 			),
 		);
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Сохраняет изменения в БД
-	 *
-	 * @return void
-	 *
-	 * @uses serveUpload
-	 * @since 1.00
-	 */
-	public function save()
-	{
-		eresus_log(__METHOD__, LOG_DEBUG, '()');
-
-		// Запоминаем состояние isNew, потому что флаг будет сброшен в parent::save()
-		$wasNew = $this->isNew();
-		// Записываем в БД чтобы получить идентификатор для использования в имени файла
-		parent::save();
-
-		if ($this->upload)
-		{
-			try
-			{
-				$this->serveUpload();
-			}
-			catch (Exception $e)
-			{
-				Core::logException($e);
-				if ($wasNew)
-				{
-					$this->delete();
-				}
-				throw $e;
-			}
-		}
 	}
 	//-----------------------------------------------------------------------------
 
@@ -332,7 +277,7 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	 * @throws EresusFsRuntimeException Если загрузка не удалась
 	 * @since 1.07
 	 */
-	private function serveUpload()
+	protected function serveUpload()
 	{
 		$fileInfo = $_FILES[$this->upload];
 		if ($fileInfo['error'] == UPLOAD_ERR_NO_FILE)

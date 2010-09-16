@@ -92,6 +92,13 @@ abstract class GoodsCatalogAbstractActiveRecord
 	);
 
 	/**
+	 * Описание файла для загрузки
+	 *
+	 * @var array
+	 */
+	protected $upload;
+
+	/**
 	 * Конструктор
 	 *
 	 * @param int $id  Идентификатор
@@ -268,6 +275,23 @@ abstract class GoodsCatalogAbstractActiveRecord
 		if ($this->isNew())
 		{
 			$this->id = $db->lastInsertId();
+		}
+
+		if ($this->upload)
+		{
+			try
+			{
+				$this->serveUpload();
+			}
+			catch (Exception $e)
+			{
+				Core::logException($e);
+				if ($this->isNew())
+				{
+					$this->delete();
+				}
+				throw $e;
+			}
 		}
 
 		$this->isNew = false;
@@ -536,6 +560,36 @@ abstract class GoodsCatalogAbstractActiveRecord
 			throw new EresusRuntimeException("Unsupported file type: $mime",
 				iconv('utf8', 'cp1251', "Неподдерживаемый тип файла: $mime."));
 		}
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Автоматически определяет порядковый номер
+	 *
+	 * @return void
+	 */
+	protected function autoPosition()
+	{
+		$q = DB::getHandler()->createSelectQuery();
+		$e = $q->expr;
+		$q->select($q->alias($e->max('position'), 'maxval'))
+			->from($this->getDbTable())
+			->where($e->eq($this->ownerProperty,
+				$q->bindValue($this->getProperty($this->ownerProperty), null, PDO::PARAM_INT)));
+		$result = DB::fetch($q);
+		$this->position = $result['maxval'] + 1;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Потомки могут перекрывать этот метод для загрузки изображения
+	 *
+	 * @return void
+	 *
+	 * @since 1.07
+	 */
+	protected function serveUpload()
+	{
 	}
 	//-----------------------------------------------------------------------------
 

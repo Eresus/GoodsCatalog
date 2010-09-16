@@ -60,13 +60,6 @@
 class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 {
 	/**
-	 * Описание файла для загрузки
-	 *
-	 * @var array
-	 */
-	private $upload;
-
-	/**
 	 * Свойство для отслеживания изменения раздела
 	 *
 	 * @var int
@@ -156,36 +149,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 
 		if ($this->isNew() || ! is_null($this->originalSection))
 		{
-			/* Вычисляем порядковый номер */
-			$q = DB::getHandler()->createSelectQuery();
-			$e = $q->expr;
-			$q->select($q->alias($e->max('position'), 'maxval'))
-				->from($this->getDbTable())
-				->where($e->eq('section', $q->bindValue($this->section, null, PDO::PARAM_INT)));
-			$result = DB::fetch($q);
-			$this->position = $result['maxval'] + 1;
-		}
-
-		// Запоминаем состояние isNew, потому что флаг будет сброшен в parent::save()
-		$wasNew = $this->isNew();
-		// Записываем в БД чтобы получить идентификатор для использования в имени файла
-		parent::save();
-
-		if ($this->upload)
-		{
-			try
-			{
-				$this->serveUpload();
-			}
-			catch (Exception $e)
-			{
-				Core::logException($e);
-				if ($wasNew)
-				{
-					$this->delete();
-				}
-				throw $e;
-			}
+			$this->autoPosition();
 		}
 	}
 	//-----------------------------------------------------------------------------
@@ -529,7 +493,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 * @throws EresusFsRuntimeException Если загрузка не удалась
 	 * @since 1.07
 	 */
-	private function serveUpload()
+	protected function serveUpload()
 	{
 		if (!isset($_FILES[$this->upload]) || $_FILES[$this->upload]['error'] == UPLOAD_ERR_NO_FILE)
 		{
