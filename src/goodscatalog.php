@@ -110,6 +110,7 @@ class GoodsCatalog extends ContentPlugin
 	 * Объект-помощник
 	 *
 	 * @var GoodsCatalogHelper
+	 * @since 1.00
 	 */
 	private $helper;
 
@@ -395,6 +396,7 @@ class GoodsCatalog extends ContentPlugin
 	/**
 	 * (non-PHPdoc)
 	 * @see main/core/Plugin::mkdir()
+	 * @since 1.00
 	 */
 	public function mkdir($name = '')
 	{
@@ -403,7 +405,7 @@ class GoodsCatalog extends ContentPlugin
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Добавляет пункта "Бренды" в меню "Расширения"
+	 * Добавляет пункт "Бренды" в меню "Расширения"
 	 *
 	 * @return void
 	 *
