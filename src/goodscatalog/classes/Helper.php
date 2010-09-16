@@ -132,7 +132,9 @@ class GoodsCatalogHelper
 	 */
 	public function getClientTemplate($name)
 	{
-		$tmpl = new Template('ext/' . $this->plugin->name . '/distrib/templates/' . $name);
+		$ts = GoodsCatalogTemplateService::getInstance();
+		$tmpl = $ts->getTemplate($name, $this->plugin->name);
+
 		return $tmpl;
 	}
 	//-----------------------------------------------------------------------------
