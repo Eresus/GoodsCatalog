@@ -107,7 +107,7 @@ class GoodsCatalog extends ContentPlugin
 	);
 
 	/**
-	 * Объект-помщник
+	 * Объект-помощник
 	 *
 	 * @var GoodsCatalogHelper
 	 */
