@@ -305,7 +305,6 @@ class GoodsCatalog extends ContentPlugin
 		global $page;
 
 		$page->linkStyles($this->urlCode . 'admin.css');
-		$this->getHelper()->linkJQuery();
 
 		// Данные для подстановки в шаблон
 		$data = $this->getHelper()->prepareTmplData();
