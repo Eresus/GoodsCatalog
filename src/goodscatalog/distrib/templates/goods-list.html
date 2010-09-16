@@ -19,5 +19,5 @@
 	</tr>
 	{/foreach}
 </table>
-{$pagination->render()}
+{if $pagination}{$pagination->render()}{/if}
 {/if}

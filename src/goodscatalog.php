@@ -182,68 +182,85 @@ class GoodsCatalog extends ContentPlugin
 	{
 		parent::install();
 
-		/*
-		 * Таблица товаров
-		 */
-		$sql = "
-			`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
-			`section` int(10) unsigned NOT NULL COMMENT 'Привязка к разделу',
-			`active` bool NOT NULL default 0 COMMENT 'Активность',
-			`position` int(10) unsigned NOT NULL default '0' COMMENT 'Порядковый номер',
-			`article` varchar(255) NOT NULL default '' COMMENT 'Артикул',
-			`title` varchar(255) NOT NULL default '' COMMENT 'Название',
-			`about` text NOT NULL default '' COMMENT 'Краткое описание',
-			`description` longtext NOT NULL default '' COMMENT 'Описание',
-			`cost` float NOT NULL default 0 COMMENT 'Цена',
-			`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла основной фотографии',
-			`special` bool NOT NULL default 0 COMMENT 'Спецпредложение',
-			`brand` int(10) unsigned default NULL COMMENT 'Привязка к бренду',
-			PRIMARY KEY  (`id`),
-			KEY `admin_list` (`section`, `position`),
-			KEY `client_list` (`active`, `section`, `position`),
-			KEY `admin_special` (`special`),
-			KEY `client_special` (`active`, `special`)
-		";
-		$this->dbCreateTable($sql, 'goods');
+		try
+		{
+			/*
+			 * Таблица товаров
+			 */
+			$sql = "
+				`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
+				`section` int(10) unsigned NOT NULL COMMENT 'Привязка к разделу',
+				`active` bool NOT NULL default 0 COMMENT 'Активность',
+				`position` int(10) unsigned NOT NULL default '0' COMMENT 'Порядковый номер',
+				`article` varchar(255) NOT NULL default '' COMMENT 'Артикул',
+				`title` varchar(255) NOT NULL default '' COMMENT 'Название',
+				`about` text NOT NULL default '' COMMENT 'Краткое описание',
+				`description` longtext NOT NULL default '' COMMENT 'Описание',
+				`cost` float NOT NULL default 0 COMMENT 'Цена',
+				`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла основной фотографии',
+				`special` bool NOT NULL default 0 COMMENT 'Спецпредложение',
+				`brand` int(10) unsigned default NULL COMMENT 'Привязка к бренду',
+				PRIMARY KEY  (`id`),
+				KEY `admin_list` (`section`, `position`),
+				KEY `client_list` (`active`, `section`, `position`),
+				KEY `admin_special` (`special`),
+				KEY `client_special` (`active`, `special`)
+			";
+			$this->dbCreateTable($sql, 'goods');
 
-		/*
-		 * Таблица брендов
-		 */
-		$sql = "
-			`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
-			`active` bool NOT NULL default 0 COMMENT 'Активность',
-			`title` varchar(255) NOT NULL default '' COMMENT 'Название',
-			`description` longtext NOT NULL default '' COMMENT 'Описание',
-			`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла логотипа',
-			PRIMARY KEY  (`id`),
-			KEY `admin_list` (`title`),
-			KEY `client_list` (`active`, `title`)
-		";
-		$this->dbCreateTable($sql, 'brands');
+			/*
+			 * Таблица брендов
+			 */
+			$sql = "
+				`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
+				`active` bool NOT NULL default 0 COMMENT 'Активность',
+				`title` varchar(255) NOT NULL default '' COMMENT 'Название',
+				`description` longtext NOT NULL default '' COMMENT 'Описание',
+				`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла логотипа',
+				PRIMARY KEY  (`id`),
+				KEY `admin_list` (`title`),
+				KEY `client_list` (`active`, `title`)
+			";
+			$this->dbCreateTable($sql, 'brands');
 
-		/*
-		 * Таблица дополнительных фотографий
-		 */
-		$sql = "
-			`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
-			`active` bool NOT NULL default 0 COMMENT 'Активность',
-			`position` int(10) unsigned NOT NULL default '0' COMMENT 'Порядковый номер',
-			`good` int(10) unsigned default 0 COMMENT 'Привязка к товару',
-			`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла',
-			PRIMARY KEY  (`id`),
-			KEY `admin_list` (`good`, `position`),
-			KEY `client_list` (`active`, `good`, `position`)
-		";
-		$this->dbCreateTable($sql, 'photos');
+			/*
+			 * Таблица дополнительных фотографий
+			 */
+			$sql = "
+				`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
+				`active` bool NOT NULL default 0 COMMENT 'Активность',
+				`position` int(10) unsigned NOT NULL default '0' COMMENT 'Порядковый номер',
+				`good` int(10) unsigned default 0 COMMENT 'Привязка к товару',
+				`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла',
+				PRIMARY KEY  (`id`),
+				KEY `admin_list` (`good`, `position`),
+				KEY `client_list` (`active`, `good`, `position`)
+			";
+			$this->dbCreateTable($sql, 'photos');
+		}
+		catch (Exception $e)
+		{
+			$this->uninstall();
+			throw new EresusRuntimeException('Fail to create DB tables',
+				'Не удалось создать таблицы в базе данных. Подробная информация доступна в журнале.', $e);
+		}
 
 		/* Создаём директории данных */
 		$this->mkdir('goods');
 		$this->mkdir('brands');
 
-		/* Создаём директорию кэша */
-		$umask = umask(0000);
-		umask($umask);
+		$ts = GoodsCatalogTemplateService::getInstance();
 
+		try
+		{
+			$ts->installTemplates($this->dirCode . 'distrib/templates', $this->name);
+		}
+		catch (Exception $e)
+		{
+			$this->uninstall();
+			throw new EresusRuntimeException('Fail to install templates',
+				'Не удалось установить шаблоны плагина. Подробная информация доступна в журнале.', $e);
+		}
 	}
 	//-----------------------------------------------------------------------------
 
@@ -257,6 +274,18 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function uninstall()
 	{
+		$ts = GoodsCatalogTemplateService::getInstance();
+
+		try
+		{
+			$ts->uninstall($this->name);
+		}
+		catch (Exception $e)
+		{
+			throw new EresusRuntimeException('Fail to uninstall templates',
+				'Не удалось удалить шаблоны плагина. Подробная информация доступна в журнале.', $e);
+		}
+
 		/* Удаляем директории данных */
 		$this->rmdir();
 

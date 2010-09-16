@@ -44,4 +44,9 @@ return array(
 	'GoodsCatalogGoodsAdminUI' => $dir . '/classes/GoodsAdminUI.php',
 	'GoodsCatalogGoodsClientUI' => $dir . '/classes/GoodsClientUI.php',
 	'GoodsCatalogPhoto' => $dir . '/classes/Photo.php',
+
+	'GoodsCatalogTemplateService' => $dir . '/classes/TemplateService.php',
+	'GoodsCatalogTemplateException' => $dir . '/classes/TemplateService.php',
+	'GoodsCatalogTemplateInvalidPathException' => $dir . '/classes/TemplateService.php',
+	'GoodsCatalogTemplatePathExistsException' => $dir . '/classes/TemplateService.php',
 );
