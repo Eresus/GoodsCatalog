@@ -36,8 +36,8 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 
 require_once dirname(__FILE__) . '/helpers.php';
 
-require_once 'GoodsCatalogAbstractActiveRecordTest.php';
-require_once 'GoodsCatalogGoodsAdminUITest.php';
+require_once dirname(__FILE__) . '/GoodsCatalogAbstractActiveRecordTest.php';
+require_once dirname(__FILE__) . '/GoodsCatalogGoodsAdminUITest.php';
 
 class AllTests
 {

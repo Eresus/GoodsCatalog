@@ -122,3 +122,101 @@ function eresus_log()
 	;
 }
 //-----------------------------------------------------------------------------
+
+
+class DB
+{
+	public static function getHandler()
+	{
+		return new DBHandlerStub();
+	}
+	//-----------------------------------------------------------------------------
+
+	public static function execute()
+	{
+		return null;
+	}
+	//-----------------------------------------------------------------------------
+
+	public static function fetch()
+	{
+		return array('id' => 1);
+	}
+	//-----------------------------------------------------------------------------
+}
+
+class DBHandlerStub
+{
+	public static $createDeleteQuery = 0;
+	public static $createInsertQuery = 0;
+	public static $createSelectQuery = 0;
+	public static $createUpdateQuery = 0;
+	public static $lastInsertId = 0;
+
+	public static function reset()
+	{
+		self::$createDeleteQuery = 0;
+		self::$createInsertQuery = 0;
+		self::$createSelectQuery = 0;
+		self::$createUpdateQuery = 0;
+		self::$lastInsertId = 0;
+	}
+	//-----------------------------------------------------------------------------
+
+	public function createDeleteQuery()
+	{
+		self::$createDeleteQuery++;
+		return new Fluent();
+	}
+	//-----------------------------------------------------------------------------
+
+	public function createInsertQuery()
+	{
+		self::$createInsertQuery++;
+		return new Fluent();
+	}
+	//-----------------------------------------------------------------------------
+
+	public function createSelectQuery()
+	{
+		self::$createSelectQuery++;
+		return new Fluent();
+	}
+	//-----------------------------------------------------------------------------
+
+	public function createUpdateQuery()
+	{
+		self::$createUpdateQuery++;
+		return new Fluent();
+	}
+	//-----------------------------------------------------------------------------
+
+	public function lastInsertId()
+	{
+		self::$lastInsertId++;
+		return 1;
+	}
+	//-----------------------------------------------------------------------------
+}
+
+
+class Fluent
+{
+	public function __get($a)
+	{
+		return $this;
+	}
+	//-----------------------------------------------------------------------------
+
+	public function __call($a, $b)
+	{
+		return $this;
+	}
+	//-----------------------------------------------------------------------------
+}
+
+class ezcQuerySelect
+{
+	const ASC = 'ASC';
+	const DESC = 'DESC';
+}
