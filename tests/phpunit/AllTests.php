@@ -37,6 +37,7 @@ PHPUnit_Util_Filter::addFileToFilter(__FILE__);
 require_once dirname(__FILE__) . '/helpers.php';
 
 require_once dirname(__FILE__) . '/GoodsCatalogAbstractActiveRecordTest.php';
+require_once dirname(__FILE__) . '/GoodsCatalogAbstractUITest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogGoodsAdminUITest.php';
 
 class AllTests
@@ -46,6 +47,7 @@ class AllTests
 		$suite = new PHPUnit_Framework_TestSuite('All Tests');
 
 		$suite->addTestSuite('GoodsCatalogAbstractActiveRecordTest');
+		$suite->addTestSuite('GoodsCatalogAbstractUITest');
 		$suite->addTestSuite('GoodsCatalogGoodsAdminUITest');
 
 		return $suite;
