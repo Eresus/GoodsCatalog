@@ -62,7 +62,9 @@
 				<mkdir dir="${phpunit.coverage.temp}" />
 
 				<exec
-					command="phpunit --log-junit ${logs.dir}/phpunit.xml --coverage-xml ${logs.dir}/phpunit.coverage.xml --coverage-html ${phpunit.coverage.html} tests/phpunit/AllTests.php"
+					command="phpunit --log-junit ${logs.dir}/phpunit.xml --coverage-clover ${logs.dir}/phpunit.coverage.xml --coverage-html ${phpunit.coverage.html} ${project.basedir}/tests/phpunit/AllTests.php"
+					checkreturn="true"
+					logoutput="true"
 				/> 
 				
 				<!-- coverage-setup database="${phpunit.coverage.temp}/database">

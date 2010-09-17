@@ -55,6 +55,72 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	//-----------------------------------------------------------------------------
 
 	/**
+	 * Clean up test enviroment
+	 * @see Framework/PHPUnit_Framework_TestCase::tearDown()
+	 */
+	protected function tearDown()
+	{
+		if (version_compare(PHP_VERSION, '5.3.2', '>='))
+		{
+			$plugin = new ReflectionMethod('GoodsCatalogAbstractActiveRecord', 'plugin');
+			$plugin->setAccessible(true);
+			$plugin->invoke(null, new GoodsCatalog());
+		}
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем GoodsCatalogAbstractActiveRecord::plugin
+	 *
+	 */
+	public function test_plugin()
+	{
+		if (version_compare(PHP_VERSION, '5.3.2', '<'))
+		{
+			$this->markTestSkipped('PHP 5.3.2 required');
+		}
+
+		$plugin = new ReflectionMethod('GoodsCatalogAbstractActiveRecord', 'plugin');
+		$plugin->setAccessible(true);
+
+		$GLOBALS['Eresus'] = new stdClass();
+		$GLOBALS['Eresus']->plugins = new PluginsStub();
+
+		$this->assertSame($GLOBALS['Eresus']->plugins->plugin, $plugin->invoke(null), 'Pass 1.1');
+		$this->assertSame($GLOBALS['Eresus']->plugins->plugin, $plugin->invoke(null), 'Pass 1.2');
+
+		$stub = new stdClass();
+		$this->assertSame($stub, $plugin->invoke(null, $stub), 'Pass 2.1');
+		$this->assertSame($stub, $plugin->invoke(null), 'Pass 2.2');
+
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем конструктор
+	 * @covers GoodsCatalogAbstractActiveRecord::__construct
+	 */
+	public function test_construct_wo_params()
+	{
+		$mock = $this->getMock('GoodsCatalogAbstractActiveRecordTest_Stub', array('loadById'), array(), '', false);
+		$mock->expects($this->never())->method('loadById');
+		$mock->__construct();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем конструктор
+	 * @covers GoodsCatalogAbstractActiveRecord::__construct
+	 */
+	public function test_construct_with_params()
+	{
+		$mock = $this->getMock('GoodsCatalogAbstractActiveRecordTest_Stub', array('loadById'), array(), '', false);
+		$mock->expects($this->once())->method('loadById');
+		$mock->__construct(123);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
 	 * Проверяем метод getDbTable
 	 * @covers GoodsCatalogAbstractActiveRecord::getDbTable
 	 */
@@ -95,6 +161,8 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	 * Проверяем вброс исключения EresusPropertyNotExistsException при обращении к несуществующему
 	 * свойству.
 	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::__get
+	 * @covers GoodsCatalogAbstractActiveRecord::getProperty
 	 * @expectedException EresusPropertyNotExistsException
 	 */
 	public function testGetUnexistentProperty()
@@ -106,6 +174,8 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем чтение неустановленного свойства.
 	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::__get
+	 * @covers GoodsCatalogAbstractActiveRecord::getProperty
 	 */
 	public function testGetUnsetProperty()
 	{
@@ -117,6 +187,8 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	 * Проверяем вброс исключения EresusPropertyNotExistsException при обращении к несуществующему
 	 * свойству.
 	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::__set
+	 * @covers GoodsCatalogAbstractActiveRecord::setProperty
 	 * @expectedException EresusPropertyNotExistsException
 	 */
 	public function testSetUnexistentProperty()
@@ -128,6 +200,8 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем установку свойства неподдерживаемого типа
 	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::__set
+	 * @covers GoodsCatalogAbstractActiveRecord::setProperty
 	 * @expectedException EresusTypeException
 	 */
 	public function testSetUnsupportedType()
@@ -139,6 +213,9 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем установку и чтение полей типа 'bool'
 	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::getProperty
+	 * @covers GoodsCatalogAbstractActiveRecord::setProperty
+	 * @covers GoodsCatalogAbstractActiveRecord::filterBool
 	 */
 	public function testSetGetBool()
 	{
@@ -158,6 +235,9 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем установку и чтение полей типа 'int'
 	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::getProperty
+	 * @covers GoodsCatalogAbstractActiveRecord::setProperty
+	 * @covers GoodsCatalogAbstractActiveRecord::filterInt
 	 */
 	public function testSetGetInt()
 	{
@@ -177,6 +257,9 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем установку и чтение полей типа 'string'
 	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::getProperty
+	 * @covers GoodsCatalogAbstractActiveRecord::setProperty
+	 * @covers GoodsCatalogAbstractActiveRecord::filterString
 	 */
 	public function testSetGetString()
 	{
@@ -190,6 +273,7 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем isNew
 	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::isNew
 	 */
 	public function testIsNew()
 	{
@@ -200,6 +284,7 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем вызов сеттера
 	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::__set
 	 */
 	public function testCallSetter()
 	{
@@ -211,10 +296,87 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем вызов геттера
 	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::__get
 	 */
 	public function testCallGetter()
 	{
 		$this->assertEquals(123, $this->fixture->int2);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем сохранение
+	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::save
+	 */
+	public function test_save()
+	{
+		$stub = new GoodsCatalogAbstractActiveRecordTest_Stub();
+		DBHandlerStub::reset();
+		$stub->save();
+		$this->assertEquals(1, DBHandlerStub::$createInsertQuery);
+		$this->assertEquals(0, DBHandlerStub::$createUpdateQuery);
+		$this->assertEquals(1, DBHandlerStub::$lastInsertId);
+
+		DBHandlerStub::reset();
+		$stub->save();
+		$this->assertEquals(0, DBHandlerStub::$createInsertQuery);
+		$this->assertEquals(1, DBHandlerStub::$createUpdateQuery);
+		$this->assertEquals(0, DBHandlerStub::$lastInsertId);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем удаление
+	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::delete
+	 */
+	public function test_delete()
+	{
+		$stub = new GoodsCatalogAbstractActiveRecordTest_Stub();
+		DBHandlerStub::reset();
+		$stub->delete();
+		$this->assertEquals(0, DBHandlerStub::$createDeleteQuery);
+
+		$stub->save();
+		DBHandlerStub::reset();
+		$stub->delete();
+		$this->assertEquals(1, DBHandlerStub::$createDeleteQuery);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем перемещение вверх
+	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::moveUp
+	 */
+	public function test_moveUp()
+	{
+		$stub = new GoodsCatalogAbstractActiveRecordTest_Stub();
+		$stub->save();
+		DBHandlerStub::reset();
+		$stub->moveUp();
+		$this->assertEquals(0, DBHandlerStub::$createUpdateQuery);
+
+		DBHandlerStub::reset();
+		$stub->position = 1;
+		$stub->moveUp();
+		$this->assertEquals(2, DBHandlerStub::$createUpdateQuery);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяем перемещение ввниз
+	 *
+	 * @covers GoodsCatalogAbstractActiveRecord::moveDown
+	 */
+	public function test_moveDown()
+	{
+		$stub = new GoodsCatalogAbstractActiveRecordTest_Stub();
+		$stub->save();
+		DBHandlerStub::reset();
+		$stub->moveDown();
+		$this->assertEquals(2, DBHandlerStub::$createUpdateQuery);
 	}
 	//-----------------------------------------------------------------------------
 
@@ -248,6 +410,10 @@ class GoodsCatalogAbstractActiveRecordTest_Stub extends GoodsCatalogAbstractActi
 			'bool' => array('type' => PDO::PARAM_BOOL),
 			'int' => array('type' => PDO::PARAM_INT),
 			'string' => array('type' => PDO::PARAM_STR, 'maxlength' => 10),
+
+			'id' => array('type' => PDO::PARAM_INT),
+			'position' => array('type' => PDO::PARAM_INT),
+			'section' => array('type' => PDO::PARAM_INT),
 		);
 	}
 	//-----------------------------------------------------------------------------
