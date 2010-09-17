@@ -23,11 +23,11 @@
 	
 		<!-- PHP source files -->
 		<fileset dir="src" id="files.sources.php">
-			<include name="**/.php" />
+			<include name="**/*.php" />
 		</fileset>
 
 	<!-- Unit tests -->
-	<fileset dir="tests/phpunit" id="files.tests.unit">
+	<fileset dir="tests/phpunit" id="files.tests.phpunit">
 		<include name="**/*Test.php" />
 	</fileset>
 	
@@ -39,34 +39,52 @@
 
 	<target name="prepare" depends="clean" description="Prepare for build">
 
-		<echo msg="Build directory: ${build.dir}" level="info" />
+		<php function="dirname" returnProperty="phing.root">
+			<param value="${env.SCRIPT_NAME}" />
+		</php>
 
-		<echo msg="Create build directory..." level="info" />
 		<mkdir dir="${build.dir}" />
+		<mkdir dir="${logs.dir}" />
+		<mkdir dir="${phpunit.coverage.temp}" />
+		<mkdir dir="${phpunit.coverage.html}" />
 
 		<phplint>
 			<fileset refid="files.sources.php" />
 		</phplint>
 				
 		<!--
-			Run unit tests
+			Run PHPUnit tests
 		-->
 		<if>
 			<istrue value="${phpunit}" />
 			<then>
 			
-				<phpunit haltonfailure="true">
+				<mkdir dir="${phpunit.coverage.temp}" />
+
+				<exec
+					command="phpunit --log-junit ${logs.dir}/phpunit.xml --coverage-xml ${logs.dir}/phpunit.coverage.xml --coverage-html ${phpunit.coverage.html} tests/phpunit/AllTests.php"
+				/> 
+				
+				<!-- coverage-setup database="${phpunit.coverage.temp}/database">
+					<fileset refid="files.sources.php" />
+				</coverage-setup>
+
+				<phpunit haltonfailure="true" codecoverage="true">
 					<formatter
 						type="${phpunit.format}"
 						usefile="${phpunit.save}"
-						todir="${phpunit.output.dir}"
-						outfile="${phpunit.output.file}"
+						todir="${logs.dir}"
+						outfile="phpunit.${phpunit.format}"
 					/>
 					<batchtest name="AllTests">
-						<fileset refid="files.tests.unit" />
+						<fileset refid="files.tests.phpunit" />
 					</batchtest>
 				</phpunit>
 				
+				<coverage-report outfile="${logs.dir}/code-coverage.xml">
+					<report styledir="${phing.root}/data/phing/etc" todir="${phpunit.coverage.html}" />
+				</coverage-report -->
+
 			</then>
 		</if>
 		
@@ -79,7 +97,7 @@
 				<phpmd rulesets="${phpmd.rulesets}">
 					<formatter
 						type="${phpmd.format}"
-						outfile="${phpmd.output}"
+						outfile="${logs.dir}/phpmd.${phpmd.format}"
 					/>
 					<fileset refid="files.sources.php" />
 				</phpmd>
@@ -98,14 +116,12 @@
 				>
 					<formatter
 						type="${phpcs.format}"
-						outfile="${phpcs.output}"
+						outfile="${logs.dir}/phpcs.${phpcs.format}"
 					/>
 					<fileset refid="files.sources.php" />
 				</phpcodesniffer>
 			</then>
 		</if>
-
-		<echo msg="Ready to build" level="info" />
 
 	</target>
 
@@ -117,21 +133,9 @@
 
 	<target name="clean" description="Clean up build">
 
-		<echo msg="Clean up: ${build.dir}..." level="info" />
-
-		<if>
-			<available file="${build.dir}" />
-
-			<then>
-				<delete includeemptydirs="true" failonerror="true">
-					<fileset dir="${build.dir}">
-						<include name="**" />
-					</fileset>
-				</delete>
-			</then>
-
-		</if>
-
+		<delete dir="${phpunit.coverage.temp}" includeemptydirs="true" />
+		<delete dir="${build.dir}" includeemptydirs="true" />
+		
 	</target>
 
 	<!--
