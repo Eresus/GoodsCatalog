@@ -125,11 +125,18 @@ class GoodsCatalogTemplateService
 				null, $e);
 		}
 
-		$templates = new GlobIterator($sourceDir . '/*.html', FilesystemIterator::KEY_AS_PATHNAME);
+		$templates = new RegexIterator(new DirectoryIterator($sourceDir),
+			'/^.*\.html$/', RegexIterator::GET_MATCH);
+		/*
+		 * Начиная с PHP 5.3.0 можно будет использовать GlobIterator:
+		 * GlobIterator($sourceDir . '/*.html', FilesystemIterator::KEY_AS_PATHNAME);
+		 */
+
 		foreach ($templates as $template)
 		{
-			$target = $targetPath . '/' . $template->getFilename();
-			copy($template->getPathname(), $target);
+			$target = $targetPath . '/' . basename($template[0]);
+
+			copy($sourceDir . '/' . $template[0], $target);
 			chmod($target, 0666);
 		}
 	}
