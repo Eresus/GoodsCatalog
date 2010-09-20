@@ -215,7 +215,6 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @covers GoodsCatalogAbstractActiveRecord::getProperty
 	 * @covers GoodsCatalogAbstractActiveRecord::setProperty
-	 * @covers GoodsCatalogAbstractActiveRecord::filterBool
 	 */
 	public function testSetGetBool()
 	{
@@ -237,7 +236,6 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	 *
 	 * @covers GoodsCatalogAbstractActiveRecord::getProperty
 	 * @covers GoodsCatalogAbstractActiveRecord::setProperty
-	 * @covers GoodsCatalogAbstractActiveRecord::filterInt
 	 */
 	public function testSetGetInt()
 	{

@@ -412,7 +412,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 * Возвращает экземпляр основного класса плгина
 	 *
 	 * @param GoodsCatalog $plugin[optional]  Использовать этот экземпляр вместо автоопределения.
-	 *                                    Для модульных тестов.
+	 *                                        Для модульных тестов.
 	 * @return GoodsCatalog
 	 *
 	 * @since 1.00
@@ -452,14 +452,17 @@ abstract class GoodsCatalogAbstractActiveRecord
 			throw new EresusPropertyNotExistsException($key, get_class($this));
 		}
 
+		/*
+		 * Фильтруем значение, присваеваемое свойству, в соответствии с типом этого свойства
+		 */
 		switch ($attrs[$key]['type'])
 		{
 			case PDO::PARAM_BOOL:
-				$value = $this->filterBool($value);
+				$value = (boolean) $value;
 			break;
 
 			case PDO::PARAM_INT:
-				$value = $this->filterInt($value);
+				$value = intval($value);
 			break;
 
 			case PDO::PARAM_STR:
@@ -590,36 +593,6 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 */
 	protected function serveUpload()
 	{
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Фильтрует значения типа 'bool'
-	 *
-	 * @param mixed $value
-	 *
-	 * @return bool
-	 *
-	 * @since 1.00
-	 */
-	private function filterBool($value)
-	{
-		return (boolean) $value;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Фильтрует значения типа 'int'
-	 *
-	 * @param mixed $value
-	 *
-	 * @return int
-	 *
-	 * @since 1.00
-	 */
-	private function filterInt($value)
-	{
-		return intval($value);
 	}
 	//-----------------------------------------------------------------------------
 

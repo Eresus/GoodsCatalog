@@ -57,7 +57,7 @@ class GoodsCatalog extends ContentPlugin
 	public $title = 'Каталог товаров';
 
 	/**
-	 * Опиание плагина
+	 * Описание плагина
 	 * @var string
 	 */
 	public $description = 'Простой каталог товаров';

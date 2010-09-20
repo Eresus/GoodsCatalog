@@ -70,7 +70,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 
 		// Определяем текущую страницу списка
 		$pg = arg('pg') ? arg('pg', 'int') : 1;
-		$maxCount = 10;
+		$maxCount = 10; // Количество групп на страницу. В настройках не изменяется.
 		$startFrom = ($pg - 1) * $maxCount;
 
 		$data['brands'] = GoodsCatalogBrand::find($maxCount, $startFrom);
