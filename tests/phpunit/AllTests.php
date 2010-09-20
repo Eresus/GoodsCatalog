@@ -38,6 +38,7 @@ require_once dirname(__FILE__) . '/helpers.php';
 
 require_once dirname(__FILE__) . '/GoodsCatalogAbstractActiveRecordTest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogAbstractUITest.php';
+require_once dirname(__FILE__) . '/GoodsCatalogAbstractAdminUITest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogGoodsAdminUITest.php';
 
 class AllTests
@@ -48,8 +49,8 @@ class AllTests
 
 		$suite->addTestSuite('GoodsCatalogAbstractActiveRecordTest');
 		$suite->addTestSuite('GoodsCatalogAbstractUITest');
+		$suite->addTestSuite('GoodsCatalogAbstractAdminUITest');
 		$suite->addTestSuite('GoodsCatalogGoodsAdminUITest');
-
 		return $suite;
 	}
 }
