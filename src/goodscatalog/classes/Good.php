@@ -151,6 +151,8 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 		{
 			$this->autoPosition();
 		}
+
+		parent::save();
 	}
 	//-----------------------------------------------------------------------------
 
