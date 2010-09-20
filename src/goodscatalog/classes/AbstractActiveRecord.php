@@ -452,6 +452,9 @@ abstract class GoodsCatalogAbstractActiveRecord
 			throw new EresusPropertyNotExistsException($key, get_class($this));
 		}
 
+		/*
+		 * Фильтруем значение, присваеваемое свойству, в соответствии с типом этого свойства
+		 */
 		switch ($attrs[$key]['type'])
 		{
 			case PDO::PARAM_BOOL:
@@ -600,6 +603,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 *
 	 * @return bool
 	 *
+	 * @see setProperty
 	 * @since 1.00
 	 */
 	private function filterBool($value)
@@ -615,6 +619,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 *
 	 * @return int
 	 *
+	 * @see setProperty
 	 * @since 1.00
 	 */
 	private function filterInt($value)
