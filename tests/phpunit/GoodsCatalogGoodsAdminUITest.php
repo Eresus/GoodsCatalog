@@ -62,6 +62,11 @@ class GoodsCatalogGoodsAdminUITest extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetDbTable()
 	{
+		if (version_compare(PHP_VERSION, '5.3.2', '<'))
+		{
+			$this->markTestSkipped('PHP 5.3.2 required');
+		}
+
 		$GLOBALS['Eresus'] = new stdClass();
 		$GLOBALS['Eresus']->sections = new GoodsCatalogGoodsAdminUITest_SectionsStub();
 
