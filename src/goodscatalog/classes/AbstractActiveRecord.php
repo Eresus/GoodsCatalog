@@ -458,11 +458,11 @@ abstract class GoodsCatalogAbstractActiveRecord
 		switch ($attrs[$key]['type'])
 		{
 			case PDO::PARAM_BOOL:
-				$value = $this->filterBool($value);
+				$value = (boolean) $value;
 			break;
 
 			case PDO::PARAM_INT:
-				$value = $this->filterInt($value);
+				$value = intval($value);
 			break;
 
 			case PDO::PARAM_STR:
@@ -593,38 +593,6 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 */
 	protected function serveUpload()
 	{
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Фильтрует значения типа 'bool'
-	 *
-	 * @param mixed $value
-	 *
-	 * @return bool
-	 *
-	 * @see setProperty
-	 * @since 1.00
-	 */
-	private function filterBool($value)
-	{
-		return (boolean) $value;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Фильтрует значения типа 'int'
-	 *
-	 * @param mixed $value
-	 *
-	 * @return int
-	 *
-	 * @see setProperty
-	 * @since 1.00
-	 */
-	private function filterInt($value)
-	{
-		return intval($value);
 	}
 	//-----------------------------------------------------------------------------
 
