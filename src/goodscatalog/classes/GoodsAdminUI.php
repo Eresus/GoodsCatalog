@@ -193,7 +193,12 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			Core::logException($e);
 			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при добавлении товара.'));
 		}
-		HTTP::redirect('admin.php?mod=content&section=' . $good->section);
+
+		/*
+		 *  Для перехода используем arg() потому что $good->section может быть неопределённым
+		 *  если добавление прошло с ошибками.
+		 */
+		HTTP::redirect('admin.php?mod=content&section=' . arg('section', 'int'));
 	}
 	//-----------------------------------------------------------------------------
 

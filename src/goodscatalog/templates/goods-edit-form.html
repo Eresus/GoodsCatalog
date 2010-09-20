@@ -132,7 +132,7 @@
 			{if $this->settings.extPhotosEnabled}
 			<fc:tab name="images">
 				<div class="ui-button-box">
-					<a class="ui-button" href="admin.php?mod=content&amp;section={$good->section}&amp;id={$good->id}&amp;action=photo_add">Добавить фотографию</a>
+					<a class="ui-button ui-button-list-add" href="admin.php?mod=content&amp;section={$good->section}&amp;id={$good->id}&amp;action=photo_add">Добавить фотографию</a>
 				</div>
 				{if count($photos) > 0}
 				<table class="catalog-photo-list ui-widget ui-widget-content">
