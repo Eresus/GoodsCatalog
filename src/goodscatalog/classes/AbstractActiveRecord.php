@@ -412,7 +412,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 * Возвращает экземпляр основного класса плгина
 	 *
 	 * @param GoodsCatalog $plugin[optional]  Использовать этот экземпляр вместо автоопределения.
-	 *                                    Для модульных тестов.
+	 *                                        Для модульных тестов.
 	 * @return GoodsCatalog
 	 *
 	 * @since 1.00
