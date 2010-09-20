@@ -61,7 +61,7 @@
 					</tr>
 					{if $this->settings.mainPhotoEnabled}
 					<tr>
-						<td></td><td>{if $good->thumbURL}<a href="#" class="pseudo good-photo-preview">Показать основное фото<img src="{$good->thumbURL}" alt="" /></a>{/if}</td>
+						<td></td><td>{if $good->thumbURL}<a href="#" onclick="return false;" class="pseudo good-photo-preview">Показать основное фото<img src="{$good->thumbURL}" alt="" /></a>{/if}</td>
 					</tr>
 					<tr>
 						<td class="formLabel">
