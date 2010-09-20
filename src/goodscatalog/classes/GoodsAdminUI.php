@@ -521,6 +521,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	 */
 	protected function addPhoto($good)
 	{
+		/* Пользователь может указать до 5-ти фотографий за один раз  */
 		for ($i = 1; $i <= 5; $i++)
 		{
 			$name = 'file' . $i;
