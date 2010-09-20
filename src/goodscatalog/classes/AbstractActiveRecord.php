@@ -275,7 +275,14 @@ abstract class GoodsCatalogAbstractActiveRecord
 		if ($this->isNew())
 		{
 			$this->id = $db->lastInsertId();
+			$wasNew = true;
 		}
+		else
+		{
+			$wasNew = false;
+		}
+
+		$this->isNew = false;
 
 		if ($this->upload)
 		{
@@ -286,7 +293,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 			catch (Exception $e)
 			{
 				Core::logException($e);
-				if ($this->isNew())
+				if ($wasNew)
 				{
 					$this->delete();
 				}
@@ -294,7 +301,6 @@ abstract class GoodsCatalogAbstractActiveRecord
 			}
 		}
 
-		$this->isNew = false;
 	}
 	//-----------------------------------------------------------------------------
 
