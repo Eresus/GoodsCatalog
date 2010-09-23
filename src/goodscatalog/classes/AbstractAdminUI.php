@@ -97,7 +97,7 @@ extends GoodsCatalogAbstractUI
 	 */
 	protected function reportBadURL(Exception $e)
 	{
-		ErrorMessage(iconv('utf8', 'cp1251', 'Неправильный адрес'));
+		ErrorMessage(iconv('utf-8', 'cp1251', 'Неправильный адрес'));
 
 		return;
 		$e = $e; // PHPMD hack
@@ -137,7 +137,7 @@ extends GoodsCatalogAbstractUI
 			}
 			catch (Exception $e)
 			{
-				ErrorMessage(iconv('utf8', 'cp1251', 'Не удалось сохранить изменения: ') .
+				ErrorMessage(iconv('utf-8', 'cp1251', 'Не удалось сохранить изменения: ') .
 					$e->getMessage());
 			}
 		}

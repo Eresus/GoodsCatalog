@@ -567,7 +567,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 		if (!in_array($mime, $this->supportedFormats))
 		{
 			throw new EresusRuntimeException("Unsupported file type: $mime",
-				iconv('utf8', 'cp1251', "Неподдерживаемый тип файла: $mime."));
+				iconv('utf-8', 'cp1251', "Неподдерживаемый тип файла: $mime."));
 		}
 	}
 	//-----------------------------------------------------------------------------
