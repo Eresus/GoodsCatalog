@@ -91,7 +91,7 @@ extends GoodsCatalogAbstractUI
 		$startFrom = ($pg - 1) * $maxCount;
 
 		$data['goods'] = GoodsCatalogGood::find($page->id, $maxCount, $startFrom, true);
-		$totalPages = ceil(GoodsCatalogGood::count($page->id / $maxCount));
+		$totalPages = ceil(GoodsCatalogGood::count($page->id) / $maxCount);
 		if ($totalPages > 1)
 		{
 			$data['pagination'] = new PaginationHelper($totalPages, $pg);

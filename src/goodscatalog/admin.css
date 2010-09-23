@@ -31,15 +31,16 @@
  *
  * Правила с "a" используются для Webkit и Presto
  */
-.ui-button,
-.ui-button:visited,
 a.ui-button,
 a.ui-button:visited
 	{
+	-moz-border-radius: 3px;
 	-moz-box-shadow: -1px -1px 1px #ccc, 1px 1px 0 #fff inset;
+	-webkit-border-radius: 3px;
 	-webkit-box-shadow: -1px -1px 1px #ccc, 1px 1px 0 #fff inset;
 	background-color: #eee;
 	border-color: #aaa #bbb #bbb #aaa;
+	border-radius: 3px;
 	border-style: solid;
 	border-width: 1px;
 	box-shadow: -1px -1px 1px #ccc, 1px 1px 0 #fff inset;
@@ -49,34 +50,34 @@ a.ui-button:visited
 	text-decoration: none;
 }
 
-	.ui-button:hover
+	a.ui-button:hover
 	{
 		-moz-box-shadow: 0 0 5px 0px #007acc, 1px 1px 0 #fff inset;
 		-webkit-box-shadow: 0 0 5px 0px #007acc, 1px 1px 0 #fff inset;
 		box-shadow: 0 0 5px 0px #007acc, 1px 1px 0 #fff inset;
 	}
 
-	.ui-button:active
+	a.ui-button:active
 	{
 		left: 1px;
 		position: relative;
 		top: 1px;
 	}
 
-	.ui-button.ui-button-go-previous,
-	.ui-button.ui-button-list-add
+	a.ui-button.ui-button-go-previous,
+	a.ui-button.ui-button-list-add
 	{
 		background-position: 10px 55%;
 		background-repeat: no-repeat;
 		padding-left: 30px;
 	}
 
-	.ui-button.ui-button-go-previous
+	a.ui-button.ui-button-go-previous
 	{
 		background-image: url(img/go-previous.png);
 	}
 
-	.ui-button.ui-button-list-add
+	a.ui-button.ui-button-list-add
 	{
 		background-image: url(img/list-add.png);
 	}

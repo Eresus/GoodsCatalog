@@ -115,7 +115,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 			}
 			catch (Exception $e)
 			{
-				ErrorMessage(iconv('utf8', 'cp1251', 'Не удалось удалить бренд: ') .
+				ErrorMessage(iconv('utf-8', 'cp1251', 'Не удалось удалить бренд: ') .
 					$e->getMessage());
 			}
 		}
@@ -190,7 +190,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 		catch (Exception $e)
 		{
 			Core::logException($e);
-			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при добавлении бренда.'));
+			ErrorMessage(iconv('utf-8', 'cp1251', 'Произошла внутренняя ошибка при добавлении бренда.'));
 		}
 
 		HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');
@@ -280,7 +280,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 		catch (Exception $e)
 		{
 			Core::logException($e);
-			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при изменении бренда.'));
+			ErrorMessage(iconv('utf-8', 'cp1251', 'Произошла внутренняя ошибка при изменении бренда.'));
 		}
 
 		HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');

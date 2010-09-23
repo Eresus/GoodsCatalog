@@ -287,11 +287,7 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 
 		$this->ext = strtolower(substr(strrchr($fileInfo['name'], '.'), 1));
 
-		if (!in_array($fileInfo['type'], $this->supportedFormats))
-		{
-			throw new EresusRuntimeException("Unsupported file type: {$fileInfo['type']}",
-				iconv('utf8', 'cp1251', "Неподдерживаемый тип файла: {$fileInfo['type']}."));
-		}
+		$this->checkFormat($fileInfo['type']);
 
 		if (!upload($this->upload, $this->logoPath))
 		{

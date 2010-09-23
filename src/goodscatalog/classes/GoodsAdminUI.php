@@ -191,7 +191,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		catch (Exception $e)
 		{
 			Core::logException($e);
-			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при добавлении товара.'));
+			ErrorMessage(iconv('utf-8', 'cp1251', 'Произошла внутренняя ошибка при добавлении товара.'));
 		}
 
 		/*
@@ -223,7 +223,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			}
 			catch (Exception $e)
 			{
-				ErrorMessage(iconv('utf8', 'cp1251', 'Не удалось удалить товар: ') .
+				ErrorMessage(iconv('utf-8', 'cp1251', 'Не удалось удалить товар: ') .
 					$e->getMessage());
 			}
 		}
@@ -372,7 +372,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		catch (Exception $e)
 		{
 			Core::logException($e);
-			ErrorMessage(iconv('utf8', 'cp1251', 'Произошла внутренняя ошибка при изменении товара.'));
+			ErrorMessage(iconv('utf-8', 'cp1251', 'Произошла внутренняя ошибка при изменении товара.'));
 		}
 
 		HTTP::goback();
@@ -551,7 +551,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			catch (Exception $e)
 			{
 				Core::logException($e);
-				ErrorMessage(iconv('utf8', 'cp1251',
+				ErrorMessage(iconv('utf-8', 'cp1251',
 					'Произошла внутренняя ошибка при добавлении фотографии.'));
 			}
 		}
@@ -623,7 +623,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			}
 			catch (Exception $e)
 			{
-				ErrorMessage(iconv('utf8', 'cp1251', 'Не удалось удалить фотографию: ') .
+				ErrorMessage(iconv('utf-8', 'cp1251', 'Не удалось удалить фотографию: ') .
 					$e->getMessage());
 			}
 		}
