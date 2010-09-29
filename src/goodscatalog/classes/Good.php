@@ -497,7 +497,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 */
 	protected function serveUpload()
 	{
-		if (!isset($_FILES[$this->upload]) || $_FILES[$this->upload]['error'] == UPLOAD_ERR_NO_FILE)
+		if (!$this->fileUploaded())
 		{
 			return;
 		}
@@ -579,8 +579,11 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 
 		$src = imageCreateFromFile($file);
 		imagealphablending($src, true);
+		imagesavealpha($src, true);
+
 		$logo = imageCreateFromPNG($logoFile);
 		imagealphablending($logo, true);
+		imagesavealpha($logo, true);
 
 		$settings = self::plugin()->settings;
 
@@ -610,8 +613,8 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 					$y = $sh - $lh - $settings['logoVPadding'];
 				break;
 			}
-			imagesavealpha($src, true);
 			imagecopy ($src, $logo, $x, $y, 0, 0, $lw, $lh);
+			imagealphablending($src, true);
 			imagesavealpha($src, true);
 			imageSaveToFile($src, $file, IMG_JPG);
 			imageDestroy($logo);

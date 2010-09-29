@@ -188,6 +188,11 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		{
 			ErrorMessage($e->getMessage());
 		}
+		catch (RuntimeException $e)
+		{
+			Core::logException($e);
+			throw $e;
+		}
 		catch (Exception $e)
 		{
 			Core::logException($e);
@@ -365,7 +370,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		{
 			$good->save();
 		}
-		catch (EresusRuntimeException $e)
+		catch (RuntimeException $e)
 		{
 			ErrorMessage($e->getMessage());
 		}

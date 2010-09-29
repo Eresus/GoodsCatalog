@@ -292,7 +292,6 @@ abstract class GoodsCatalogAbstractActiveRecord
 			}
 			catch (Exception $e)
 			{
-				Core::logException($e);
 				if ($wasNew)
 				{
 					$this->delete();
@@ -569,6 +568,35 @@ abstract class GoodsCatalogAbstractActiveRecord
 			throw new EresusRuntimeException("Unsupported file type: $mime",
 				iconv('utf-8', 'cp1251', "Неподдерживаемый тип файла: $mime."));
 		}
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Проверяет, был ли загружен файл
+	 *
+	 * @return bool
+	 */
+	protected function fileUploaded()
+	{
+		if (!isset($_FILES[$this->upload]) || $_FILES[$this->upload]['error'] == UPLOAD_ERR_NO_FILE)
+		{
+			return false;
+		}
+
+		switch ($_FILES[$this->upload]['error'])
+		{
+			case UPLOAD_ERR_INI_SIZE:
+			case UPLOAD_ERR_FORM_SIZE:
+				throw new RuntimeException(iconv('utf-8', 'cp1251',
+					'Размер загружаемого файла превышает максимально допустимый'));
+			break;
+			case UPLOAD_ERR_PARTIAL:
+				throw new RuntimeException(iconv('utf-8', 'cp1251',
+					'Во время загрузки файла произошёл сбой. Попробуйте ещё раз'));
+				break;
+		}
+
+		return true;
 	}
 	//-----------------------------------------------------------------------------
 
