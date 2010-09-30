@@ -35,13 +35,39 @@ jQuery('a[href$="#catalog-popup"]').live('click', function (e)
 	e.stopPropagation();
 	e.preventDefault();
 	
-	var popup = jQuery('<img src="' + e.currentTarget.href + '" alt="" />').dialog({
+	jQuery('<img src="' + e.currentTarget.href + '" alt="" />').dialog({
 		width: 'auto',
+		draggable: false,
 		modal: true,
 		closeText: 'Закрыть',
 		resizable: false,
-		close: function(event) { 
+		close: function(event)
+		{ 
 			jQuery(event.target).remove().closest('div.ui-dialog').remove();
+		},
+		/**
+		 * Исправляем позиционирование диалога. Размещаем его по центру окна
+		 * 
+		 * После выполнения http://bugs.eresus.ru/view.php?id=496 можно переделать с использованием
+		 * position()
+		 */
+		open: function(event)
+		{
+			jQuery(event.target).closest('div.ui-dialog').hide();
+			setTimeout(function ()
+			{
+				var dlg = jQuery(event.target).closest('div.ui-dialog').eq(0);
+				var dlgWidth = dlg.width();
+				var dlgHeight = dlg.height();
+				
+				var body = jQuery('body').eq(0);
+				var bodyWidth = body.width();
+				var bodyHeight = body.height();
+				
+				var left = Math.round((bodyWidth - dlgWidth) / 2, 0);
+				var top = Math.round((bodyHeight - dlgHeight) / 2, 0);
+				dlg.css('left', left + 'px').css('top', (jQuery(document).scrollTop() + top) + 'px').show();
+			}, 1);
 		}
 	});
 });
