@@ -128,7 +128,8 @@ extends GoodsCatalogAbstractUI
 
 		try
 		{
-			$item = new $this->activeRecordClass($id);
+			$class = $this->activeRecordClass;
+			$item = new $class($id);
 
 			try
 			{

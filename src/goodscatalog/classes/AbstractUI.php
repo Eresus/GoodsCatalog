@@ -51,7 +51,7 @@ abstract class GoodsCatalogAbstractUI
 	 *
 	 * @var string
 	 */
-	private $activeRecordClass;
+	protected $activeRecordClass;
 
 	/**
 	 * Конструктор
