@@ -162,6 +162,11 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 */
 	public function delete()
 	{
+		foreach ($this->photos as $photo)
+		{
+			$photo->delete();
+		}
+
 		if (is_file($this->photoPath))
 		{
 			@$result = unlink($this->photoPath);
