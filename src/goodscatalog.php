@@ -312,10 +312,22 @@ class GoodsCatalog extends ContentPlugin
 		$data['logoExists'] = FS::isFile($this->getLogoFileName());
 
 		// Создаём экземпляр шаблона
-		$tmpl = $this->getHelper()->getAdminTemplate('settings.html');
+		//$tmpl = $this->getHelper()->getAdminTemplate('settings.html');
+		$form = new EresusForm('ext/' . $this->name . '/templates/settings.html', LOCALE_CHARSET);
+
+		foreach ($data as $key => $value)
+		{
+			$form->setValue($key, $value);
+		}
+
+		$ts = GoodsCatalogTemplateService::getInstance();
+
+		$this->settings['tmplList'] = $ts->getContents('goods-list.html', $this->name);
+		$this->settings['tmplItem'] = $ts->getContents('goods-item.html', $this->name);
 
 		// Компилируем шаблон и данные
-		$html = $tmpl->compile($data);
+		//$html = $tmpl->compile($data);
+		$html = $form->compile();
 
 		return $html;
 	}
@@ -331,6 +343,11 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function onSettingsUpdate()
 	{
+		$ts = GoodsCatalogTemplateService::getInstance();
+
+		$ts->setContents(arg('tmplList'), 'goods-list.html', $this->name);
+		$ts->setContents(arg('tmplItem'), 'goods-item.html', $this->name);
+
 		$this->uploadLogo();
 	}
 	//-----------------------------------------------------------------------------

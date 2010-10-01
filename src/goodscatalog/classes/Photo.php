@@ -43,7 +43,7 @@
  * @property-read  string                $clientPopup  URL для показа во всплывающем блоке
  * @property-write string                $photo        Свойство для загрузки основной фотографии
  * @property-read  string                $thumbPath    Путь к миниатюре
- * @property-read  string                $thumbURL     URL иниатюры
+ * @property-read  string                $thumbURL     URL миниатюры
  *
  * @package GoodsCatalog
  */

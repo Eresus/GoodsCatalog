@@ -185,3 +185,42 @@ a.good-photo-preview:hover img
 	display: inline;
 	position: absolute;
 }
+
+
+
+.ui-toolbar
+{
+	padding-bottom: .5em;	
+}
+
+a.ui-guide-icon
+{
+	background: url(img/guides.png) no-repeat 0 50%;
+	padding-left: 20px;
+}
+
+a.ui-help-icon
+{
+	background: url(img/help.png) no-repeat 0 50%;
+	padding-left: 20px;
+}
+
+#goodscatalog-templates-hint
+{
+	background-color: #e8f1ff;
+	border: solid 1px #aaa;
+	display: none;
+	margin: 2px 0 16px;
+}
+
+.ui-widget-header .ui-icon
+{
+	background-image: url(img/dialog-cancel.png);
+	background-position: 0 0;
+}
+
+.ui-dialog .ui-resizable-se
+{
+	background-image: url(img/resize-grip.png);
+	background-position: 0 0;
+}

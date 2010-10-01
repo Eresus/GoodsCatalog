@@ -197,6 +197,75 @@ class GoodsCatalogTemplateService
 	//-----------------------------------------------------------------------------
 
 	/**
+	 * Возвращает содержимое шаблона
+	 *
+	 * @param string $name              Имя файла шаблона
+	 * @param string $prefix[optional]  Опциональный префикс (путь относительно корня шаблонов)
+	 *
+	 * @return string
+	 *
+	 * @throws GoodsCatalogTemplateInvalidPathException
+	 */
+	public function getContents($name, $prefix = '')
+	{
+		$path = $this->rootDir . '/' . $this->getFilename($name, $prefix);
+
+		if (!is_file($path))
+		{
+			throw new GoodsCatalogTemplateInvalidPathException('Template not exists: ' .	$path);
+		}
+
+		$contents = file_get_contents($path);
+
+		return $contents;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Записывает содержимое шаблона
+	 *
+	 * @param string $contents          Содержимое шаблона
+	 * @param string $name              Имя файла шаблона
+	 * @param string $prefix[optional]  Опциональный префикс (путь относительно корня шаблонов)
+	 *
+	 * @return void
+	 *
+	 * @throws GoodsCatalogTemplateInvalidPathException
+	 */
+	public function setContents($contents, $name, $prefix = '')
+	{
+		$path = $this->rootDir . '/' . $this->getFilename($name, $prefix);
+
+		if (!is_file($path))
+		{
+			throw new GoodsCatalogTemplateInvalidPathException('Template not exists: ' .	$path);
+		}
+
+		@file_put_contents($path, $contents);
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Возвращает путь к файлу шаблона
+	 *
+	 * @param string $name              Имя файла шаблона
+	 * @param string $prefix[optional]  Опциональный префикс (путь относительно корня шаблонов)
+	 *
+	 * @return string
+	 */
+	public function getFilename($name, $prefix = '')
+	{
+		$path = $name;
+		if ($prefix != '')
+		{
+			$path = $prefix . '/' . $path;
+		}
+
+		return $path;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
 	 * Возвращает объект шаблона
 	 *
 	 * @param string $name              Имя файла шаблона
@@ -208,11 +277,7 @@ class GoodsCatalogTemplateService
 	 */
 	public function getTemplate($name, $prefix = '')
 	{
-		$path = $name;
-		if ($prefix != '')
-		{
-			$path = $prefix . '/' . $path;
-		}
+		$path = $this->getFilename($name, $prefix);
 
 		if (!is_file($this->rootDir . '/' . $path))
 		{
@@ -224,6 +289,7 @@ class GoodsCatalogTemplateService
 		return $tmpl;
 	}
 	//-----------------------------------------------------------------------------
+
 }
 
 
