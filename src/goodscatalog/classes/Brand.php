@@ -143,12 +143,16 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	/**
 	 * Выбирает бренды из БД
 	 *
-	 * @param int              $limit[optional]       Вернуть не более $limit брендов
-	 * @param int              $offset[optional]      Пропустить $offset первых брендов
-	 * @param bool             $activeOnly[optional]  Искать только активные бренды
+	 * @param int   $limit       Вернуть не более $limit брендов
+	 * @param int   $offset      Пропустить $offset первых брендов
+	 * @param bool  $activeOnly  Искать только активные бренды
 	 *
-	 * @return array(GoodsCatalogBrand)
+	 * @return array(GoodsCatalogBrand)  Массив объектов GoodsCatalogBrand
 	 *
+	 * @uses eresus_log()
+	 * @uses DB::getHandler()
+	 * @uses load()
+	 * @uses PDO
 	 * @since 1.00
 	 */
 	public static function find($limit = null, $offset = null, $activeOnly = false)

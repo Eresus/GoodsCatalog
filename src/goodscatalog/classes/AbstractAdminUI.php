@@ -2,7 +2,7 @@
 /**
  * Каталог товаров
  *
- * Абстрактный интерфейс управления
+ * Абстрактный пользовательскй интерфейс управления (АИ)
  *
  * @version ${product.version}
  *
@@ -33,7 +33,7 @@
 
 
 /**
- * Абстрактный интерфейс управления
+ * Абстрактный пользовательскй интерфейс управления (АИ)
  *
  * @package GoodsCatalog
  */
@@ -43,7 +43,35 @@ extends GoodsCatalogAbstractUI
 	/**
 	 * Возвращает HTML интерфейса управления
 	 *
+	 * Метод "понимает" HTTP-запросы на следующие базовые действия:
+	 *
+	 * - Добавлние объекта. Аргумент "action" должен быть "insert". Будет вызван метод addItem
+	 * - Переключение активности. Аргумент "toggle" должен содержать ID объекта. Вызовет toogleItem
+	 * - Удаление. Аргумент "delete" должен содержать ID объекта. Вызовет deleteItem
+	 * - Изменение объекта. Аргумент "update" должен содержать ID объекта. Вызовет updateItem
+	 * - Диалог добавления. Аргумент "action" должен быть "add". Вызовет renderAddDialog
+	 * - Диалог изменения. Аргумент "id" должен содержать ID объекта. Вызовет renderEditDialog
+	 *
+	 * Если ни одно из действий не подошло и метод {@link extendedActions} вернул FALSE, вызовет
+	 * метод renderList для отрисовки списка объектов.
+	 *
+	 * Кроме этого метод подключает к странице admin.js и admin.css
+	 *
 	 * @return string
+	 *
+	 * @uses $page
+	 * @uses $plugin
+	 * @uses arg()
+	 * @uses addItem()
+	 * @uses deleteItem()
+	 * @uses GoodsCatalog::getCodeURL()
+	 * @uses renderAddDialog()
+	 * @uses renderEditDialog()
+	 * @uses renderList()
+	 * @uses toggleItem()
+	 * @uses updateItem()
+	 * @uses WebPage::linkScripts()
+	 * @uses WebPage::linkStyles()
 	 */
 	public function getHTML()
 	{
@@ -94,6 +122,10 @@ extends GoodsCatalogAbstractUI
 	 * Помещает в сессию сообщение о неправильном адресе
 	 *
 	 * @param Exception $e
+	 *
+	 * @return void
+	 *
+	 * @uses ErrorMessage()
 	 */
 	protected function reportBadURL(Exception $e)
 	{
@@ -107,7 +139,11 @@ extends GoodsCatalogAbstractUI
 	/**
 	 * Потомки могут перекрывать этот метод для добавления дополнительных действий над объектами
 	 *
-	 * return string|false  HTML или FALSE если ни одно действие не выполнено
+	 * Список основных действий см. в описании {@link getHTML()}.
+	 *
+	 * Метод должен возвращать HTML или FALSE если ни одно действие не выполнено.
+	 *
+	 * return false
 	 */
 	protected function extendedActions()
 	{
@@ -120,6 +156,11 @@ extends GoodsCatalogAbstractUI
 	 *
 	 * @return void
 	 *
+	 * @uses arg()
+	 * @uses GoodsCatalogAbstractActiveRecord::save()
+	 * @uses ErrorMessage()
+	 * @uses HTTP::goback()
+	 * @uses reportBadURL()
 	 * @since 1.00
 	 */
 	protected function toggleItem()

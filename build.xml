@@ -179,7 +179,7 @@
 		<phpdoc title="API Documentation"
 		  destdir="${docs.dir}"
 		  sourcecode="no"
-			parseprivate="true"
+			parseprivate="false"
 		  output="${docs.converter}">
 		   <fileset dir="${build.dir}">
 		      <include name="**/*.php" />

@@ -42,8 +42,18 @@
 abstract class GoodsCatalogAbstractActiveRecord
 {
 	/**
+	 * Описание файла для загрузки - элемент из массива $_FILES
+	 *
+	 * @var array
+	 * @since 1.00
+	 */
+	protected $upload;
+
+	/**
 	 * Имя свойства, определяющего владельца
+	 *
 	 * @var string
+	 * @since 1.00
 	 */
 	protected $ownerProperty = 'section';
 
@@ -81,7 +91,9 @@ abstract class GoodsCatalogAbstractActiveRecord
 
 	/**
 	 * Список поддерживаемых форматов
+	 *
 	 * @var array
+	 * @since 1.00
 	 */
 	private $supportedFormats = array(
 		'image/jpeg',
@@ -92,19 +104,16 @@ abstract class GoodsCatalogAbstractActiveRecord
 	);
 
 	/**
-	 * Описание файла для загрузки
-	 *
-	 * @var array
-	 */
-	protected $upload;
-
-	/**
 	 * Конструктор
 	 *
-	 * @param int $id  Идентификатор
+	 * @param int $id  Идентификатор. Если передан, то из БД будут загружены свойства
+	 *                 соответствующего объекта. Иначе этот объект будет считаться новым (см.
+	 *                 {@link isNew()})
 	 *
 	 * @return GoodsCatalogAbstractActiveRecord
 	 *
+	 * @uses loadById
+	 * @uses eresus_log
 	 * @since 1.00
 	 */
 	public function __construct($id = null)
@@ -120,7 +129,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	/**
 	 * Метод должен возвращать имя таблицы БД
 	 *
-	 * @return string
+	 * @return string  Короткое имя таблицы БД
 	 *
 	 * @since 1.00
 	 */
@@ -137,7 +146,29 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 * - pattern - PCRE для проверки значения
 	 * - maxlength - Для строковых полей, максимальное количество символов
 	 *
-	 * @return array
+	 * Пример:
+	 * <code>
+	 * public function getAttrs()
+	 * {
+	 * 	return array(
+	 * 		'id' => array(
+	 * 			'type' => PDO::PARAM_INT,
+	 * 		),
+	 * 		'active' => array(
+	 * 			'type' => PDO::PARAM_BOOL,
+	 * 		),
+	 * 		'title' => array(
+	 * 			'type' => PDO::PARAM_STR,
+	 * 			'maxlength' => 255,
+	 * 		),
+	 * 		'description' => array(
+	 * 			'type' => PDO::PARAM_STR,
+	 * 		)
+	 * 	);
+	 * }
+	 * </code>
+	 *
+	 * @return array Список полей записи
 	 *
 	 * @since 1.00
 	 */
@@ -145,10 +176,12 @@ abstract class GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Возвращает полное имя таблицы (плагин_таблица)
+	 * Возвращает полное имя таблицы БД
 	 *
-	 * @return string
+	 * @return string  Полное имя таблицы БД (имя плагина + короткое имя таблицы)
 	 *
+	 * @uses plugin
+	 * @uses getTableName
 	 * @since 1.00
 	 */
 	public function getDbTable()
@@ -158,12 +191,14 @@ abstract class GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Возвращает полное имя таблицы (для статических вызовов)
+	 * Возвращает полное имя таблицы БД (для статических вызовов)
 	 *
 	 * @param string $className  Имя класса, потомка GoodsCatalogAbstractActiveRecord, для которого
 	 *                           надо получить имя таблицы
 	 * @return string
 	 *
+	 * @throws EresusTypeException если класс $className не потомок GoodsCatalogAbstractActiveRecord
+	 * @uses getDbTable
 	 * @since 1.00
 	 */
 	public static function getDbTableStatic($className)
@@ -180,13 +215,16 @@ abstract class GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Возвращает значение поля
+	 * "Магический" метод для доступа к свойствам объекта
+	 *
+	 * Если есть метод, имя которого состоит из префикса "get" и имени свойства, вызывает этот
+	 * метод для полчения значения. В противном случае вызывает {@link getProperty}.
 	 *
 	 * @param string $key  Имя поля
 	 *
 	 * @return mixed  Значение поля
 	 *
-	 * @throws EresusPropertyNotExistsException
+	 * @uses getProperty
 	 * @since 1.00
 	 */
 	public function __get($key)
@@ -202,13 +240,17 @@ abstract class GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Задаёт значение поля
+	 * "Магический" метод для установки свойств объекта
+	 *
+	 * Если есть метод, имя которого состоит из префикса "set" и имени свойства, вызывает этот
+	 * метод для установки значения. В противном случае вызывает {@link setProperty}.
 	 *
 	 * @param string $key    Имя поля
 	 * @param mixed  $value  Значение поля
 	 *
 	 * @return void
 	 *
+	 * @uses setProperty
 	 * @since 1.00
 	 */
 	public function __set($key, $value)
@@ -228,7 +270,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	/**
 	 * Возвращает TRUE если эта запись ещё не добавлена в БД
 	 *
-	 * @return bool
+	 * @return bool  TRUE если эта запись ещё не добавлена в БД
 	 *
 	 * @since 1.00
 	 */
@@ -243,6 +285,13 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 *
 	 * @return void
 	 *
+	 * @uses eresus_log
+	 * @uses DB::getHandler
+	 * @uses isNew
+	 * @uses getDbTable
+	 * @uses DB::execute
+	 * @uses serveUpload
+	 * @uses delete
 	 * @since 1.00
 	 */
 	public function save()
@@ -304,10 +353,15 @@ abstract class GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Удаляет запись
+	 * Удаляет запись объекта из БД
+	 *
+	 * После удаления объект получает статус "новый" (см. {@link isNew()})
 	 *
 	 * @return void
 	 *
+	 * @uses DB::getHandler
+	 * @uses DB::execute
+	 * @uses eresus_log
 	 * @since 1.00
 	 */
 	public function delete()
@@ -333,8 +387,14 @@ abstract class GoodsCatalogAbstractActiveRecord
 	/**
 	 * Перемещает объект вверх по списку
 	 *
+	 * Применим только к объектам со свойством $position.
+	 *
 	 * @return void
 	 *
+	 * @uses DB::getHandler
+	 * @uses DB::fetch
+	 * @uses loadFromArray
+	 * @uses save
 	 * @since 1.00
 	 */
 	public function moveUp()
@@ -377,8 +437,14 @@ abstract class GoodsCatalogAbstractActiveRecord
 	/**
 	 * Перемещает объект вниз по списку
 	 *
+	 * Применим только к объектам со свойством $position.
+	 *
 	 * @return void
 	 *
+	 * @uses DB::getHandler
+	 * @uses DB::fetch
+	 * @uses loadFromArray
+	 * @uses save
 	 * @since 1.00
 	 */
 	public function moveDown()
@@ -416,10 +482,11 @@ abstract class GoodsCatalogAbstractActiveRecord
 	/**
 	 * Возвращает экземпляр основного класса плгина
 	 *
-	 * @param GoodsCatalog $plugin[optional]  Использовать этот экземпляр вместо автоопределения.
-	 *                                        Для модульных тестов.
+	 * @param GoodsCatalog $plugin  Использовать этот экземпляр вместо автоопределения.
+	 *                              Для модульных тестов.
 	 * @return GoodsCatalog
 	 *
+	 * @uses Plugins::load
 	 * @since 1.00
 	 */
 	protected static function plugin($plugin = null)
@@ -446,7 +513,10 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 * @param mixed  $value  Значение
 	 * @return void
 	 *
-	 * @throws EresusPropertyNotExistsException
+	 * @throws EresusPropertyNotExistsException если свойства $key нет
+	 * @throws EresusTypeException если у свойства неподдерживаемый тип (см. {@link getAttrs()})
+	 * @uses getAttrs
+	 * @uses PDO
 	 * @since 1.00
 	 */
 	protected function setProperty($key, $value)
@@ -486,12 +556,13 @@ abstract class GoodsCatalogAbstractActiveRecord
 	/**
 	 * Возвращает значение свойства
 	 *
-	 * Метод не инициирует вызов геттеров
+	 * Читает значение непосредственно из массива свойств, не инициируя вызов геттеров
 	 *
-	 * @param string $key  Имя свойства
-	 * @return mixed
+	 * @param string $key  имя свойства
+	 * @return mixed  значение свойства
 	 *
-	 * @throws EresusPropertyNotExistsException
+	 * @throws EresusPropertyNotExistsException  если такого свойства нет
+	 * @uses getAttrs
 	 * @since 1.00
 	 */
 	protected function getProperty($key)
@@ -514,7 +585,10 @@ abstract class GoodsCatalogAbstractActiveRecord
 	/**
 	 * Загружает свойства из массива
 	 *
-	 * @param array $raw
+	 * При загрузке свойства НЕ ПРОВЕРЯЮТСЯ на соответствие схеме класса ({@link getAttrs()}).
+	 * Метод отменяет состояние "новый" (см. {@link isNew()})
+	 *
+	 * @param array $raw  ассоциативный массив значений свойств
 	 * @return void
 	 *
 	 * @since 1.00
@@ -529,10 +603,12 @@ abstract class GoodsCatalogAbstractActiveRecord
 	/**
 	 * Загружает запись из БД по её идентификатору
 	 *
-	 * @param int $id
+	 * @param int $id  Идентификатор записи
 	 * @return void
 	 *
-	 * @throws DBQueryException
+	 * @throws DomainException если запись с таким идентификатором не найдена
+	 * @uses DB::getHandler
+	 * @uses DB::fetch
 	 * @since 1.00
 	 */
 	protected function loadById($id)
@@ -556,10 +632,17 @@ abstract class GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Проверяет формат изображения файла
+	 * Проверяет, поддерживается ли формат изображения файла
 	 *
-	 * @param string $mime
+	 * Список поддерживаемых форматов задан в приватном свойстве $supportedFormats.
+	 * Если формат не поддерживается будет врошено исключение EresusRuntimeException.
+	 *
+	 * @param string $mime  Тип MIME, который надо проверить
+	 *
 	 * @return void
+	 *
+	 * @throws EresusRuntimeException
+	 * @since 1.00
 	 */
 	protected function checkFormat($mime)
 	{
@@ -574,7 +657,11 @@ abstract class GoodsCatalogAbstractActiveRecord
 	/**
 	 * Проверяет, был ли загружен файл
 	 *
-	 * @return bool
+	 * @return bool  TRUE если файл был загружен и FALSE в противном случае
+	 *
+	 * @throws RuntimeException если при загрузке произошла ошибка. Содержит сообщение, пригодное
+	 *                          для показа пользователю
+	 * @since 1.00
 	 */
 	protected function fileUploaded()
 	{
@@ -601,9 +688,20 @@ abstract class GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Автоматически определяет порядковый номер
+	 * Автоматически определяет следующий порядковый номер в группе объектов и устанавливает
+	 * свойство $position.
+	 *
+	 * Группой считаются объекты с одинаковым значением свойства, имя которого хранится в свойстве
+	 * {@link $ownerProperty} (это либо "section" либо "owner").
+	 *
+	 * Использование метода требует двух условий:
+	 * 1. У класса должно быть свойство $position
+	 * 2. Свойство, задаваемое {@link $ownerProperty} должно быть уже установлено
 	 *
 	 * @return void
+	 *
+	 * @uses DB::getHandler
+	 * @uses DB::fetch
 	 */
 	protected function autoPosition()
 	{
@@ -621,9 +719,11 @@ abstract class GoodsCatalogAbstractActiveRecord
 	/**
 	 * Потомки могут перекрывать этот метод для загрузки изображения
 	 *
+	 * Метод не выполняет никаких действий.
+	 *
 	 * @return void
 	 *
-	 * @since 1.07
+	 * @since 1.00
 	 */
 	protected function serveUpload()
 	{
