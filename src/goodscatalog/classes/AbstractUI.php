@@ -2,7 +2,7 @@
 /**
  * Каталог товаров
  *
- * Абстрактный интерфейс
+ * Абстрактный пользоательский интерфейс
  *
  * @version ${product.version}
  *
@@ -33,7 +33,7 @@
 
 
 /**
- * Абстрактный интерфейс
+ * Абстрактный пользоательский интерфейс
  *
  * @package GoodsCatalog
  */
@@ -47,18 +47,20 @@ abstract class GoodsCatalogAbstractUI
 	protected $plugin;
 
 	/**
-	 * Класс AR
+	 * Имя класса ActiveRecord, соответствующего типу объектов с которыми работает интерфейс
 	 *
 	 * @var string
+	 * @see getActiveRecordClass
 	 */
 	protected $activeRecordClass;
 
 	/**
 	 * Конструктор
 	 *
-	 * @param GoodsCatalog $plugin
+	 * @param GoodsCatalog $plugin экземпляр класса плагина GoodsCatalog
 	 *
-	 * @return GoodsCatalogBrandsAI
+	 * @uses getActiveRecordClass
+	 * @since 1.00
 	 */
 	public function __construct(GoodsCatalog $plugin)
 	{
@@ -68,7 +70,7 @@ abstract class GoodsCatalogAbstractUI
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Должен возвращать HTML интерфейса
+	 * Должен возвращать HTML-разметку интерфейса
 	 *
 	 * @return string
 	 */
@@ -76,7 +78,8 @@ abstract class GoodsCatalogAbstractUI
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Метод должен возвращать имя класса активной записи
+	 * Метод должен возвращать имя класса активной записи соответствующего типу объектов,
+	 * с которыми работет интерфейс
 	 *
 	 * @return string
 	 */
