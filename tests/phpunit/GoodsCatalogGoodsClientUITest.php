@@ -49,6 +49,10 @@ class GoodsCatalogGoodsClientUITest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_issue584()
 	{
+		if (version_compare(PHP_VERSION, '5.3', '<'))
+		{
+			$this->markTestSkipped('PHP 5.3 required');
+		}
 		$template = $this->getMock('stdClass', array('compile'));
 		$template->expects($this->any())->method('compile');
 
