@@ -53,6 +53,7 @@ require_once dirname(__FILE__) . '/GoodsCatalogAbstractActiveRecordTest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogAbstractUITest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogAbstractAdminUITest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogGoodsAdminUITest.php';
+require_once dirname(__FILE__) . '/GoodsCatalogGoodsClientUITest.php';
 
 class AllTests
 {
@@ -64,6 +65,7 @@ class AllTests
 		$suite->addTestSuite('GoodsCatalogAbstractUITest');
 		$suite->addTestSuite('GoodsCatalogAbstractAdminUITest');
 		$suite->addTestSuite('GoodsCatalogGoodsAdminUITest');
+		$suite->addTestSuite('GoodsCatalogGoodsClientUITest');
 		return $suite;
 	}
 }
