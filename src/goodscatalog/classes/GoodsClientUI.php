@@ -93,7 +93,7 @@ extends GoodsCatalogAbstractUI
 		$data['goods'] = GoodsCatalogGood::find($page->id, $maxCount, $startFrom, true);
 		$totalPages = ceil(GoodsCatalogGood::count($page->id, true) / $maxCount);
 
-		if ($pg > $totalPages)
+		if ($pg > $totalPages && $pg != 1)
 		{
 			$page->httpError(404);
 		}

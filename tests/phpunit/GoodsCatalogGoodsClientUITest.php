@@ -49,13 +49,19 @@ class GoodsCatalogGoodsClientUITest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_issue584()
 	{
-		$helper = $this->getMock('stdClass', array('prepareTmplData'));
-		$helper->expects($this->once())->method('prepareTmplData')->
-			will($this->returnValue(array()));
+		$template = $this->getMock('stdClass', array('compile'));
+		$template->expects($this->any())->method('compile');
 
-		$plugin = $this->getMock('ContentPlugin', array('getHelper'), array(), '', false);
+		$helper = $this->getMock('stdClass', array('prepareTmplData', 'getClientTemplate'));
+		$helper->expects($this->any())->method('prepareTmplData')->
+			will($this->returnValue(array()));
+		$helper->expects($this->any())->method('getClientTemplate')->
+			will($this->returnValue($template));
+
+		$plugin = $this->getMockBuilder('ContentPlugin')->setMethods(array('getHelper'))->
+			disableOriginalConstructor()->getMock();
 		$plugin->settings = array('goodsPerPage' => 1);
-		$plugin->expects($this->once())->method('getHelper')->will($this->returnValue($helper));
+		$plugin->expects($this->any())->method('getHelper')->will($this->returnValue($helper));
 		$test = new GoodsCatalogGoodsClientUI($plugin);
 
 		$GLOBALS['page'] = $this->getMockBuilder('stdClass')->setMethods(array('httpError'))->getMock();
