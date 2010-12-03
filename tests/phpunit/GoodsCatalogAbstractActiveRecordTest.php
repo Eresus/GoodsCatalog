@@ -350,6 +350,10 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_moveUp()
 	{
+		if (version_compare(PHP_VERSION, '5.3'))
+		{
+			$this->markTestSkipped('PHP 5.3 required');
+		}
 		$stub = new GoodsCatalogAbstractActiveRecordTest_Stub();
 		$stub->save();
 		DBHandlerStub::reset();
@@ -374,6 +378,10 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_moveDown()
 	{
+		if (version_compare(PHP_VERSION, '5.3'))
+		{
+			$this->markTestSkipped('PHP 5.3 required');
+		}
 		$stub = new GoodsCatalogAbstractActiveRecordTest_Stub();
 		$stub->save();
 		DBHandlerStub::reset();
