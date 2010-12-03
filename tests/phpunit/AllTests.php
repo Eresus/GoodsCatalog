@@ -50,6 +50,7 @@ else
 require_once dirname(__FILE__) . '/helpers.php';
 
 require_once dirname(__FILE__) . '/GoodsCatalogAbstractActiveRecordTest.php';
+require_once dirname(__FILE__) . '/GoodsCatalogGoodTest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogAbstractUITest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogAbstractAdminUITest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogGoodsAdminUITest.php';
@@ -62,6 +63,7 @@ class AllTests
 		$suite = new PHPUnit_Framework_TestSuite('All Tests');
 
 		$suite->addTestSuite('GoodsCatalogAbstractActiveRecordTest');
+		$suite->addTestSuite('GoodsCatalogGoodTest');
 		$suite->addTestSuite('GoodsCatalogAbstractUITest');
 		$suite->addTestSuite('GoodsCatalogAbstractAdminUITest');
 		$suite->addTestSuite('GoodsCatalogGoodsAdminUITest');
