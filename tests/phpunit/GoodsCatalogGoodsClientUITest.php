@@ -58,13 +58,12 @@ class GoodsCatalogGoodsClientUITest extends PHPUnit_Framework_TestCase
 		$helper->expects($this->any())->method('getClientTemplate')->
 			will($this->returnValue($template));
 
-		$plugin = $this->getMockBuilder('ContentPlugin')->setMethods(array('getHelper'))->
-			disableOriginalConstructor()->getMock();
+		$plugin = $this->getMock('ContentPlugin', array('getHelper'));
 		$plugin->settings = array('goodsPerPage' => 1);
 		$plugin->expects($this->any())->method('getHelper')->will($this->returnValue($helper));
 		$test = new GoodsCatalogGoodsClientUI($plugin);
 
-		$GLOBALS['page'] = $this->getMockBuilder('stdClass')->setMethods(array('httpError'))->getMock();
+		$GLOBALS['page'] = $this->getMock('stdClass', array('httpError'));
 		$GLOBALS['page']->topic = null;
 		$GLOBALS['page']->subpage = 0;
 		$GLOBALS['page']->id = 1;

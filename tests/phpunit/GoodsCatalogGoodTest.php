@@ -54,8 +54,8 @@ class GoodsCatalogGoodTest extends PHPUnit_Framework_TestCase
 			$this->markTestSkipped('PHP 5.3 required');
 		}
 
-		$test = $this->getMockBuilder('GoodsCatalogGood')->
-			setMethods(array('setProperty', 'getProperty'))->disableOriginalConstructor()->getMock();
+		$test = $this->getMock('GoodsCatalogGood', array('setProperty', 'getProperty'), array(), '',
+			false);
 		$test->expects($this->once())->method('getProperty')->will($this->returnValue(123));
 
 		$rawData = new ReflectionProperty('GoodsCatalogAbstractActiveRecord', 'rawData');
