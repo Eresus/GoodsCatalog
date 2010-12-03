@@ -47,10 +47,10 @@ class GoodsCatalogAbstractUITest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_construct()
 	{
-		$stub = new GoodsCatalog();
+		$plugin = new GoodsCatalog_Stub();
 		$mock = $this->getMock('GoodsCatalogAbstractUI', array('getHTML', 'getActiveRecordClass'), array(), '', false);
-		$mock->__construct($stub);
-		$this->assertAttributeEquals($stub, 'plugin', $mock);
+		$mock->__construct($plugin);
+		$this->assertAttributeEquals($plugin, 'plugin', $mock);
 	}
 	//-----------------------------------------------------------------------------
 

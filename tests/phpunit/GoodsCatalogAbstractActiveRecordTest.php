@@ -64,7 +64,7 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 		{
 			$plugin = new ReflectionMethod('GoodsCatalogAbstractActiveRecord', 'plugin');
 			$plugin->setAccessible(true);
-			$plugin->invoke(null, new GoodsCatalog());
+			$plugin->invoke(null, new GoodsCatalog_Stub());
 		}
 	}
 	//-----------------------------------------------------------------------------

@@ -32,7 +32,20 @@
  * $Id$
  */
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+if (class_exists('PHP_CodeCoverage_Filter', false))
+{
+	PHP_CodeCoverage_Filter::getInstance()->addFileToBlacklist(__FILE__);
+
+	$root = realpath(dirname(__FILE__) . '/../../src');
+
+	PHP_CodeCoverage_Filter::getInstance()->addDirectoryToWhitelist($root);
+	PHP_CodeCoverage_Filter::getInstance()->removeFileFromWhitelist($root . '/goodscatalog/autoload.php');
+	PHP_CodeCoverage_Filter::getInstance()->removeFileFromWhitelist($root . '/goodscatalog/classes/TemplateService.php');
+}
+else
+{
+	PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+}
 
 require_once dirname(__FILE__) . '/helpers.php';
 

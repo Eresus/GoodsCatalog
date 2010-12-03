@@ -51,7 +51,7 @@ class GoodsCatalogGoodsAdminUITest extends PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		// @codeCoverageIgnoreStart
-		$this->fixture = new GoodsCatalogGoodsAdminUI(new GoodsCatalog());
+		$this->fixture = new GoodsCatalogGoodsAdminUI(new GoodsCatalog_Stub());
 		// @codeCoverageIgnoreEnd
 	}
 	//-----------------------------------------------------------------------------
