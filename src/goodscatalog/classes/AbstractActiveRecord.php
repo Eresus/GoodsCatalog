@@ -624,7 +624,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 
 		if (!$this->rawData)
 		{
-			throw new DomainException("Brand(#$id) not found");
+			throw new DomainException(get_class($this) . "(#$id) not found");
 		}
 
 		$this->isNew = false;

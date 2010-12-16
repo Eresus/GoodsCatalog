@@ -402,7 +402,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 */
 	protected function setSection($value)
 	{
-		if (is_null($this->originalSection) || $value != $this->section	)
+		if ($value != $this->section && is_null($this->originalSection))
 		{
 			$this->originalSection = $this->section;
 		}

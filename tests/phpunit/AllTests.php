@@ -32,14 +32,29 @@
  * $Id$
  */
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+if (class_exists('PHP_CodeCoverage_Filter', false))
+{
+	PHP_CodeCoverage_Filter::getInstance()->addFileToBlacklist(__FILE__);
+
+	$root = realpath(dirname(__FILE__) . '/../../src');
+
+	PHP_CodeCoverage_Filter::getInstance()->addDirectoryToWhitelist($root);
+	PHP_CodeCoverage_Filter::getInstance()->removeFileFromWhitelist($root . '/goodscatalog/autoload.php');
+	PHP_CodeCoverage_Filter::getInstance()->removeFileFromWhitelist($root . '/goodscatalog/classes/TemplateService.php');
+}
+else
+{
+	PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+}
 
 require_once dirname(__FILE__) . '/helpers.php';
 
 require_once dirname(__FILE__) . '/GoodsCatalogAbstractActiveRecordTest.php';
+require_once dirname(__FILE__) . '/GoodsCatalogGoodTest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogAbstractUITest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogAbstractAdminUITest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogGoodsAdminUITest.php';
+require_once dirname(__FILE__) . '/GoodsCatalogGoodsClientUITest.php';
 
 class AllTests
 {
@@ -48,9 +63,11 @@ class AllTests
 		$suite = new PHPUnit_Framework_TestSuite('All Tests');
 
 		$suite->addTestSuite('GoodsCatalogAbstractActiveRecordTest');
+		$suite->addTestSuite('GoodsCatalogGoodTest');
 		$suite->addTestSuite('GoodsCatalogAbstractUITest');
 		$suite->addTestSuite('GoodsCatalogAbstractAdminUITest');
 		$suite->addTestSuite('GoodsCatalogGoodsAdminUITest');
+		$suite->addTestSuite('GoodsCatalogGoodsClientUITest');
 		return $suite;
 	}
 }

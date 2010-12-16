@@ -54,7 +54,9 @@ class GoodsCatalogAbstractAdminUITest extends PHPUnit_Framework_TestCase
 		}
 		$extendedActions = new ReflectionMethod('GoodsCatalogAbstractAdminUI', 'extendedActions');
 		$extendedActions->setAccessible(true);
-		$this->assertFalse($extendedActions->invoke(new GoodsCatalogAbstractAdminUITest_Stub(new GoodsCatalog())));
+		$plugin = new GoodsCatalog_Stub();
+		$this->assertFalse($extendedActions->invoke(
+			new GoodsCatalogAbstractAdminUITest_Stub($plugin)));
 	}
 	//-----------------------------------------------------------------------------
 
