@@ -33,26 +33,44 @@
  */
 
 include_once dirname(__FILE__) . '/helpers.php';
-include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/AbstractUI.php';
+include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/AbstractActiveRecord.php';
+include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/Good.php';
 
 /**
  * @package GoodsCatalog
  * @subpackage Tests
  */
-class GoodsCatalogAbstractUITest extends PHPUnit_Framework_TestCase
+class GoodsCatalogGoodTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * Проверяем конструктор
-	 * @covers GoodsCatalogAbstractUI::__construct
+	 * http://bugs.eresus.ru/view.php?id=583
+	 *
+	 * @covers GoodsCatalogGood::setSection
 	 */
-	public function test_construct()
+	public function test_issue583()
 	{
-		$plugin = new GoodsCatalog_Stub();
-		$mock = $this->getMock('GoodsCatalogAbstractUI', array('getHTML', 'getActiveRecordClass'), array(), '', false);
-		$mock->__construct($plugin);
-		$this->assertAttributeEquals($plugin, 'plugin', $mock);
+		if (version_compare(PHP_VERSION, '5.3', '<'))
+		{
+			$this->markTestSkipped('PHP 5.3 required');
+		}
+
+		$test = $this->getMock('GoodsCatalogGood', array('setProperty', 'getProperty'), array(), '',
+			false);
+		$test->expects($this->once())->method('getProperty')->will($this->returnValue(123));
+
+		$rawData = new ReflectionProperty('GoodsCatalogAbstractActiveRecord', 'rawData');
+		$rawData->setAccessible(true);
+		$rawData->setValue($test, array('section' => 123));
+
+		$originalSection = new ReflectionProperty('GoodsCatalogGood', 'originalSection');
+		$originalSection->setAccessible(true);
+		$originalSection->setValue($test, null);
+
+		$setSection = new ReflectionMethod('GoodsCatalogGood', 'setSection');
+		$setSection->setAccessible(true);
+		$setSection->invoke($test, 123);
+
+		$this->assertNull($originalSection->getValue($test));
 	}
 	//-----------------------------------------------------------------------------
-
-	/* */
 }

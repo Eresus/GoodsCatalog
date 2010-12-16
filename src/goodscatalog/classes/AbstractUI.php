@@ -57,12 +57,12 @@ abstract class GoodsCatalogAbstractUI
 	/**
 	 * Конструктор
 	 *
-	 * @param GoodsCatalog $plugin экземпляр класса плагина GoodsCatalog
+	 * @param ContentPlugin $plugin экземпляр класса плагина GoodsCatalog
 	 *
 	 * @uses getActiveRecordClass
 	 * @since 1.00
 	 */
-	public function __construct(GoodsCatalog $plugin)
+	public function __construct(ContentPlugin $plugin)
 	{
 		$this->plugin = $plugin;
 		$this->activeRecordClass = $this->getActiveRecordClass();

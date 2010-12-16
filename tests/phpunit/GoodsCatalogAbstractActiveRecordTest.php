@@ -64,7 +64,7 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 		{
 			$plugin = new ReflectionMethod('GoodsCatalogAbstractActiveRecord', 'plugin');
 			$plugin->setAccessible(true);
-			$plugin->invoke(null, new GoodsCatalog());
+			$plugin->invoke(null, new GoodsCatalog_Stub());
 		}
 	}
 	//-----------------------------------------------------------------------------
@@ -350,6 +350,10 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_moveUp()
 	{
+		if (version_compare(PHP_VERSION, '5.3', '<'))
+		{
+			$this->markTestSkipped('PHP 5.3 required');
+		}
 		$stub = new GoodsCatalogAbstractActiveRecordTest_Stub();
 		$stub->save();
 		DBHandlerStub::reset();
@@ -357,6 +361,10 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(0, DBHandlerStub::$createUpdateQuery);
 
 		DBHandlerStub::reset();
+		$db = $this->getMock('stdClass', array('fetch'));
+		$db->expects($this->once())->method('fetch')->will($this->returnValue(array('id' => 1)));
+		DB::setMock($db);
+
 		$stub->position = 1;
 		$stub->moveUp();
 		$this->assertEquals(2, DBHandlerStub::$createUpdateQuery);
@@ -370,9 +378,16 @@ class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_moveDown()
 	{
+		if (version_compare(PHP_VERSION, '5.3', '<'))
+		{
+			$this->markTestSkipped('PHP 5.3 required');
+		}
 		$stub = new GoodsCatalogAbstractActiveRecordTest_Stub();
 		$stub->save();
 		DBHandlerStub::reset();
+		$db = $this->getMock('stdClass', array('fetch'));
+		$db->expects($this->once())->method('fetch')->will($this->returnValue(array('id' => 1)));
+		DB::setMock($db);
 		$stub->moveDown();
 		$this->assertEquals(2, DBHandlerStub::$createUpdateQuery);
 	}

@@ -34,23 +34,50 @@
 
 include_once dirname(__FILE__) . '/helpers.php';
 include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/AbstractUI.php';
+include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/GoodsClientUI.php';
+include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/Good.php';
 
 /**
  * @package GoodsCatalog
  * @subpackage Tests
  */
-class GoodsCatalogAbstractUITest extends PHPUnit_Framework_TestCase
+class GoodsCatalogGoodsClientUITest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * Проверяем конструктор
-	 * @covers GoodsCatalogAbstractUI::__construct
+	 * http://bugs.eresus.ru/view.php?id=584
+	 * @covers GoodsCatalogGoodsClientUI::renderList
 	 */
-	public function test_construct()
+	public function test_issue584()
 	{
-		$plugin = new GoodsCatalog_Stub();
-		$mock = $this->getMock('GoodsCatalogAbstractUI', array('getHTML', 'getActiveRecordClass'), array(), '', false);
-		$mock->__construct($plugin);
-		$this->assertAttributeEquals($plugin, 'plugin', $mock);
+		if (version_compare(PHP_VERSION, '5.3', '<'))
+		{
+			$this->markTestSkipped('PHP 5.3 required');
+		}
+		$template = $this->getMock('stdClass', array('compile'));
+		$template->expects($this->any())->method('compile');
+
+		$helper = $this->getMock('stdClass', array('prepareTmplData', 'getClientTemplate'));
+		$helper->expects($this->any())->method('prepareTmplData')->
+			will($this->returnValue(array()));
+		$helper->expects($this->any())->method('getClientTemplate')->
+			will($this->returnValue($template));
+
+		$plugin = $this->getMock('ContentPlugin', array('getHelper'));
+		$plugin->settings = array('goodsPerPage' => 1);
+		$plugin->expects($this->any())->method('getHelper')->will($this->returnValue($helper));
+		$test = new GoodsCatalogGoodsClientUI($plugin);
+
+		$GLOBALS['page'] = $this->getMock('stdClass', array('httpError'));
+		$GLOBALS['page']->topic = null;
+		$GLOBALS['page']->subpage = 0;
+		$GLOBALS['page']->id = 1;
+		$GLOBALS['page']->expects($this->never())->method('httpError');
+
+		$db = $this->getMock('stdClass', array('fetchAll', 'fetch'), array(), 'DB_Mock');
+		$db->expects($this->once())->method('fetch')->will($this->returnValue(array('count' => 0)));
+		DB::setMock($db);
+
+		$test->getHTML();
 	}
 	//-----------------------------------------------------------------------------
 

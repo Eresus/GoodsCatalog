@@ -32,7 +32,87 @@
  * $Id$
  */
 
-PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+if (class_exists('PHP_CodeCoverage_Filter', false))
+{
+	PHP_CodeCoverage_Filter::getInstance()->addFileToBlacklist(__FILE__);
+}
+else
+{
+	PHPUnit_Util_Filter::addFileToFilter(__FILE__);
+}
+
+
+/**
+ * Фасад к моку для эмуляции статичных методов
+ *
+ * @package EresusCMS
+ * @subpackage Tests
+ * @since 2.16
+ */
+class MockFacade
+{
+	/**
+	 * Мок
+	 *
+	 * @var object
+	 */
+	private static $mock;
+
+	/**
+	 * Устанавливает мок
+	 *
+	 * @param object $mock
+	 *
+	 * @return void
+	 *
+	 * @since 2.16
+	 */
+	public static function setMock($mock)
+	{
+		self::$mock = $mock;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Вызывает метод мока
+	 *
+	 * @param string $method
+	 * @param array  $args
+	 *
+	 * @return void
+	 *
+	 * @since 2.16
+	 */
+	public static function __callstatic($method, $args)
+	{
+		if (self::$mock)
+		{
+			return call_user_func_array(array(self::$mock, $method), $args);
+		}
+
+		return null;
+	}
+	//-----------------------------------------------------------------------------
+}
+
+
+
+/**
+ * @package GoodsCatalog
+ * @subpackage Tests
+ */
+class ContentPlugin
+{
+}
+
+
+
+function eresus_log()
+{
+}
+//-----------------------------------------------------------------------------
+
+
 
 /**
  * @package GoodsCatalog
@@ -72,7 +152,7 @@ class PluginsStub
 
 	public function __construct()
 	{
-		$this->plugin = new GoodsCatalog();
+		$this->plugin = new GoodsCatalog_Stub();
 	}
 	//-----------------------------------------------------------------------------
 
@@ -95,7 +175,7 @@ class PluginsStub
  * @package GoodsCatalog
  * @subpackage Tests
  */
-class GoodsCatalog
+class GoodsCatalog_Stub extends ContentPlugin
 {
 	public $name = 'goodscatalog';
 
@@ -117,14 +197,9 @@ class GoodsCatalog
 }
 
 
-function eresus_log()
-{
-	;
-}
-//-----------------------------------------------------------------------------
 
 
-class DB
+class DB extends MockFacade
 {
 	public static function getHandler()
 	{
@@ -135,12 +210,6 @@ class DB
 	public static function execute()
 	{
 		return null;
-	}
-	//-----------------------------------------------------------------------------
-
-	public static function fetch()
-	{
-		return array('id' => 1);
 	}
 	//-----------------------------------------------------------------------------
 }
