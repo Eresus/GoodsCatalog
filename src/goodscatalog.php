@@ -197,7 +197,7 @@ class GoodsCatalog extends ContentPlugin
 				`title` varchar(255) NOT NULL default '' COMMENT 'Название',
 				`about` text NOT NULL default '' COMMENT 'Краткое описание',
 				`description` longtext NOT NULL default '' COMMENT 'Описание',
-				`cost` float NOT NULL default 0 COMMENT 'Цена',
+				`cost` double NOT NULL default 0 COMMENT 'Цена',
 				`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла основной фотографии',
 				`special` bool NOT NULL default 0 COMMENT 'Спецпредложение',
 				`brand` int(10) unsigned default NULL COMMENT 'Привязка к бренду',
