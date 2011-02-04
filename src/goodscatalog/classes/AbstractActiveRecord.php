@@ -742,7 +742,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 */
 	private function filterString($value, $attrs)
 	{
-		if (isset($attrs['maxlength']))
+		if (isset($attrs['maxlength']) && strlen($value) > $attrs['maxlength'])
 		{
 			$value = substr($value, 0, $attrs['maxlength']);
 		}
