@@ -43,7 +43,7 @@
  * @property       string                   $title        Название
  * @property       string                   $about        Краткое описание
  * @property       string                   $description  Описание
- * @property       float                    $cost         Цена
+ * @property       GoodsCatalogMoney        $cost         Цена
  * @property-read  string                   $photoPath    Путь к основной фотографии
  * @property-read  string                   $photoURL     URL основной фотографии
  * @property-write string                   $photo        Свойство для загрузки основной фотографии
@@ -255,6 +255,36 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 		$result = self::load($q, $limit, $offset);
 
 		return $result;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Сеттер свойства $cost
+	 *
+	 * @param mixed $value
+	 *
+	 * @return void
+	 *
+	 * @since 1.00m
+	 */
+	protected function setCost($value)
+	{
+		$cost = new GoodsCatalogMoney($value);
+		$this->setProperty('cost', $cost->getAmount());
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Геттер свойства $cost
+	 *
+	 * @return GoodsCatalogMoney
+	 *
+	 * @since 1.00m
+	 */
+	protected function getCost()
+	{
+		$cost = new GoodsCatalogMoney($this->getProperty('cost'));
+		return strval($cost);
 	}
 	//-----------------------------------------------------------------------------
 
