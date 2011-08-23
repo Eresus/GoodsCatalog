@@ -87,41 +87,27 @@
 
 	<!--
 	=====================================================================
-	Prepare for build
-	=====================================================================
-	-->
-
-	<target name="prepare" depends="clean" description="Prepare for build">
-
-		<php function="dirname" returnProperty="phing.root">
-			<param value="${env.SCRIPT_NAME}" />
-		</php>
-
-		<mkdir dir="${build.dir}" />
-		<mkdir dir="${logs.dir}" />
-
-	</target>
-
-	<!--
-	=====================================================================
 	Clean up after build
 	=====================================================================
 	-->
 
 	<target name="clean" description="Clean up build">
 
-		<delete dir="${phpunit.coverage.temp}" includeemptydirs="true" />
 		<delete dir="${build.dir}" includeemptydirs="true" />
+		<delete dir="${logs.dir}" includeemptydirs="true" />
+		<delete dir="${phpunit.coverage.html}" includeemptydirs="true" />
 		
 	</target>
 
 	<!--
 	=====================================================================
-	Build project
+	Сборка проекта
 	=====================================================================
 	-->
 
-	<target name="build" depends="prepare" description="Build project">
+	<target name="build" description="Build project">
+
+		<mkdir dir="${build.dir}" />
 
 		<copy todir="${build.dir}">
 			<fileset refid="files.sources" />
