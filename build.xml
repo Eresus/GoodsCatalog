@@ -15,21 +15,16 @@
 	=====================================================================
 	-->
 	
-	<!-- Source files -->
+	<!-- Исходные файлы -->
 	<fileset dir="src" id="files.sources">
 		<include name="**" />
 		<exclude name=".svn" />
 	</fileset>
 	
-		<!-- PHP source files -->
+		<!-- Исходные файлы PHP -->
 		<fileset dir="src" id="files.sources.php">
 			<include name="**/*.php" />
 		</fileset>
-
-	<!-- Unit tests -->
-	<fileset dir="tests/phpunit" id="files.tests.phpunit">
-		<include name="**/*Test.php" />
-	</fileset>
 	
 	<!--
 	=====================================================================
@@ -38,12 +33,35 @@
 	-->
 	<target name="tests" description="Run unit tests">
 
+		<phplint>
+			<fileset refid="files.sources.php" />
+		</phplint>
+
+		<mkdir dir="${logs.dir}" />
 		<exec
 			command="phpunit --log-junit ${logs.dir}/phpunit.xml --coverage-clover ${logs.dir}/phpunit.coverage.xml --coverage-html ${phpunit.coverage.html} ${project.basedir}/tests/phpunit/AllTests.php"
 			checkreturn="true"
 			logoutput="true"
 		/>
 		 
+	</target>
+
+	<!--
+	=====================================================================
+	Поиск плохого кода
+	=====================================================================
+	-->
+	<target name="mess" description="Mess detection">
+	
+		<mkdir dir="${logs.dir}" />
+		<phpmd rulesets="${phpmd.rulesets}">
+			<formatter
+				type="${phpmd.format}"
+				outfile="${logs.dir}/phpmd.${phpmd.format}"
+			/>
+			<fileset refid="files.sources.php" />
+		</phpmd>
+		
 	</target>
 
 	<!--
@@ -60,67 +78,8 @@
 
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${logs.dir}" />
-		<mkdir dir="${phpunit.coverage.temp}" />
 		<mkdir dir="${phpunit.coverage.html}" />
 
-		<phplint>
-			<fileset refid="files.sources.php" />
-		</phplint>
-				
-		<!--
-			Run PHPUnit tests
-		-->
-		<if>
-			<istrue value="${phpunit}" />
-			<then>
-			
-				<mkdir dir="${phpunit.coverage.temp}" />
-
-				<exec
-					command="phpunit --log-junit ${logs.dir}/phpunit.xml --coverage-clover ${logs.dir}/phpunit.coverage.xml --coverage-html ${phpunit.coverage.html} ${project.basedir}/tests/phpunit/AllTests.php"
-					checkreturn="true"
-					logoutput="true"
-				/> 
-				
-				<!-- coverage-setup database="${phpunit.coverage.temp}/database">
-					<fileset refid="files.sources.php" />
-				</coverage-setup>
-
-				<phpunit haltonfailure="true" codecoverage="true">
-					<formatter
-						type="${phpunit.format}"
-						usefile="${phpunit.save}"
-						todir="${logs.dir}"
-						outfile="phpunit.${phpunit.format}"
-					/>
-					<batchtest name="AllTests">
-						<fileset refid="files.tests.phpunit" />
-					</batchtest>
-				</phpunit>
-				
-				<coverage-report outfile="${logs.dir}/code-coverage.xml">
-					<report styledir="${phing.root}/data/phing/etc" todir="${phpunit.coverage.html}" />
-				</coverage-report -->
-
-			</then>
-		</if>
-		
-		<!--
-			Check sources for bad code
-		-->
-		<if>
-			<istrue value="${phpmd}" />
-			<then>
-				<phpmd rulesets="${phpmd.rulesets}">
-					<formatter
-						type="${phpmd.format}"
-						outfile="${logs.dir}/phpmd.${phpmd.format}"
-					/>
-					<fileset refid="files.sources.php" />
-				</phpmd>
-			</then>
-		</if>
-		
 		<!--
 			Check sources for coding standards
 		-->
