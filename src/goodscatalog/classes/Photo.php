@@ -450,7 +450,7 @@ class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
 
 		$this->checkFormat($fileInfo['type']);
 
-		$dirCreated = self::plugin()->mkdir('goods/' . $this->id);
+		$dirCreated = self::plugin()->mkdir('goods/' . $this->good->id);
 
 		if (!$dirCreated)
 		{
