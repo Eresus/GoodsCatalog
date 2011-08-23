@@ -115,7 +115,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 			),
 			'description' => array(
 				'type' => PDO::PARAM_STR,
-				'maxlength' => 4294967295,
+				'maxlength' => 2147483647,
 			),
 			'cost' => array(
 				'type' => PDO::PARAM_STR,
