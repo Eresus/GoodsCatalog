@@ -66,6 +66,27 @@
 
 	<!--
 	=====================================================================
+	Проверка соблюдения стандартов кодирования
+	=====================================================================
+	-->
+	<target name="checkstyle" description="Check for coding standards">
+	
+		<mkdir dir="${logs.dir}" />
+		<phpcodesniffer
+			standard="Eresus"
+			haltonerror="false"
+		>
+			<formatter
+				type="${phpcs.format}"
+				outfile="${logs.dir}/phpcs.${phpcs.format}"
+			/>
+			<fileset refid="files.sources.php" />
+		</phpcodesniffer>
+		
+	</target>
+
+	<!--
+	=====================================================================
 	Prepare for build
 	=====================================================================
 	-->
@@ -78,26 +99,6 @@
 
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${logs.dir}" />
-		<mkdir dir="${phpunit.coverage.html}" />
-
-		<!--
-			Check sources for coding standards
-		-->
-		<if>
-			<istrue value="${phpcs}" />
-			<then>
-				<phpcodesniffer
-					standard="Eresus"
-					haltonerror="false"
-				>
-					<formatter
-						type="${phpcs.format}"
-						outfile="${logs.dir}/phpcs.${phpcs.format}"
-					/>
-					<fileset refid="files.sources.php" />
-				</phpcodesniffer>
-			</then>
-		</if>
 
 	</target>
 
