@@ -33,6 +33,21 @@
 	
 	<!--
 	=====================================================================
+	Модульные тесы
+	=====================================================================
+	-->
+	<target name="tests" description="Run unit tests">
+
+		<exec
+			command="phpunit --log-junit ${logs.dir}/phpunit.xml --coverage-clover ${logs.dir}/phpunit.coverage.xml --coverage-html ${phpunit.coverage.html} ${project.basedir}/tests/phpunit/AllTests.php"
+			checkreturn="true"
+			logoutput="true"
+		/>
+		 
+	</target>
+
+	<!--
+	=====================================================================
 	Prepare for build
 	=====================================================================
 	-->
@@ -155,26 +170,14 @@
 		  </filterchain>
 		</copy>
 
-		<!--
-			Build documentation
-		-->
-		<if>
-			<istrue value="${docs}" />
-			<then>
-				<phingcall target="docs" />
-			</then>
-		</if>
-
 	</target>
 
 	<!--
 	=====================================================================
-	Build documentation
+	Документация API
 	=====================================================================
 	-->
 	<target name="docs" description="Generate documentation">
-
-		<echo msg="Generating documentation..." level="info" />
 
 		<phpdoc title="API Documentation"
 		  destdir="${docs.dir}"
@@ -195,10 +198,9 @@
 
 	<!--
 	=====================================================================
-	Build distributive
+	Создание дистрибутива
 	=====================================================================
 	-->
-
 	<target name="distr" depends="build" description="Build distributive">
 
 		<available file="${distr.dir}" type="dir" property="distr.dir.exists" />
