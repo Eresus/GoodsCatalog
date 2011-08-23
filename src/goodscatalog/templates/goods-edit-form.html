@@ -139,9 +139,9 @@
 					{foreach $photos photo}
 					<tr class="photo-list-item">
 						<td class="controls">
-							<a href="{sprintf($urlEdit, $photo->id)}" title="Изменить">
+							{*<a href="{sprintf($urlEdit, $photo->id)}" title="Изменить">
 								<img src="{$Eresus->root}{$theme->getIcon('item-edit.png')}" alt="[изменить]" />
-							</a>
+							</a>*}
 							<a href="{sprintf($urlUp, $photo->id)}" title="Поднять">
 								<img src="{$Eresus->root}{$theme->getIcon('move-up.png')}" alt="[поднять]" />
 							</a>
