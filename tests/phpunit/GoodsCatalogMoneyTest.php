@@ -46,7 +46,7 @@ class GoodsCatalogMoneyTest extends PHPUnit_Framework_TestCase
 		$test->setAmount(12345.67);
 		$this->assertAttributeSame(12345.67, 'amount', $test, 'Numeric test');
 
-		setlocale(LC_ALL, 'ru_RU');
+		setlocale(LC_ALL, 'ru_RU.UTF-8');
 
 		$test = new GoodsCatalogMoney;
 		$test->setAmount('12345,67');
