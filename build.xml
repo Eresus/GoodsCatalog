@@ -139,14 +139,14 @@
 	-->
 	<target name="docs" description="Generate documentation">
 
-		<phpdoc title="API Documentation"
+		<delete dir="${docs.dir}" includeemptydirs="true" failonerror="true" />
+
+		<phpdoc title="GoodsCatalog API"
 		  destdir="${docs.dir}"
 		  sourcecode="no"
 			parseprivate="false"
 		  output="${docs.converter}">
-		   <fileset dir="${build.dir}">
-		      <include name="**/*.php" />
-		   </fileset>
+		   <fileset refid="files.sources" />
 		   <projdocfileset dir=".">
 		      <include name="README" />
 		      <include name="INSTALL" />
