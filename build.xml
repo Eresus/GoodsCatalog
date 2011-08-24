@@ -15,116 +15,74 @@
 	=====================================================================
 	-->
 	
-	<!-- Source files -->
+	<!-- Исходные файлы -->
 	<fileset dir="src" id="files.sources">
 		<include name="**" />
 		<exclude name=".svn" />
 	</fileset>
 	
-		<!-- PHP source files -->
+		<!-- Исходные файлы PHP -->
 		<fileset dir="src" id="files.sources.php">
 			<include name="**/*.php" />
 		</fileset>
-
-	<!-- Unit tests -->
-	<fileset dir="tests/phpunit" id="files.tests.phpunit">
-		<include name="**/*Test.php" />
-	</fileset>
 	
 	<!--
 	=====================================================================
-	Prepare for build
+	Модульные тесы
 	=====================================================================
 	-->
-
-	<target name="prepare" depends="clean" description="Prepare for build">
-
-		<php function="dirname" returnProperty="phing.root">
-			<param value="${env.SCRIPT_NAME}" />
-		</php>
-
-		<mkdir dir="${build.dir}" />
-		<mkdir dir="${logs.dir}" />
-		<mkdir dir="${phpunit.coverage.temp}" />
-		<mkdir dir="${phpunit.coverage.html}" />
+	<target name="tests" description="Run unit tests">
 
 		<phplint>
 			<fileset refid="files.sources.php" />
 		</phplint>
-				
-		<!--
-			Run PHPUnit tests
-		-->
-		<if>
-			<istrue value="${phpunit}" />
-			<then>
-			
-				<mkdir dir="${phpunit.coverage.temp}" />
 
-				<exec
-					command="phpunit --log-junit ${logs.dir}/phpunit.xml --coverage-clover ${logs.dir}/phpunit.coverage.xml --coverage-html ${phpunit.coverage.html} ${project.basedir}/tests/phpunit/AllTests.php"
-					checkreturn="true"
-					logoutput="true"
-				/> 
-				
-				<!-- coverage-setup database="${phpunit.coverage.temp}/database">
-					<fileset refid="files.sources.php" />
-				</coverage-setup>
+		<mkdir dir="${logs.dir}" />
+		<exec
+			command="phpunit --log-junit ${logs.dir}/phpunit.xml --coverage-clover ${logs.dir}/phpunit.coverage.xml --coverage-html ${phpunit.coverage.html} ${project.basedir}/tests/phpunit/AllTests.php"
+			checkreturn="true"
+			logoutput="true"
+		/>
+		 
+	</target>
 
-				<phpunit haltonfailure="true" codecoverage="true">
-					<formatter
-						type="${phpunit.format}"
-						usefile="${phpunit.save}"
-						todir="${logs.dir}"
-						outfile="phpunit.${phpunit.format}"
-					/>
-					<batchtest name="AllTests">
-						<fileset refid="files.tests.phpunit" />
-					</batchtest>
-				</phpunit>
-				
-				<coverage-report outfile="${logs.dir}/code-coverage.xml">
-					<report styledir="${phing.root}/data/phing/etc" todir="${phpunit.coverage.html}" />
-				</coverage-report -->
-
-			</then>
-		</if>
+	<!--
+	=====================================================================
+	Поиск плохого кода
+	=====================================================================
+	-->
+	<target name="mess" description="Mess detection">
+	
+		<mkdir dir="${logs.dir}" />
+		<phpmd rulesets="${phpmd.rulesets}">
+			<formatter
+				type="${phpmd.format}"
+				outfile="${logs.dir}/phpmd.${phpmd.format}"
+			/>
+			<fileset refid="files.sources.php" />
+		</phpmd>
 		
-		<!--
-			Check sources for bad code
-		-->
-		<if>
-			<istrue value="${phpmd}" />
-			<then>
-				<phpmd rulesets="${phpmd.rulesets}">
-					<formatter
-						type="${phpmd.format}"
-						outfile="${logs.dir}/phpmd.${phpmd.format}"
-					/>
-					<fileset refid="files.sources.php" />
-				</phpmd>
-			</then>
-		</if>
-		
-		<!--
-			Check sources for coding standards
-		-->
-		<if>
-			<istrue value="${phpcs}" />
-			<then>
-				<phpcodesniffer
-					standard="Eresus"
-					haltonerror="false"
-				>
-					<formatter
-						type="${phpcs.format}"
-						outfile="${logs.dir}/phpcs.${phpcs.format}"
-					/>
-					<fileset refid="files.sources.php" />
-				</phpcodesniffer>
-			</then>
-		</if>
+	</target>
 
+	<!--
+	=====================================================================
+	Проверка соблюдения стандартов кодирования
+	=====================================================================
+	-->
+	<target name="checkstyle" description="Check for coding standards">
+	
+		<mkdir dir="${logs.dir}" />
+		<phpcodesniffer
+			standard="Eresus"
+			haltonerror="false"
+		>
+			<formatter
+				type="${phpcs.format}"
+				outfile="${logs.dir}/phpcs.${phpcs.format}"
+			/>
+			<fileset refid="files.sources.php" />
+		</phpcodesniffer>
+		
 	</target>
 
 	<!--
@@ -135,18 +93,21 @@
 
 	<target name="clean" description="Clean up build">
 
-		<delete dir="${phpunit.coverage.temp}" includeemptydirs="true" />
 		<delete dir="${build.dir}" includeemptydirs="true" />
+		<delete dir="${logs.dir}" includeemptydirs="true" />
+		<delete dir="${phpunit.coverage.html}" includeemptydirs="true" />
 		
 	</target>
 
 	<!--
 	=====================================================================
-	Build project
+	Сборка проекта
 	=====================================================================
 	-->
 
-	<target name="build" depends="prepare" description="Build project">
+	<target name="build" description="Build project">
+
+		<mkdir dir="${build.dir}" />
 
 		<copy todir="${build.dir}">
 			<fileset refid="files.sources" />
@@ -155,35 +116,23 @@
 		  </filterchain>
 		</copy>
 
-		<!--
-			Build documentation
-		-->
-		<if>
-			<istrue value="${docs}" />
-			<then>
-				<phingcall target="docs" />
-			</then>
-		</if>
-
 	</target>
 
 	<!--
 	=====================================================================
-	Build documentation
+	Документация API
 	=====================================================================
 	-->
 	<target name="docs" description="Generate documentation">
 
-		<echo msg="Generating documentation..." level="info" />
+		<delete dir="${docs.dir}" includeemptydirs="true" failonerror="true" />
 
-		<phpdoc title="API Documentation"
+		<phpdoc title="GoodsCatalog API"
 		  destdir="${docs.dir}"
 		  sourcecode="no"
 			parseprivate="false"
 		  output="${docs.converter}">
-		   <fileset dir="${build.dir}">
-		      <include name="**/*.php" />
-		   </fileset>
+		   <fileset refid="files.sources" />
 		   <projdocfileset dir=".">
 		      <include name="README" />
 		      <include name="INSTALL" />
@@ -195,10 +144,9 @@
 
 	<!--
 	=====================================================================
-	Build distributive
+	Создание дистрибутива
 	=====================================================================
 	-->
-
 	<target name="distr" depends="build" description="Build distributive">
 
 		<available file="${distr.dir}" type="dir" property="distr.dir.exists" />

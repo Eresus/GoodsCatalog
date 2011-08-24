@@ -32,23 +32,17 @@
  * $Id$
  */
 
-if (class_exists('PHP_CodeCoverage_Filter', false))
-{
-	PHP_CodeCoverage_Filter::getInstance()->addFileToBlacklist(__FILE__);
+PHP_CodeCoverage_Filter::getInstance()->addFileToBlacklist(__FILE__);
 
-	$root = realpath(dirname(__FILE__) . '/../../src');
+$root = realpath(dirname(__FILE__) . '/../../src');
 
-	PHP_CodeCoverage_Filter::getInstance()->addDirectoryToWhitelist($root);
-	PHP_CodeCoverage_Filter::getInstance()->removeFileFromWhitelist($root . '/goodscatalog/autoload.php');
-	PHP_CodeCoverage_Filter::getInstance()->removeFileFromWhitelist($root . '/goodscatalog/classes/TemplateService.php');
-}
-else
-{
-	PHPUnit_Util_Filter::addFileToFilter(__FILE__);
-}
+PHP_CodeCoverage_Filter::getInstance()->addDirectoryToWhitelist($root);
+PHP_CodeCoverage_Filter::getInstance()->removeFileFromWhitelist($root . '/goodscatalog/autoload.php');
+PHP_CodeCoverage_Filter::getInstance()->removeFileFromWhitelist($root . '/goodscatalog/classes/TemplateService.php');
 
 require_once dirname(__FILE__) . '/helpers.php';
 
+require_once dirname(__FILE__) . '/GoodsCatalogMoneyTest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogAbstractActiveRecordTest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogGoodTest.php';
 require_once dirname(__FILE__) . '/GoodsCatalogAbstractUITest.php';
@@ -62,6 +56,7 @@ class AllTests
 	{
 		$suite = new PHPUnit_Framework_TestSuite('All Tests');
 
+		$suite->addTestSuite('GoodsCatalogMoneyTest');
 		$suite->addTestSuite('GoodsCatalogAbstractActiveRecordTest');
 		$suite->addTestSuite('GoodsCatalogGoodTest');
 		$suite->addTestSuite('GoodsCatalogAbstractUITest');

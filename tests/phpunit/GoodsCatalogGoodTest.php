@@ -43,7 +43,7 @@ include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/Good.php';
 class GoodsCatalogGoodTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * http://bugs.eresus.ru/view.php?id=583
+	 * @link http://bugs.eresus.ru/view.php?id=583
 	 *
 	 * @covers GoodsCatalogGood::setSection
 	 */
@@ -71,6 +71,25 @@ class GoodsCatalogGoodTest extends PHPUnit_Framework_TestCase
 		$setSection->invoke($test, 123);
 
 		$this->assertNull($originalSection->getValue($test));
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * @link http://bugs.eresus.ru/view.php?id=689
+	 *
+	 * @covers GoodsCatalogGood::getAttrs
+	 */
+	public function test_issue689()
+	{
+		$test = new GoodsCatalogGood();
+		$fields = $test->getAttrs();
+		foreach ($fields as $name => $attrs)
+		{
+			if (isset($attrs['maxlength']))
+			{
+				$this->assertInternalType('integer', $attrs['maxlength'], $name);
+			}
+		}
 	}
 	//-----------------------------------------------------------------------------
 }
