@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://test.eresus.ru/eresus-suite-trunk/" />
+<title>EditGood</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">EditGood</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>admin.php?mod=content&amp;section=2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=img[alt=&quot;[изменить]&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=catalog-article-input</td>
+	<td>1234</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=catalog-title-input</td>
+	<td>Тестовый товар 2</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=catalog-about-input</td>
+	<td>Краткое описание товара 2.</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=catalog-cost-input</td>
+	<td>1 200</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=tinymce</td>
+	<td>Полное описание товара 2.</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=#catalogEdit-main &gt; div.ui-button-box &gt; button[type=&quot;submit&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Вернуться к списку</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.article</td>
+	<td>1234</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.title</td>
+	<td>Тестовый товар 2</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td.cost</td>
+	<td>1 200</td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
