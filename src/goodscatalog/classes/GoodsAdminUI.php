@@ -40,7 +40,6 @@
 class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 {
 	/**
-	 * (non-PHPdoc)
 	 * @see src/goodscatalog/classes/GoodsCatalogAbstractAdminUI::getActiveRecordClass()
 	 */
 	protected function getActiveRecordClass()
@@ -50,7 +49,6 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * (non-PHPdoc)
 	 * @see src/goodscatalog/classes/GoodsCatalogAbstractAdminUI::extendedActions()
 	 */
 	protected function extendedActions()

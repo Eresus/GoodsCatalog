@@ -185,7 +185,11 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 			}
 		}
 
-		rmdir(dirname($this->photoPath));
+		$dir = dirname($this->photoPath);
+		if (is_dir($dir))
+		{
+			rmdir($dir);
+		}
 
 		parent::delete();
 	}
