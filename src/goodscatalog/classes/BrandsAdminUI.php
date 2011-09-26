@@ -137,20 +137,6 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 	 */
 	protected function renderAddDialog()
 	{
-		/*
-		 * Имитируем использование старых форм на основе массивов.
-		 * Это требуется для правильного подключения WYSIWYG.
-		 */
-		$wysiwyg = $GLOBALS['Eresus']->extensions->load('forms', 'html');
-		$fakeForm = array('values' => array());
-		$fakeField = array(
-			'name' => 'description',
-			'value' => '',
-			'label' => '',
-			'height' => null,
-		);
-		$wysiwyg->forms_html($fakeForm, $fakeField);
-
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
 
@@ -217,20 +203,6 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 			$this->reportBadURL($e);
 			return;
 		}
-
-		/*
-		 * Имитируем использование старых форм на основе массивов.
-		 * Это требуется для правильного подключения WYSIWYG.
-		 */
-		$wysiwyg = $GLOBALS['Eresus']->extensions->load('forms', 'html');
-		$fakeForm = array('values' => array());
-		$fakeField = array(
-			'name' => 'description',
-			'value' => '',
-			'label' => '',
-			'height' => null,
-		);
-		$wysiwyg->forms_html($fakeForm, $fakeField);
 
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
