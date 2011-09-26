@@ -40,7 +40,6 @@
 class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 {
 	/**
-	 * (non-PHPdoc)
 	 * @see src/goodscatalog/classes/GoodsCatalogAbstractAdminUI::getActiveRecordClass()
 	 */
 	protected function getActiveRecordClass()
@@ -50,7 +49,6 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * (non-PHPdoc)
 	 * @see src/goodscatalog/classes/GoodsCatalogAbstractAdminUI::extendedActions()
 	 */
 	protected function extendedActions()
@@ -129,20 +127,6 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	 */
 	protected function renderAddDialog()
 	{
-		/*
-		 * Имитируем использование старых форм на основе массивов.
-		 * Это требуется для правильного подключения WYSIWYG.
-		 */
-		$wysiwyg = $GLOBALS['Eresus']->extensions->load('forms', 'html');
-		$fakeForm = array('values' => array());
-		$fakeField = array(
-			'name' => 'description',
-			'value' => '',
-			'label' => '',
-			'height' => null,
-		);
-		$wysiwyg->forms_html($fakeForm, $fakeField);
-
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
 		$data['section'] = arg('section', 'int');
@@ -275,20 +259,6 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		/*
 		 * Основные свойства
 		 */
-
-		/*
-		 * Имитируем использование старых форм на основе массивов.
-		 * Это требуется для правильного подключения WYSIWYG.
-		 */
-		$wysiwyg = $GLOBALS['Eresus']->extensions->load('forms', 'html');
-		$fakeForm = array('values' => array());
-		$fakeField = array(
-			'name' => 'description',
-			'value' => '',
-			'label' => '',
-			'height' => null,
-		);
-		$wysiwyg->forms_html($fakeForm, $fakeField);
 
 		$form = new EresusForm('ext/' . $this->plugin->name . '/templates/goods-edit-form.html' ,
 			LOCALE_CHARSET);

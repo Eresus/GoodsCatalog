@@ -350,7 +350,8 @@ class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
 	 */
 	protected function getGood()
 	{
-		try {
+		try
+		{
 			$good = new GoodsCatalogGood($this->getProperty('good'));
 		}
 		catch (DomainException $e)

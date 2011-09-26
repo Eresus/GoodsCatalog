@@ -185,7 +185,11 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 			}
 		}
 
-		rmdir(dirname($this->photoPath));
+		$dir = dirname($this->photoPath);
+		if (is_dir($dir))
+		{
+			rmdir($dir);
+		}
 
 		parent::delete();
 	}
@@ -389,7 +393,8 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 */
 	protected function getBrand()
 	{
-		try {
+		try
+		{
 			$brand = new GoodsCatalogBrand($this->getProperty('brand'));
 		}
 		catch (DomainException $e)
