@@ -393,7 +393,8 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 */
 	protected function getBrand()
 	{
-		try {
+		try
+		{
 			$brand = new GoodsCatalogBrand($this->getProperty('brand'));
 		}
 		catch (DomainException $e)
