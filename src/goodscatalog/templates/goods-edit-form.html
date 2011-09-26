@@ -48,7 +48,7 @@
 					<tr>
 						<td colspan="2">
 							<label for="wyswyg_description">Описание</label><br />
-							<textarea name="wyswyg_description" id="wyswyg_description" cols="40" rows="8" class="tinymce_default wysiwyg full-width">{$good->description|escape}</textarea>
+							{wysiwyg name='description', value=$good->description}
 						</td>
 					</tr>
 					<tr>

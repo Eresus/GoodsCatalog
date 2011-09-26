@@ -48,7 +48,7 @@ class GoodsCatalog extends ContentPlugin
 	 * Требуемая версия ядра
 	 * @var string
 	 */
-	public $kernel = '2.14';
+	public $kernel = '2.16';
 
 	/**
 	 * Название плагина
