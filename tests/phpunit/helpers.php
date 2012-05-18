@@ -32,16 +32,6 @@
  * $Id$
  */
 
-if (class_exists('PHP_CodeCoverage_Filter', false))
-{
-	PHP_CodeCoverage_Filter::getInstance()->addFileToBlacklist(__FILE__);
-}
-else
-{
-	PHPUnit_Util_Filter::addFileToFilter(__FILE__);
-}
-
-
 /**
  * Фасад к моку для эмуляции статичных методов
  *
@@ -289,3 +279,5 @@ class ezcQuerySelect
 	const ASC = 'ASC';
 	const DESC = 'DESC';
 }
+
+class EresusRuntimeException extends RuntimeException {}
