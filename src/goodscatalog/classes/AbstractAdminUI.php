@@ -128,10 +128,7 @@ abstract class GoodsCatalog_AbstractAdminUI extends GoodsCatalog_AbstractUI
 	 */
 	protected function reportBadURL(Exception $e)
 	{
-		ErrorMessage(iconv('utf-8', 'cp1251', 'Неправильный адрес'));
-
-		return;
-		$e = $e; // PHPMD hack
+		ErrorMessage('Неправильный адрес');
 	}
 	//-----------------------------------------------------------------------------
 
@@ -178,8 +175,7 @@ abstract class GoodsCatalog_AbstractAdminUI extends GoodsCatalog_AbstractUI
 			}
 			catch (Exception $e)
 			{
-				ErrorMessage(iconv('utf-8', 'cp1251', 'Не удалось сохранить изменения: ') .
-					$e->getMessage());
+				ErrorMessage('Не удалось сохранить изменения: ' .	$e->getMessage());
 			}
 		}
 		catch (DomainException $e)

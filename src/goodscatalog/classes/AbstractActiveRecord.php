@@ -649,7 +649,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
 		if (!in_array($mime, $this->supportedFormats))
 		{
 			throw new EresusRuntimeException("Unsupported file type: $mime",
-				iconv('utf-8', 'cp1251', "Неподдерживаемый тип файла: $mime."));
+				"Неподдерживаемый тип файла: $mime.");
 		}
 	}
 	//-----------------------------------------------------------------------------
@@ -674,12 +674,10 @@ abstract class GoodsCatalog_AbstractActiveRecord
 		{
 			case UPLOAD_ERR_INI_SIZE:
 			case UPLOAD_ERR_FORM_SIZE:
-				throw new RuntimeException(iconv('utf-8', 'cp1251',
-					'Размер загружаемого файла превышает максимально допустимый'));
+				throw new RuntimeException('Размер загружаемого файла превышает максимально допустимый');
 			break;
 			case UPLOAD_ERR_PARTIAL:
-				throw new RuntimeException(iconv('utf-8', 'cp1251',
-					'Во время загрузки файла произошёл сбой. Попробуйте ещё раз'));
+				throw new RuntimeException('Во время загрузки файла произошёл сбой. Попробуйте ещё раз');
 				break;
 		}
 

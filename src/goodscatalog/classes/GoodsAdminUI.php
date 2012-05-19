@@ -180,7 +180,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 		catch (Exception $e)
 		{
 			Core::logException($e);
-			ErrorMessage(iconv('utf-8', 'cp1251', 'Произошла внутренняя ошибка при добавлении товара.'));
+			ErrorMessage('Произошла внутренняя ошибка при добавлении товара.');
 		}
 
 		/*
@@ -212,8 +212,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 			}
 			catch (Exception $e)
 			{
-				ErrorMessage(iconv('utf-8', 'cp1251', 'Не удалось удалить товар: ') .
-					$e->getMessage());
+				ErrorMessage('Не удалось удалить товар: ' . $e->getMessage());
 			}
 		}
 		catch (DomainException $e)
@@ -260,8 +259,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 		 * Основные свойства
 		 */
 
-		$form = new EresusForm('ext/' . $this->plugin->name . '/templates/goods-edit-form.html' ,
-			LOCALE_CHARSET);
+		$form = new EresusForm('ext/' . $this->plugin->name . '/templates/goods-edit-form.html');
 
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
@@ -347,7 +345,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 		catch (Exception $e)
 		{
 			Core::logException($e);
-			ErrorMessage(iconv('utf-8', 'cp1251', 'Произошла внутренняя ошибка при изменении товара.'));
+			ErrorMessage('Произошла внутренняя ошибка при изменении товара.');
 		}
 
 		HTTP::goback();
@@ -526,8 +524,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 			catch (Exception $e)
 			{
 				Core::logException($e);
-				ErrorMessage(iconv('utf-8', 'cp1251',
-					'Произошла внутренняя ошибка при добавлении фотографии.'));
+				ErrorMessage('Произошла внутренняя ошибка при добавлении фотографии.');
 			}
 		}
 
@@ -598,8 +595,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 			}
 			catch (Exception $e)
 			{
-				ErrorMessage(iconv('utf-8', 'cp1251', 'Не удалось удалить фотографию: ') .
-					$e->getMessage());
+				ErrorMessage('Не удалось удалить фотографию: ' . $e->getMessage());
 			}
 		}
 		catch (DomainException $e)

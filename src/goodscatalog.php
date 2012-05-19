@@ -310,7 +310,7 @@ class GoodsCatalog extends ContentPlugin
 
 		// Создаём экземпляр шаблона
 		//$tmpl = $this->getHelper()->getAdminTemplate('settings.html');
-		$form = new EresusForm('ext/' . $this->name . '/templates/settings.html', LOCALE_CHARSET);
+		$form = new EresusForm('ext/' . $this->name . '/templates/settings.html');
 
 		foreach ($data as $key => $value)
 		{
