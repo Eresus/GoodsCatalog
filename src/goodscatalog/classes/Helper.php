@@ -39,7 +39,7 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogHelper
+class GoodsCatalog_Helper
 {
 	/**
 	 * Объект плагина
@@ -53,7 +53,7 @@ class GoodsCatalogHelper
 	 *
 	 * @param GoodsCatalog $plugin
 	 *
-	 * @return GoodsCatalogHelper
+	 * @return GoodsCatalog_Helper
 	 */
 	public function __construct(GoodsCatalog $plugin)
 	{

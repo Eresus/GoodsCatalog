@@ -39,7 +39,7 @@
  *
  * @since 1.02
  */
-class GoodsCatalogMoney
+class GoodsCatalog_Money
 {
 	/**
 	 * Количество денег
@@ -53,7 +53,7 @@ class GoodsCatalogMoney
 	 *
 	 * @param float $amount  начальное количество денег
 	 *
-	 * @return GoodsCatalogMoney
+	 * @return GoodsCatalog_Money
 	 *
 	 * @since 1.02
 	 */
@@ -66,7 +66,7 @@ class GoodsCatalogMoney
 	/**
 	 * Задаёт количество денег
 	 *
-	 * @param GoodsCatalogMoney|float|string $amount
+	 * @param GoodsCatalog_Money|float|string $amount
 	 *
 	 * @return void
 	 *

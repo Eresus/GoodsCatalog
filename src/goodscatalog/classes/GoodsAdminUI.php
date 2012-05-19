@@ -37,7 +37,7 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
+class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 {
 	/**
 	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractAdminUI::getActiveRecordClass()
@@ -280,7 +280,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 		 */
 		if ($this->plugin->settings['extPhotosEnabled'])
 		{
-			$form->setValue('photos', GoodsCatalogPhoto::find($good->id));
+			$form->setValue('photos', GoodsCatalog_Photo::find($good->id));
 
 			/* Шаблоны адресов действий */
 			$form->setValue('urlEdit', str_replace('&', '&amp;', $page->url(array('photo_id' => '%s'))));
@@ -512,7 +512,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 			{
 				continue;
 			}
-			$photo = new GoodsCatalogPhoto();
+			$photo = new GoodsCatalog_Photo();
 			$photo->good = $good->id;
 			$photo->photo = $name; // $_FILES[$name];
 			try
@@ -544,7 +544,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 	{
 		try
 		{
-			$photo = new GoodsCatalogPhoto(arg('photo_up', 'int'));
+			$photo = new GoodsCatalog_Photo(arg('photo_up', 'int'));
 		}
 		catch (DomainException $e)
 		{
@@ -565,7 +565,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 	{
 		try
 		{
-			$photo = new GoodsCatalogPhoto(arg('photo_down', 'int'));
+			$photo = new GoodsCatalog_Photo(arg('photo_down', 'int'));
 		}
 		catch (DomainException $e)
 		{
@@ -590,7 +590,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 
 		try
 		{
-			$photo = new GoodsCatalogPhoto($id);
+			$photo = new GoodsCatalog_Photo($id);
 
 			try
 			{

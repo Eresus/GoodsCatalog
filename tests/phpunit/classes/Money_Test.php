@@ -38,54 +38,54 @@ include_once TESTS_SRC_DIR . '/goodscatalog/classes/Money.php';
 class GoodsCatalog_Money_Test extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @covers GoodsCatalogMoney::setAmount
+	 * @covers GoodsCatalog_Money::setAmount
 	 */
 	public function test_setAmount()
 	{
-		$test = new GoodsCatalogMoney;
+		$test = new GoodsCatalog_Money;
 		$test->setAmount(12345.67);
 		$this->assertAttributeSame(12345.67, 'amount', $test, 'Numeric test');
 
 		setlocale(LC_ALL, 'ru_RU.UTF-8');
 
-		$test = new GoodsCatalogMoney;
+		$test = new GoodsCatalog_Money;
 		$test->setAmount('12345,67');
 		$this->assertAttributeSame(12345.67, 'amount', $test, 'Colon test');
 
-		$test = new GoodsCatalogMoney;
+		$test = new GoodsCatalog_Money;
 		$test->setAmount('12 345');
 		$this->assertAttributeSame(floatval(12345), 'amount', $test, 'Spaces test');
 
-		$test = new GoodsCatalogMoney;
+		$test = new GoodsCatalog_Money;
 		$test->setAmount('12 345 руб');
 		$this->assertAttributeSame(floatval(12345), 'amount', $test, 'Currency suffix test');
 
 		setlocale(LC_ALL, 'en_US');
 
-		$test = new GoodsCatalogMoney;
+		$test = new GoodsCatalog_Money;
 		$test->setAmount('$12 345');
 		$this->assertAttributeSame(floatval(12345), 'amount', $test, 'Currency prefix test');
 
-		$a = new GoodsCatalogMoney(12345.67);
-		$test = new GoodsCatalogMoney();
+		$a = new GoodsCatalog_Money(12345.67);
+		$test = new GoodsCatalog_Money();
 		$test->setAmount($a);
 		$this->assertAttributeSame(12345.67, 'amount', $test, 'Currency object test');
 	}
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * @covers GoodsCatalogMoney::__toString
+	 * @covers GoodsCatalog_Money::__toString
 	 */
 	public function test_toString()
 	{
 		setlocale(LC_ALL, 'ru_RU');
 		$lc = localeconv();
 
-		$test = new GoodsCatalogMoney(12345.67);
+		$test = new GoodsCatalog_Money(12345.67);
 		$this->assertEquals('12' . $lc['mon_thousands_sep'] . '345' . $lc['mon_decimal_point'] . '67',
 			strval($test));
 
-		$test = new GoodsCatalogMoney(12345);
+		$test = new GoodsCatalog_Money(12345);
 		$this->assertEquals('12' . $lc['mon_thousands_sep'] . '345', strval($test));
 	}
 	//-----------------------------------------------------------------------------

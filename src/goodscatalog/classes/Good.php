@@ -43,7 +43,7 @@
  * @property       string                   $title        Название
  * @property       string                   $about        Краткое описание
  * @property       string                   $description  Описание
- * @property       GoodsCatalogMoney        $cost         Цена
+ * @property       GoodsCatalog_Money        $cost         Цена
  * @property-read  string                   $photoPath    Путь к основной фотографии
  * @property-read  string                   $photoURL     URL основной фотографии
  * @property-write string                   $photo        Свойство для загрузки основной фотографии
@@ -272,7 +272,7 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
 	 */
 	protected function setCost($value)
 	{
-		$cost = new GoodsCatalogMoney($value);
+		$cost = new GoodsCatalog_Money($value);
 		$this->setProperty('cost', $cost->getAmount());
 	}
 	//-----------------------------------------------------------------------------
@@ -280,13 +280,13 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
 	/**
 	 * Геттер свойства $cost
 	 *
-	 * @return GoodsCatalogMoney
+	 * @return GoodsCatalog_Money
 	 *
 	 * @since 1.00m
 	 */
 	protected function getCost()
 	{
-		$cost = new GoodsCatalogMoney($this->getProperty('cost'));
+		$cost = new GoodsCatalog_Money($this->getProperty('cost'));
 		return strval($cost);
 	}
 	//-----------------------------------------------------------------------------
@@ -453,7 +453,7 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
 	 */
 	protected function getPhotos()
 	{
-		return GoodsCatalogPhoto::find($this->id);
+		return GoodsCatalog_Photo::find($this->id);
 	}
 	//-----------------------------------------------------------------------------
 

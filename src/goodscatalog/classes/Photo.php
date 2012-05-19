@@ -47,14 +47,14 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogPhoto extends GoodsCatalog_AbstractActiveRecord
+class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
 {
 	/**
 	 * Конструктор
 	 *
 	 * @param int $id  Идентификатор
 	 *
-	 * @return GoodsCatalogPhoto
+	 * @return GoodsCatalog_Photo
 	 *
 	 * @since 1.00
 	 */

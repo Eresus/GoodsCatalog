@@ -109,7 +109,7 @@ class GoodsCatalog extends ContentPlugin
 	/**
 	 * Объект-помощник
 	 *
-	 * @var GoodsCatalogHelper
+	 * @var GoodsCatalog_Helper
 	 * @since 1.00
 	 */
 	private $helper;
@@ -396,7 +396,7 @@ class GoodsCatalog extends ContentPlugin
 	/**
 	 * Возвращает объект-помощник
 	 *
-	 * @return GoodsCatalogHelper
+	 * @return GoodsCatalog_Helper
 	 *
 	 * @since 1.00
 	 */
@@ -404,7 +404,7 @@ class GoodsCatalog extends ContentPlugin
 	{
 		if (!$this->helper)
 		{
-			$this->helper = new GoodsCatalogHelper($this);
+			$this->helper = new GoodsCatalog_Helper($this);
 		}
 		return $this->helper;
 	}
@@ -475,7 +475,7 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function adminRenderContent()
 	{
-		$ui = new GoodsCatalogGoodsAdminUI($this);
+		$ui = new GoodsCatalog_GoodsAdminUI($this);
 
 		return $ui->getHTML();
 	}
@@ -490,7 +490,7 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function clientRenderContent()
 	{
-		$ui = new GoodsCatalogGoodsClientUI($this);
+		$ui = new GoodsCatalog_GoodsClientUI($this);
 
 		return $ui->getHTML();
 	}

@@ -37,8 +37,7 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogGoodsClientUI
-extends GoodsCatalog_AbstractUI
+class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
 {
 	/**
 	 * (non-PHPdoc)

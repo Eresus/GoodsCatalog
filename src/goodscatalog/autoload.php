@@ -34,13 +34,6 @@
 $dir = dirname(__FILE__);
 
 return array(
-	'GoodsCatalogHelper' => $dir . '/classes/Helper.php',
-	'GoodsCatalogGoodsAdminUI' => $dir . '/classes/GoodsAdminUI.php',
-	'GoodsCatalogGoodsClientUI' => $dir . '/classes/GoodsClientUI.php',
-	'GoodsCatalogPhoto' => $dir . '/classes/Photo.php',
-
-	'GoodsCatalogMoney' => $dir . '/classes/Money.php',
-
 	'GoodsCatalogTemplateService' => $dir . '/classes/TemplateService.php',
 	'GoodsCatalogTemplateException' => $dir . '/classes/TemplateService.php',
 	'GoodsCatalogTemplateInvalidPathException' => $dir . '/classes/TemplateService.php',

@@ -45,7 +45,7 @@ class GoodsCatalog_GoodsClientUI_Test extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * http://bugs.eresus.ru/view.php?id=584
-	 * @covers GoodsCatalogGoodsClientUI::renderList
+	 * @covers GoodsCatalog_GoodsClientUI::renderList
 	 */
 	public function test_issue584()
 	{
@@ -65,7 +65,7 @@ class GoodsCatalog_GoodsClientUI_Test extends PHPUnit_Framework_TestCase
 		$plugin = $this->getMock('ContentPlugin', array('getHelper'));
 		$plugin->settings = array('goodsPerPage' => 1);
 		$plugin->expects($this->any())->method('getHelper')->will($this->returnValue($helper));
-		$test = new GoodsCatalogGoodsClientUI($plugin);
+		$test = new GoodsCatalog_GoodsClientUI($plugin);
 
 		$GLOBALS['page'] = $this->getMock('stdClass', array('httpError'));
 		$GLOBALS['page']->topic = null;

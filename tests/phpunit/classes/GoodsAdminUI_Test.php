@@ -51,7 +51,7 @@ class GoodsCatalog_GoodsAdminUI_Test extends PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		// @codeCoverageIgnoreStart
-		$this->fixture = new GoodsCatalogGoodsAdminUI(new GoodsCatalog_Stub());
+		$this->fixture = new GoodsCatalog_GoodsAdminUI(new GoodsCatalog_Stub());
 		// @codeCoverageIgnoreEnd
 	}
 	//-----------------------------------------------------------------------------
@@ -70,7 +70,7 @@ class GoodsCatalog_GoodsAdminUI_Test extends PHPUnit_Framework_TestCase
 		$GLOBALS['Eresus'] = new stdClass();
 		$GLOBALS['Eresus']->sections = new GoodsCatalogGoodsAdminUITest_SectionsStub();
 
-		$buildSectionTree = new ReflectionMethod('GoodsCatalogGoodsAdminUI', 'buildSectionTree');
+		$buildSectionTree = new ReflectionMethod('GoodsCatalog_GoodsAdminUI', 'buildSectionTree');
 		$buildSectionTree->setAccessible(true);
 
 		$expected = array(
