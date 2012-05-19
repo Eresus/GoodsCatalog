@@ -32,15 +32,15 @@
  * $Id$
  */
 
-include_once dirname(__FILE__) . '/helpers.php';
-include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/AbstractActiveRecord.php';
-include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/Good.php';
+include_once dirname(__FILE__) . '/../bootstrap.php';
+include_once TESTS_SRC_DIR . '/goodscatalog/classes/AbstractActiveRecord.php';
+include_once TESTS_SRC_DIR . '/goodscatalog/classes/Good.php';
 
 /**
  * @package GoodsCatalog
  * @subpackage Tests
  */
-class GoodsCatalogGoodTest extends PHPUnit_Framework_TestCase
+class GoodsCatalog_Good_Test extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @link http://bugs.eresus.ru/view.php?id=583

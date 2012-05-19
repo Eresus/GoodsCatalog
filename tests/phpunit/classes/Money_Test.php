@@ -32,10 +32,10 @@
  * $Id$
  */
 
-include_once dirname(__FILE__) . '/helpers.php';
-include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/Money.php';
+include_once dirname(__FILE__) . '/../bootstrap.php';
+include_once TESTS_SRC_DIR . '/goodscatalog/classes/Money.php';
 
-class GoodsCatalogMoneyTest extends PHPUnit_Framework_TestCase
+class GoodsCatalog_Money_Test extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @covers GoodsCatalogMoney::setAmount

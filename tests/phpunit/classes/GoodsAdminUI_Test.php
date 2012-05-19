@@ -32,16 +32,16 @@
  * $Id$
  */
 
-include_once dirname(__FILE__) . '/helpers.php';
-include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/AbstractUI.php';
-include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/AbstractAdminUI.php';
-include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/GoodsAdminUI.php';
+include_once dirname(__FILE__) . '/../bootstrap.php';
+include_once TESTS_SRC_DIR . '/goodscatalog/classes/AbstractUI.php';
+include_once TESTS_SRC_DIR . '/goodscatalog/classes/AbstractAdminUI.php';
+include_once TESTS_SRC_DIR . '/goodscatalog/classes/GoodsAdminUI.php';
 
 /**
  * @package GoodsCatalog
  * @subpackage Tests
  */
-class GoodsCatalogGoodsAdminUITest extends PHPUnit_Framework_TestCase
+class GoodsCatalog_GoodsAdminUI_Test extends PHPUnit_Framework_TestCase
 {
 	private $fixture;
 

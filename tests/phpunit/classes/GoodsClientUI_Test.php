@@ -32,16 +32,16 @@
  * $Id$
  */
 
-include_once dirname(__FILE__) . '/helpers.php';
-include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/AbstractUI.php';
-include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/GoodsClientUI.php';
-include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/Good.php';
+include_once dirname(__FILE__) . '/../bootstrap.php';
+include_once TESTS_SRC_DIR . '/goodscatalog/classes/AbstractUI.php';
+include_once TESTS_SRC_DIR . '/goodscatalog/classes/GoodsClientUI.php';
+include_once TESTS_SRC_DIR . '/goodscatalog/classes/Good.php';
 
 /**
  * @package GoodsCatalog
  * @subpackage Tests
  */
-class GoodsCatalogGoodsClientUITest extends PHPUnit_Framework_TestCase
+class GoodsCatalog_GoodsClientUI_Test extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * http://bugs.eresus.ru/view.php?id=584

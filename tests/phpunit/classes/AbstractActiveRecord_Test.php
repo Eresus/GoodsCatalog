@@ -32,14 +32,14 @@
  * $Id$
  */
 
-include_once dirname(__FILE__) . '/helpers.php';
-include_once dirname(__FILE__) . '/../../src/goodscatalog/classes/AbstractActiveRecord.php';
+include_once dirname(__FILE__) . '/../bootstrap.php';
+include_once TESTS_SRC_DIR . '/goodscatalog/classes/AbstractActiveRecord.php';
 
 /**
  * @package GoodsCatalog
  * @subpackage Tests
  */
-class GoodsCatalogAbstractActiveRecordTest extends PHPUnit_Framework_TestCase
+class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 {
 	private $fixture;
 
