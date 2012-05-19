@@ -37,7 +37,7 @@
  *
  * @package GoodsCatalog
  */
-abstract class GoodsCatalogAbstractAdminUI extends GoodsCatalogAbstractUI
+abstract class GoodsCatalog_AbstractAdminUI extends GoodsCatalogAbstractUI
 {
 	/**
 	 * Возвращает HTML интерфейса управления

@@ -37,11 +37,11 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
+class GoodsCatalogBrandsAdminUI extends GoodsCatalog_AbstractAdminUI
 {
 	/**
 	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractAdminUI::getActiveRecordClass()
+	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractAdminUI::getActiveRecordClass()
 	 */
 	protected function getActiveRecordClass()
 	{

@@ -37,10 +37,10 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
+class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 {
 	/**
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractAdminUI::getActiveRecordClass()
+	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractAdminUI::getActiveRecordClass()
 	 */
 	protected function getActiveRecordClass()
 	{
@@ -49,7 +49,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractAdminUI::extendedActions()
+	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractAdminUI::extendedActions()
 	 */
 	protected function extendedActions()
 	{

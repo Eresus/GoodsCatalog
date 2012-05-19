@@ -44,7 +44,7 @@ class GoodsCatalog_AbstractAdminUI_Test extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * Проверяем extendedActions
-	 * @covers GoodsCatalogAbstractAdminUI::extendedActions
+	 * @covers GoodsCatalog_AbstractAdminUI::extendedActions
 	 */
 	public function test_extendedActions()
 	{
@@ -52,7 +52,7 @@ class GoodsCatalog_AbstractAdminUI_Test extends PHPUnit_Framework_TestCase
 		{
 			$this->markTestSkipped('PHP 5.3.2 required');
 		}
-		$extendedActions = new ReflectionMethod('GoodsCatalogAbstractAdminUI', 'extendedActions');
+		$extendedActions = new ReflectionMethod('GoodsCatalog_AbstractAdminUI', 'extendedActions');
 		$extendedActions->setAccessible(true);
 		$plugin = new GoodsCatalog_Stub();
 		$this->assertFalse($extendedActions->invoke(
@@ -63,7 +63,7 @@ class GoodsCatalog_AbstractAdminUI_Test extends PHPUnit_Framework_TestCase
 	/* */
 }
 
-class GoodsCatalogAbstractAdminUITest_Stub extends GoodsCatalogAbstractAdminUI
+class GoodsCatalogAbstractAdminUITest_Stub extends GoodsCatalog_AbstractAdminUI
 {
 	/**
 	 * Метод должен возвращать имя класса активной записи
