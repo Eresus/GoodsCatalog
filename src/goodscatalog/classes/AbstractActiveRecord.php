@@ -742,6 +742,10 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 */
 	private function filterString($value, $attrs)
 	{
+		/*
+		 * Функции mb_* здесь не используются, т. к. мы работаем с байтами, а не символами.
+		 * И да, при этом substr может обрезать символ «по середине».
+		 */
 		if (isset($attrs['maxlength']) && strlen($value) > $attrs['maxlength'])
 		{
 			$value = substr($value, 0, $attrs['maxlength']);
