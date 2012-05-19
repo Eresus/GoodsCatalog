@@ -125,9 +125,6 @@ class GoodsCatalog extends ContentPlugin
 	{
 		parent::__construct();
 
-		// Настраиваем автозагрузку классов
-		EresusClassAutoloader::add($this->dirCode . 'autoload.php');
-
 		$this->listenEvents('adminOnMenuRender');
 	}
 	//-----------------------------------------------------------------------------
