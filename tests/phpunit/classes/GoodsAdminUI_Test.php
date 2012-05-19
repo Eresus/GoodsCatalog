@@ -58,7 +58,7 @@ class GoodsCatalog_GoodsAdminUI_Test extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Проверяем метод getDbTable
-	 * @covers GoodsCatalogAbstractActiveRecord::getDbTable
+	 * @covers GoodsCatalog_AbstractActiveRecord::getDbTable
 	 */
 	public function testGetDbTable()
 	{

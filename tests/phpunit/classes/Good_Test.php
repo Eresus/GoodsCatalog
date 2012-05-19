@@ -58,7 +58,7 @@ class GoodsCatalog_Good_Test extends PHPUnit_Framework_TestCase
 			false);
 		$test->expects($this->once())->method('getProperty')->will($this->returnValue(123));
 
-		$rawData = new ReflectionProperty('GoodsCatalogAbstractActiveRecord', 'rawData');
+		$rawData = new ReflectionProperty('GoodsCatalog_AbstractActiveRecord', 'rawData');
 		$rawData->setAccessible(true);
 		$rawData->setValue($test, array('section' => 123));
 

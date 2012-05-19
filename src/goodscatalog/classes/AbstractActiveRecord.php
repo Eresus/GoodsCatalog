@@ -39,7 +39,7 @@
  *
  * @since 1.00
  */
-abstract class GoodsCatalogAbstractActiveRecord
+abstract class GoodsCatalog_AbstractActiveRecord
 {
 	/**
 	 * Описание файла для загрузки - элемент из массива $_FILES
@@ -110,7 +110,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 *                 соответствующего объекта. Иначе этот объект будет считаться новым (см.
 	 *                 {@link isNew()})
 	 *
-	 * @return GoodsCatalogAbstractActiveRecord
+	 * @return GoodsCatalog_AbstractActiveRecord
 	 *
 	 * @uses loadById
 	 * @uses eresus_log
@@ -193,11 +193,11 @@ abstract class GoodsCatalogAbstractActiveRecord
 	/**
 	 * Возвращает полное имя таблицы БД (для статических вызовов)
 	 *
-	 * @param string $className  Имя класса, потомка GoodsCatalogAbstractActiveRecord, для которого
+	 * @param string $className  Имя класса, потомка GoodsCatalog_AbstractActiveRecord, для которого
 	 *                           надо получить имя таблицы
 	 * @return string
 	 *
-	 * @throws EresusTypeException если класс $className не потомок GoodsCatalogAbstractActiveRecord
+	 * @throws EresusTypeException если класс $className не потомок GoodsCatalog_AbstractActiveRecord
 	 * @uses getDbTable
 	 * @since 1.00
 	 */
@@ -205,7 +205,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	{
 		$stub = new $className();
 
-		if (!($stub instanceof GoodsCatalogAbstractActiveRecord))
+		if (!($stub instanceof GoodsCatalog_AbstractActiveRecord))
 		{
 			throw new EresusTypeException();
 		}

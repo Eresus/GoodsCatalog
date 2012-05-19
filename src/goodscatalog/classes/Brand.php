@@ -45,7 +45,7 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
+class GoodsCatalogBrand extends GoodsCatalog_AbstractActiveRecord
 {
 	/**
 	 * Метод возвращает имя таблицы БД
@@ -93,7 +93,7 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 
 	/**
 	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractActiveRecord::delete()
+	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractActiveRecord::delete()
 	 */
 	public function delete()
 	{

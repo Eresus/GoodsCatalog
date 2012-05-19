@@ -37,8 +37,7 @@
  *
  * @package GoodsCatalog
  */
-abstract class GoodsCatalogAbstractAdminUI
-extends GoodsCatalogAbstractUI
+abstract class GoodsCatalogAbstractAdminUI extends GoodsCatalogAbstractUI
 {
 	/**
 	 * Возвращает HTML интерфейса управления
@@ -157,7 +156,7 @@ extends GoodsCatalogAbstractUI
 	 * @return void
 	 *
 	 * @uses arg()
-	 * @uses GoodsCatalogAbstractActiveRecord::save()
+	 * @uses GoodsCatalog_AbstractActiveRecord::save()
 	 * @uses ErrorMessage()
 	 * @uses HTTP::goback()
 	 * @uses reportBadURL()

@@ -47,7 +47,7 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
+class GoodsCatalogPhoto extends GoodsCatalog_AbstractActiveRecord
 {
 	/**
 	 * Конструктор
@@ -132,7 +132,7 @@ class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
 
 	/**
 	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractActiveRecord::delete()
+	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractActiveRecord::delete()
 	 */
 	public function delete()
 	{

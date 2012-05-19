@@ -57,7 +57,7 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
+class GoodsCatalogGood extends GoodsCatalog_AbstractActiveRecord
 {
 	/**
 	 * Свойство для отслеживания изменения раздела
@@ -158,7 +158,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 
 	/**
 	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractActiveRecord::delete()
+	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractActiveRecord::delete()
 	 */
 	public function delete()
 	{

@@ -62,7 +62,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	{
 		if (version_compare(PHP_VERSION, '5.3.2', '>='))
 		{
-			$plugin = new ReflectionMethod('GoodsCatalogAbstractActiveRecord', 'plugin');
+			$plugin = new ReflectionMethod('GoodsCatalog_AbstractActiveRecord', 'plugin');
 			$plugin->setAccessible(true);
 			$plugin->invoke(null, new GoodsCatalog_Stub());
 		}
@@ -70,7 +70,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Проверяем GoodsCatalogAbstractActiveRecord::plugin
+	 * Проверяем GoodsCatalog_AbstractActiveRecord::plugin
 	 *
 	 */
 	public function test_plugin()
@@ -80,7 +80,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 			$this->markTestSkipped('PHP 5.3.2 required');
 		}
 
-		$plugin = new ReflectionMethod('GoodsCatalogAbstractActiveRecord', 'plugin');
+		$plugin = new ReflectionMethod('GoodsCatalog_AbstractActiveRecord', 'plugin');
 		$plugin->setAccessible(true);
 
 		$GLOBALS['Eresus'] = new stdClass();
@@ -98,7 +98,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Проверяем конструктор
-	 * @covers GoodsCatalogAbstractActiveRecord::__construct
+	 * @covers GoodsCatalog_AbstractActiveRecord::__construct
 	 */
 	public function test_construct_wo_params()
 	{
@@ -111,7 +111,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Проверяем конструктор
-	 * @covers GoodsCatalogAbstractActiveRecord::__construct
+	 * @covers GoodsCatalog_AbstractActiveRecord::__construct
 	 */
 	public function test_construct_with_params()
 	{
@@ -124,7 +124,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Проверяем метод getDbTable
-	 * @covers GoodsCatalogAbstractActiveRecord::getDbTable
+	 * @covers GoodsCatalog_AbstractActiveRecord::getDbTable
 	 */
 	public function testGetDbTable()
 	{
@@ -137,7 +137,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Проверяем метод getDbTableStatic
-	 * @covers GoodsCatalogAbstractActiveRecord::getDbTableStatic
+	 * @covers GoodsCatalog_AbstractActiveRecord::getDbTableStatic
 	 */
 	public function testGetDbTableStatic()
 	{
@@ -152,7 +152,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 
 	/**
 	 * Проверяем метод getDbTableStatic
-	 * @covers GoodsCatalogAbstractActiveRecord::getDbTableStatic
+	 * @covers GoodsCatalog_AbstractActiveRecord::getDbTableStatic
 	 * @expectedException EresusTypeException
 	 */
 	public function testGetDbTableStatic_fail()
@@ -166,8 +166,8 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	 * Проверяем вброс исключения EresusPropertyNotExistsException при обращении к несуществующему
 	 * свойству.
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::__get
-	 * @covers GoodsCatalogAbstractActiveRecord::getProperty
+	 * @covers GoodsCatalog_AbstractActiveRecord::__get
+	 * @covers GoodsCatalog_AbstractActiveRecord::getProperty
 	 * @expectedException EresusPropertyNotExistsException
 	 */
 	public function testGetUnexistentProperty()
@@ -179,8 +179,8 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем чтение неустановленного свойства.
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::__get
-	 * @covers GoodsCatalogAbstractActiveRecord::getProperty
+	 * @covers GoodsCatalog_AbstractActiveRecord::__get
+	 * @covers GoodsCatalog_AbstractActiveRecord::getProperty
 	 */
 	public function testGetUnsetProperty()
 	{
@@ -192,8 +192,8 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	 * Проверяем вброс исключения EresusPropertyNotExistsException при обращении к несуществующему
 	 * свойству.
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::__set
-	 * @covers GoodsCatalogAbstractActiveRecord::setProperty
+	 * @covers GoodsCatalog_AbstractActiveRecord::__set
+	 * @covers GoodsCatalog_AbstractActiveRecord::setProperty
 	 * @expectedException EresusPropertyNotExistsException
 	 */
 	public function testSetUnexistentProperty()
@@ -205,8 +205,8 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем установку свойства неподдерживаемого типа
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::__set
-	 * @covers GoodsCatalogAbstractActiveRecord::setProperty
+	 * @covers GoodsCatalog_AbstractActiveRecord::__set
+	 * @covers GoodsCatalog_AbstractActiveRecord::setProperty
 	 * @expectedException EresusTypeException
 	 */
 	public function testSetUnsupportedType()
@@ -218,8 +218,8 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем установку и чтение полей типа 'bool'
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::getProperty
-	 * @covers GoodsCatalogAbstractActiveRecord::setProperty
+	 * @covers GoodsCatalog_AbstractActiveRecord::getProperty
+	 * @covers GoodsCatalog_AbstractActiveRecord::setProperty
 	 */
 	public function testSetGetBool()
 	{
@@ -239,8 +239,8 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем установку и чтение полей типа 'int'
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::getProperty
-	 * @covers GoodsCatalogAbstractActiveRecord::setProperty
+	 * @covers GoodsCatalog_AbstractActiveRecord::getProperty
+	 * @covers GoodsCatalog_AbstractActiveRecord::setProperty
 	 */
 	public function testSetGetInt()
 	{
@@ -260,9 +260,9 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем установку и чтение полей типа 'string'
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::getProperty
-	 * @covers GoodsCatalogAbstractActiveRecord::setProperty
-	 * @covers GoodsCatalogAbstractActiveRecord::filterString
+	 * @covers GoodsCatalog_AbstractActiveRecord::getProperty
+	 * @covers GoodsCatalog_AbstractActiveRecord::setProperty
+	 * @covers GoodsCatalog_AbstractActiveRecord::filterString
 	 */
 	public function testSetGetString()
 	{
@@ -276,7 +276,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем isNew
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::isNew
+	 * @covers GoodsCatalog_AbstractActiveRecord::isNew
 	 */
 	public function testIsNew()
 	{
@@ -287,7 +287,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем вызов сеттера
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::__set
+	 * @covers GoodsCatalog_AbstractActiveRecord::__set
 	 */
 	public function testCallSetter()
 	{
@@ -299,7 +299,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем вызов геттера
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::__get
+	 * @covers GoodsCatalog_AbstractActiveRecord::__get
 	 */
 	public function testCallGetter()
 	{
@@ -310,7 +310,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем сохранение
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::save
+	 * @covers GoodsCatalog_AbstractActiveRecord::save
 	 */
 	public function test_save()
 	{
@@ -332,7 +332,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем удаление
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::delete
+	 * @covers GoodsCatalog_AbstractActiveRecord::delete
 	 */
 	public function test_delete()
 	{
@@ -351,7 +351,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем перемещение вверх
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::moveUp
+	 * @covers GoodsCatalog_AbstractActiveRecord::moveUp
 	 */
 	public function test_moveUp()
 	{
@@ -379,7 +379,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * Проверяем перемещение ввниз
 	 *
-	 * @covers GoodsCatalogAbstractActiveRecord::moveDown
+	 * @covers GoodsCatalog_AbstractActiveRecord::moveDown
 	 */
 	public function test_moveDown()
 	{
@@ -411,7 +411,7 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
  * @package GoodsCatalog
  * @subpackage Tests
  */
-class GoodsCatalogAbstractActiveRecordTest_Stub extends GoodsCatalogAbstractActiveRecord
+class GoodsCatalogAbstractActiveRecordTest_Stub extends GoodsCatalog_AbstractActiveRecord
 {
 	public $_success = false;
 
