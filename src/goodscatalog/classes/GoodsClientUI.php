@@ -46,7 +46,7 @@ extends GoodsCatalog_AbstractUI
 	 */
 	protected function getActiveRecordClass()
 	{
-		return 'GoodsCatalogGood';
+		return 'GoodsCatalog_Good';
 	}
 	//-----------------------------------------------------------------------------
 
@@ -90,8 +90,8 @@ extends GoodsCatalog_AbstractUI
 		$maxCount = $this->plugin->settings['goodsPerPage'];
 		$startFrom = ($pg - 1) * $maxCount;
 
-		$data['goods'] = GoodsCatalogGood::find($page->id, $maxCount, $startFrom, true);
-		$totalPages = ceil(GoodsCatalogGood::count($page->id, true) / $maxCount);
+		$data['goods'] = GoodsCatalog_Good::find($page->id, $maxCount, $startFrom, true);
+		$totalPages = ceil(GoodsCatalog_Good::count($page->id, true) / $maxCount);
 
 		if ($pg > $totalPages && $pg != 1)
 		{
@@ -130,7 +130,7 @@ extends GoodsCatalog_AbstractUI
 
 		try
 		{
-			$good = new GoodsCatalogGood(intval($page->topic));
+			$good = new GoodsCatalog_Good(intval($page->topic));
 		}
 		catch (DomainException $e)
 		{

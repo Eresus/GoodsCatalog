@@ -36,7 +36,7 @@
  * ActiveRecord фотографии
  *
  * @property       int                   $id           Идентификатор
- * @property       GoodsCatalogGood      $good         Товар
+ * @property       GoodsCatalog_Good      $good         Товар
  * @property       int                   $position     Порядковый номер
  * @property-read  string                $photoPath    Путь к основной фотографии
  * @property-read  string                $photoURL     URL основной фотографии
@@ -344,7 +344,7 @@ class GoodsCatalogPhoto extends GoodsCatalog_AbstractActiveRecord
 	/**
 	 * Геттер свойства $good
 	 *
-	 * @return GoodsCatalogGood
+	 * @return GoodsCatalog_Good
 	 *
 	 * @since 1.00
 	 */
@@ -352,7 +352,7 @@ class GoodsCatalogPhoto extends GoodsCatalog_AbstractActiveRecord
 	{
 		try
 		{
-			$good = new GoodsCatalogGood($this->getProperty('good'));
+			$good = new GoodsCatalog_Good($this->getProperty('good'));
 		}
 		catch (DomainException $e)
 		{
@@ -367,7 +367,7 @@ class GoodsCatalogPhoto extends GoodsCatalog_AbstractActiveRecord
 	/**
 	 * Сеттер свойства $good
 	 *
-	 * @param int|GoodsCatalogGood $value
+	 * @param int|GoodsCatalog_Good $value
 	 *
 	 * @return void
 	 *
@@ -375,7 +375,7 @@ class GoodsCatalogPhoto extends GoodsCatalog_AbstractActiveRecord
 	 */
 	protected function setGood($value)
 	{
-		if ($value instanceof GoodsCatalogGood)
+		if ($value instanceof GoodsCatalog_Good)
 		{
 			$value = $value->id;
 		}

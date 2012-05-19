@@ -50,14 +50,13 @@
  * @property-read  string                   $thumbPath    Путь к миниатюре
  * @property-read  string                   $thumbURL     URL иниатюры
  * @property       bool                     $special      Спецпредложение
- * @property-read  GoodsCatalog_Brand        $brand        Бренд или null
- * @property-write GoodsCatalog_Brand|int    $brand        Бренд или его идентификатор
+ * @property       GoodsCatalog_Brand|int   $brand        Бренд или его идентификатор
  * @property-read  array(GoodsCatalogPhoto) $photos       Дополнительные фотографии
  * @property-read  string                   $clientURL    URL страницы товара в КИ
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogGood extends GoodsCatalog_AbstractActiveRecord
+class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
 {
 	/**
 	 * Свойство для отслеживания изменения раздела

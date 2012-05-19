@@ -45,7 +45,7 @@ class GoodsCatalog_Good_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * @link http://bugs.eresus.ru/view.php?id=583
 	 *
-	 * @covers GoodsCatalogGood::setSection
+	 * @covers GoodsCatalog_Good::setSection
 	 */
 	public function test_issue583()
 	{
@@ -54,7 +54,7 @@ class GoodsCatalog_Good_Test extends PHPUnit_Framework_TestCase
 			$this->markTestSkipped('PHP 5.3 required');
 		}
 
-		$test = $this->getMock('GoodsCatalogGood', array('setProperty', 'getProperty'), array(), '',
+		$test = $this->getMock('GoodsCatalog_Good', array('setProperty', 'getProperty'), array(), '',
 			false);
 		$test->expects($this->once())->method('getProperty')->will($this->returnValue(123));
 
@@ -62,11 +62,11 @@ class GoodsCatalog_Good_Test extends PHPUnit_Framework_TestCase
 		$rawData->setAccessible(true);
 		$rawData->setValue($test, array('section' => 123));
 
-		$originalSection = new ReflectionProperty('GoodsCatalogGood', 'originalSection');
+		$originalSection = new ReflectionProperty('GoodsCatalog_Good', 'originalSection');
 		$originalSection->setAccessible(true);
 		$originalSection->setValue($test, null);
 
-		$setSection = new ReflectionMethod('GoodsCatalogGood', 'setSection');
+		$setSection = new ReflectionMethod('GoodsCatalog_Good', 'setSection');
 		$setSection->setAccessible(true);
 		$setSection->invoke($test, 123);
 
@@ -77,11 +77,11 @@ class GoodsCatalog_Good_Test extends PHPUnit_Framework_TestCase
 	/**
 	 * @link http://bugs.eresus.ru/view.php?id=689
 	 *
-	 * @covers GoodsCatalogGood::getAttrs
+	 * @covers GoodsCatalog_Good::getAttrs
 	 */
 	public function test_issue689()
 	{
-		$test = new GoodsCatalogGood();
+		$test = new GoodsCatalog_Good();
 		$fields = $test->getAttrs();
 		foreach ($fields as $name => $attrs)
 		{

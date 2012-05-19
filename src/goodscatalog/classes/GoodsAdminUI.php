@@ -44,7 +44,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 	 */
 	protected function getActiveRecordClass()
 	{
-		return 'GoodsCatalogGood';
+		return 'GoodsCatalog_Good';
 	}
 	//-----------------------------------------------------------------------------
 
@@ -97,8 +97,8 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 		$maxCount = $this->plugin->settings['goodsPerPage'];
 		$startFrom = ($pg - 1) * $maxCount;
 
-		$data['goods'] = GoodsCatalogGood::find($data['section'], $maxCount, $startFrom);
-		$totalPages = ceil(GoodsCatalogGood::count($data['section']) / $maxCount);
+		$data['goods'] = GoodsCatalog_Good::find($data['section'], $maxCount, $startFrom);
+		$totalPages = ceil(GoodsCatalog_Good::count($data['section']) / $maxCount);
 		if ($totalPages > 1)
 		{
 			$data['pagination'] = new PaginationHelper($totalPages, $pg, $page->url(array('pg' => '%s')));
@@ -152,7 +152,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 	 */
 	protected function addItem()
 	{
-		$good = new GoodsCatalogGood();
+		$good = new GoodsCatalog_Good();
 		$good->section = arg('section', 'int');
 		$good->article = arg('article');
 		$good->title = arg('title');
@@ -204,7 +204,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 
 		try
 		{
-			$good = new GoodsCatalogGood($id);
+			$good = new GoodsCatalog_Good($id);
 
 			try
 			{
@@ -240,7 +240,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 
 		try
 		{
-			$good = new GoodsCatalogGood($id);
+			$good = new GoodsCatalog_Good($id);
 		}
 		catch (DomainException $e)
 		{
@@ -317,7 +317,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 		$id = arg('update', 'int');
 		try
 		{
-			$good = new GoodsCatalogGood($id);
+			$good = new GoodsCatalog_Good($id);
 		}
 		catch (DomainException $e)
 		{
@@ -363,7 +363,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 	{
 		try
 		{
-			$good = new GoodsCatalogGood(arg('up', 'int'));
+			$good = new GoodsCatalog_Good(arg('up', 'int'));
 		}
 		catch (DomainException $e)
 		{
@@ -384,7 +384,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 	{
 		try
 		{
-			$good = new GoodsCatalogGood(arg('down', 'int'));
+			$good = new GoodsCatalog_Good(arg('down', 'int'));
 		}
 		catch (DomainException $e)
 		{
@@ -433,7 +433,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 	/**
 	 * Действия с дополнительными фотографиями
 	 *
-	 * @param GoodsCatalogGood $good
+	 * @param GoodsCatalog_Good $good
 	 *
 	 * @return string|false
 	 */
@@ -471,7 +471,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 	/**
 	 * Возвращает диалог добавления дополнительной фотографии
 	 *
-	 * @param GoodsCatalogGood $good
+	 * @param GoodsCatalog_Good $good
 	 */
 	private function renderPhotoAddDialog($good)
 	{
@@ -492,7 +492,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 	/**
 	 * Добавляет дополнительную фотографию
 	 *
-	 * @param GoodsCatalogGood $good
+	 * @param GoodsCatalog_Good $good
 	 *
 	 * @return void
 	 *
