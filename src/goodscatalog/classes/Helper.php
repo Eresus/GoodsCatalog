@@ -132,7 +132,7 @@ class GoodsCatalog_Helper
 	 */
 	public function getClientTemplate($name)
 	{
-		$ts = GoodsCatalogTemplateService::getInstance();
+		$ts = TemplateService::getInstance();
 		$tmpl = $ts->getTemplate($name, $this->plugin->name);
 
 		return $tmpl;

@@ -250,7 +250,7 @@ class GoodsCatalog extends ContentPlugin
 		$this->mkdir('goods');
 		$this->mkdir('brands');
 
-		$ts = GoodsCatalogTemplateService::getInstance();
+		$ts = TemplateService::getInstance();
 
 		try
 		{
@@ -320,7 +320,7 @@ class GoodsCatalog extends ContentPlugin
 			$form->setValue($key, $value);
 		}
 
-		$ts = GoodsCatalogTemplateService::getInstance();
+		$ts = TemplateService::getInstance();
 
 		$this->settings['tmplList'] = $ts->getContents('goods-list.html', $this->name);
 		$this->settings['tmplItem'] = $ts->getContents('goods-item.html', $this->name);
@@ -343,7 +343,7 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function onSettingsUpdate()
 	{
-		$ts = GoodsCatalogTemplateService::getInstance();
+		$ts = TemplateService::getInstance();
 
 		$ts->setContents(arg('tmplList'), 'goods-list.html', $this->name);
 		$ts->setContents(arg('tmplItem'), 'goods-item.html', $this->name);
