@@ -45,7 +45,7 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogBrand extends GoodsCatalog_AbstractActiveRecord
+class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
 {
 	/**
 	 * Метод возвращает имя таблицы БД
@@ -147,7 +147,7 @@ class GoodsCatalogBrand extends GoodsCatalog_AbstractActiveRecord
 	 * @param int   $offset      Пропустить $offset первых брендов
 	 * @param bool  $activeOnly  Искать только активные бренды
 	 *
-	 * @return array(GoodsCatalogBrand)  Массив объектов GoodsCatalogBrand
+	 * @return array(GoodsCatalog_Brand)  Массив объектов GoodsCatalog_Brand
 	 *
 	 * @uses eresus_log()
 	 * @uses DB::getHandler()
@@ -262,7 +262,7 @@ class GoodsCatalogBrand extends GoodsCatalog_AbstractActiveRecord
 		{
 			foreach ($raw as $item)
 			{
-				$image = new GoodsCatalogBrand();
+				$image = new GoodsCatalog_Brand();
 				$image->loadFromArray($item);
 				$result []= $image;
 			}

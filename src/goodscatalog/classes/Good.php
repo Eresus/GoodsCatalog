@@ -50,8 +50,8 @@
  * @property-read  string                   $thumbPath    Путь к миниатюре
  * @property-read  string                   $thumbURL     URL иниатюры
  * @property       bool                     $special      Спецпредложение
- * @property-read  GoodsCatalogBrand        $brand        Бренд или null
- * @property-write GoodsCatalogBrand|int    $brand        Бренд или его идентификатор
+ * @property-read  GoodsCatalog_Brand        $brand        Бренд или null
+ * @property-write GoodsCatalog_Brand|int    $brand        Бренд или его идентификатор
  * @property-read  array(GoodsCatalogPhoto) $photos       Дополнительные фотографии
  * @property-read  string                   $clientURL    URL страницы товара в КИ
  *
@@ -387,7 +387,7 @@ class GoodsCatalogGood extends GoodsCatalog_AbstractActiveRecord
 	/**
 	 * Геттер свойства $brand
 	 *
-	 * @return GoodsCatalogBrand
+	 * @return GoodsCatalog_Brand
 	 *
 	 * @since 1.00
 	 */
@@ -395,7 +395,7 @@ class GoodsCatalogGood extends GoodsCatalog_AbstractActiveRecord
 	{
 		try
 		{
-			$brand = new GoodsCatalogBrand($this->getProperty('brand'));
+			$brand = new GoodsCatalog_Brand($this->getProperty('brand'));
 		}
 		catch (DomainException $e)
 		{
@@ -410,7 +410,7 @@ class GoodsCatalogGood extends GoodsCatalog_AbstractActiveRecord
 	/**
 	 * Сеттер свойства $brand
 	 *
-	 * @param int|GoodsCatalogBrand $value
+	 * @param int|GoodsCatalog_Brand $value
 	 *
 	 * @return void
 	 *
@@ -418,7 +418,7 @@ class GoodsCatalogGood extends GoodsCatalog_AbstractActiveRecord
 	 */
 	protected function setBrand($value)
 	{
-		if ($value instanceof GoodsCatalogBrand)
+		if ($value instanceof GoodsCatalog_Brand)
 		{
 			$value = $value->id;
 		}

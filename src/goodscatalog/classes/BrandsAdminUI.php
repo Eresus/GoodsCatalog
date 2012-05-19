@@ -37,15 +37,16 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogBrandsAdminUI extends GoodsCatalog_AbstractAdminUI
+class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
 {
 	/**
-	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractAdminUI::getActiveRecordClass()
+	 * @return string
+	 *
+	 * @see GoodsCatalog_AbstractAdminUI::getActiveRecordClass()
 	 */
 	protected function getActiveRecordClass()
 	{
-		return 'GoodsCatalogBrand';
+		return 'GoodsCatalog_Brand';
 	}
 	//-----------------------------------------------------------------------------
 
@@ -73,8 +74,8 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalog_AbstractAdminUI
 		$maxCount = 10; // Количество групп на страницу. В настройках не изменяется.
 		$startFrom = ($pg - 1) * $maxCount;
 
-		$data['brands'] = GoodsCatalogBrand::find($maxCount, $startFrom);
-		$totalPages = ceil(GoodsCatalogBrand::count() / $maxCount);
+		$data['brands'] = GoodsCatalog_Brand::find($maxCount, $startFrom);
+		$totalPages = ceil(GoodsCatalog_Brand::count() / $maxCount);
 		if ($totalPages > 1)
 		{
 			$data['pagination'] = new PaginationHelper($totalPages, $pg, $page->url(array('pg' => '%s')));
@@ -107,7 +108,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalog_AbstractAdminUI
 
 		try
 		{
-			$brand = new GoodsCatalogBrand($id);
+			$brand = new GoodsCatalog_Brand($id);
 
 			try
 			{
@@ -160,7 +161,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalog_AbstractAdminUI
 	 */
 	protected function addItem()
 	{
-		$brand = new GoodsCatalogBrand();
+		$brand = new GoodsCatalog_Brand();
 		$brand->title = arg('title');
 		$brand->active = true;
 		$brand->description = arg('description');
@@ -196,7 +197,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalog_AbstractAdminUI
 
 		try
 		{
-			$brand = new GoodsCatalogBrand($id);
+			$brand = new GoodsCatalog_Brand($id);
 		}
 		catch (DomainException $e)
 		{
@@ -231,7 +232,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalog_AbstractAdminUI
 		$id = arg('update', 'int');
 		try
 		{
-			$brand = new GoodsCatalogBrand($id);
+			$brand = new GoodsCatalog_Brand($id);
 		}
 		catch (DomainException $e)
 		{

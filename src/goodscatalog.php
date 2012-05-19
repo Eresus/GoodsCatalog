@@ -460,7 +460,7 @@ class GoodsCatalog extends ContentPlugin
 				'">настройках</a>.');
 		}
 
-		$ui = new GoodsCatalogBrandsAdminUI($this);
+		$ui = new GoodsCatalog_BrandsAdminUI($this);
 
 		return $ui->getHTML();
 	}

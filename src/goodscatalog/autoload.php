@@ -34,8 +34,6 @@
 $dir = dirname(__FILE__);
 
 return array(
-	'GoodsCatalogBrand' => $dir . '/classes/Brand.php',
-	'GoodsCatalogBrandsAdminUI' => $dir . '/classes/BrandsAdminUI.php',
 	'GoodsCatalogHelper' => $dir . '/classes/Helper.php',
 	'GoodsCatalogGood' => $dir . '/classes/Good.php',
 	'GoodsCatalogGoodsAdminUI' => $dir . '/classes/GoodsAdminUI.php',

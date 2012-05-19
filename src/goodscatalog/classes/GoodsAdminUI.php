@@ -130,7 +130,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
 		$data['section'] = arg('section', 'int');
-		$data['brands'] = GoodsCatalogBrand::find(null, null, true);
+		$data['brands'] = GoodsCatalog_Brand::find(null, null, true);
 
 		// Создаём экземпляр шаблона
 		$tmpl = $this->plugin->getHelper()->getAdminTemplate('goods-add.html');
@@ -271,7 +271,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 		}
 
 		$form->setValue('good', $good);
-		$form->setValue('brands', GoodsCatalogBrand::find(null, null, true));
+		$form->setValue('brands', GoodsCatalog_Brand::find(null, null, true));
 
 		$form->setValue('sections', $this->buildSectionTree());
 
