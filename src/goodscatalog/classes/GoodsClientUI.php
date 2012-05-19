@@ -40,8 +40,9 @@
 class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
 {
 	/**
-	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractUI::getActiveRecordClass()
+	 * @return string
+	 *
+	 * @see GoodsCatalog_AbstractUI::getActiveRecordClass()
 	 */
 	protected function getActiveRecordClass()
 	{
@@ -80,6 +81,9 @@ class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
 	 */
 	private function renderList()
 	{
+		/**
+		 * @var TClientUI
+		 */
 		global $page;
 
 		// Данные для подстановки в шаблон
@@ -130,11 +134,14 @@ class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
 		try
 		{
 			$good = new GoodsCatalog_Good(intval($page->topic));
+			if (!$good->active)
+			{
+				throw new DomainException;
+			}
 		}
 		catch (DomainException $e)
 		{
 			$page->httpError(404);
-			$e = $e; // PHPMD hack
 		}
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();

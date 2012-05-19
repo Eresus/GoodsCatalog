@@ -49,10 +49,6 @@ class GoodsCatalog_GoodsClientUI_Test extends PHPUnit_Framework_TestCase
 	 */
 	public function test_issue584()
 	{
-		if (version_compare(PHP_VERSION, '5.3', '<'))
-		{
-			$this->markTestSkipped('PHP 5.3 required');
-		}
 		$template = $this->getMock('stdClass', array('compile'));
 		$template->expects($this->any())->method('compile');
 
@@ -78,6 +74,35 @@ class GoodsCatalog_GoodsClientUI_Test extends PHPUnit_Framework_TestCase
 		DB::setMock($db);
 
 		$test->getHTML();
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * В КИ "подробно" отображается товар, даже если он неактивен
+	 * @link http://bugs.eresus.ru/view.php?id=781
+	 * @covers GoodsCatalog_GoodsClientUI::renderItem
+	 * @expectedException DomainException
+	 */
+	public function test_issue781()
+	{
+		$plugin = $this->getMock('ContentPlugin');
+		$test = new GoodsCatalog_GoodsClientUI($plugin);
+
+		$page = $this->getMock('stdClass', array('httpError'));
+		$page->expects($this->once())->method('httpError')->with(404)->
+			will($this->throwException(new DomainException()));
+		$page->topic = 1;
+		$GLOBALS['page'] = $page;
+
+		$good = array('active' => false);
+
+		$db = $this->getMock('stdClass', array('fetch'), array());
+		$db->expects($this->once())->method('fetch')->will($this->returnValue($good));
+		DB::setMock($db);
+
+		$m_renderIrem = new ReflectionMethod('GoodsCatalog_GoodsClientUI', 'renderItem');
+		$m_renderIrem->setAccessible(true);
+		$m_renderIrem->invoke($test);
 	}
 	//-----------------------------------------------------------------------------
 
