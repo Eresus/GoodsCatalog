@@ -38,11 +38,11 @@
  * @package GoodsCatalog
  */
 class GoodsCatalogGoodsClientUI
-extends GoodsCatalogAbstractUI
+extends GoodsCatalog_AbstractUI
 {
 	/**
 	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractUI::getActiveRecordClass()
+	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractUI::getActiveRecordClass()
 	 */
 	protected function getActiveRecordClass()
 	{

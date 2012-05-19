@@ -43,12 +43,12 @@ class GoodsCatalog_AbstractUI_Test extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * Проверяем конструктор
-	 * @covers GoodsCatalogAbstractUI::__construct
+	 * @covers GoodsCatalog_AbstractUI::__construct
 	 */
 	public function test_construct()
 	{
 		$plugin = new GoodsCatalog_Stub();
-		$mock = $this->getMock('GoodsCatalogAbstractUI', array('getHTML', 'getActiveRecordClass'), array(), '', false);
+		$mock = $this->getMock('GoodsCatalog_AbstractUI', array('getHTML', 'getActiveRecordClass'), array(), '', false);
 		$mock->__construct($plugin);
 		$this->assertAttributeEquals($plugin, 'plugin', $mock);
 	}

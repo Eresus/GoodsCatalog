@@ -37,7 +37,7 @@
  *
  * @package GoodsCatalog
  */
-abstract class GoodsCatalogAbstractUI
+abstract class GoodsCatalog_AbstractUI
 {
 	/**
 	 * Объект плагина
