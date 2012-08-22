@@ -315,7 +315,7 @@
 						return;
 					}
 				}
-	
+
 				/* Если все переключатели выключены, деактивируем поля ввода */
 				inputs.attr('disabled', 'disabled');
 				
@@ -333,7 +333,19 @@
 					inputs.attr('disabled', 'disabled');
 				}
 			});
-			
+
+			jQuery('#settings').submit(function()
+			{
+				var result = true;
+				if (!jQuery('#catalog-goodsPerPage-input').val().match(/^\d+$/)) 
+				{
+					alert('Количество товаров на одной странице задается только цифрами!');
+					result = false;
+					jQuery('#catalog-goodsPerPage-input').select();
+				}
+				return result;
+			});
+
 		});
 	
 		jQuery("#goodscatalog-templates-hint").dialog({
