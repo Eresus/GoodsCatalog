@@ -171,9 +171,11 @@ class GoodsCatalog extends ContentPlugin
 	/**
 	 * Действия при инсталляции
 	 *
+	 * @throws EresusRuntimeException
+	 *
 	 * @return void
 	 *
-	 * @see main/core/Plugin::install()
+	 * @see Plugin::install()
 	 * @since 1.00
 	 */
 	public function install()
@@ -256,7 +258,7 @@ class GoodsCatalog extends ContentPlugin
 		catch (Exception $e)
 		{
 			$this->uninstall();
-			throw new EresusRuntimeException('Fail to install templates',
+			throw new EresusRuntimeException('Failed to install templates',
 				'Не удалось установить шаблоны плагина. Подробная информация доступна в журнале.', $e);
 		}
 	}
@@ -278,11 +280,11 @@ class GoodsCatalog extends ContentPlugin
 
 		try
 		{
-			$ts->uninstall($this->name);
+			$ts->uninstallTemplates($this->name);
 		}
 		catch (Exception $e)
 		{
-			throw new EresusRuntimeException('Fail to uninstall templates',
+			throw new EresusRuntimeException('Failed to uninstall templates',
 				'Не удалось удалить шаблоны плагина. Подробная информация доступна в журнале.', $e);
 		}
 
