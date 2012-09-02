@@ -140,7 +140,7 @@
 	-->
 	<target name="docs" description="Generate documentation">
 
-		<delete dir="${docs.dir}" includeemptydirs="true" failonerror="true" />
+		<delete dir="${docs.dir}" includeemptydirs="true" />
 
 		<phpdoc title="GoodsCatalog API"
 		  destdir="${docs.dir}"
@@ -177,7 +177,7 @@
 			
 		</if>
 		
-		<tar destFile="${distr.dir}/${phing.project.name}-${product.version}.tar.bz2" compression="bzip2">
+		<tar destfile="${distr.dir}/${phing.project.name}-${product.version}.tar.bz2" compression="bzip2">
 			<fileset dir="${build.dir}">
 				<include name="**" />
 			</fileset>

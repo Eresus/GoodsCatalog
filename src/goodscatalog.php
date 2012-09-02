@@ -76,9 +76,9 @@ class GoodsCatalog extends ContentPlugin
 		'logoEnabled' => false,
 		// Положение логотипа
 		'logoPosition' => 'BL', // Значения: TL, TR, BL, Br. T - верх, B - низ, L - лево, R - право.
-		// Вертикальный отступ от края в пикселах
+		// Вертикальный отступ от края в пикселях
 		'logoVPadding' => 10,
-		// Горизонтальный отступ от края в пикселах
+		// Горизонтальный отступ от края в пикселях
 		'logoHPadding' => 10,
 
 		// Использовать основную фотографию
@@ -196,7 +196,7 @@ class GoodsCatalog extends ContentPlugin
 				`description` longtext NOT NULL default '' COMMENT 'Описание',
 				`cost` double NOT NULL default 0 COMMENT 'Цена',
 				`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла основной фотографии',
-				`special` bool NOT NULL default 0 COMMENT 'Спецпредложение',
+				`special` bool NOT NULL default 0 COMMENT 'Спец. предложение',
 				`brand` int(10) unsigned default NULL COMMENT 'Привязка к бренду',
 				PRIMARY KEY  (`id`),
 				KEY `admin_list` (`section`, `position`),
@@ -265,14 +265,16 @@ class GoodsCatalog extends ContentPlugin
 	/**
 	 * Действия при удалении плагина
 	 *
+	 * @throws EresusRuntimeException
+	 *
 	 * @return void
 	 *
-	 * @see main/core/Plugin::uninstall()
+	 * @see Plugin::uninstall()
 	 * @since 1.00
 	 */
 	public function uninstall()
 	{
-		$ts = GoodsCatalogTemplateService::getInstance();
+		$ts = TemplateService::getInstance();
 
 		try
 		{
@@ -408,8 +410,7 @@ class GoodsCatalog extends ContentPlugin
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * (non-PHPdoc)
-	 * @see main/core/Plugin::mkdir()
+	 * @see Plugin::mkdir()
 	 * @since 1.00
 	 */
 	public function mkdir($name = '')

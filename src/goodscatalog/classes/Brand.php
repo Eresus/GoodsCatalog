@@ -39,6 +39,7 @@
  * @property       bool   $active       Активность бренда
  * @property       string $title        Название
  * @property       string $description  Описание бренда
+ * @property       string $ext          Расширение файла логотипа
  * @property-read  string $logoPath     Путь к файлу логотипа
  * @property-read  string $logoURL      URL файла логотипа
  * @property-write string $logo         Свойство для загрузки нового логотипа
@@ -92,8 +93,7 @@ class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractActiveRecord::delete()
+	 * @see GoodsCatalog_AbstractActiveRecord::delete()
 	 */
 	public function delete()
 	{

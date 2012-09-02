@@ -36,7 +36,7 @@
  * ActiveRecord фотографии
  *
  * @property       int                   $id           Идентификатор
- * @property       GoodsCatalog_Good      $good         Товар
+ * @property       GoodsCatalog_Good     $good         Товар
  * @property       int                   $position     Порядковый номер
  * @property-read  string                $photoPath    Путь к основной фотографии
  * @property-read  string                $photoURL     URL основной фотографии
@@ -44,6 +44,7 @@
  * @property-write string                $photo        Свойство для загрузки основной фотографии
  * @property-read  string                $thumbPath    Путь к миниатюре
  * @property-read  string                $thumbURL     URL миниатюры
+ * @property       string                $ext          Расширение файла основной фотографии
  *
  * @package GoodsCatalog
  */
@@ -131,8 +132,7 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractActiveRecord::delete()
+	 * @see GoodsCatalog_AbstractActiveRecord::delete()
 	 */
 	public function delete()
 	{
@@ -357,7 +357,6 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
 		catch (DomainException $e)
 		{
 			return null;
-			$e = $e; // PHPMD hack
 		}
 
 		return $good;

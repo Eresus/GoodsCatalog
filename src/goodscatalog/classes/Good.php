@@ -48,8 +48,8 @@
  * @property-read  string                   $photoURL     URL основной фотографии
  * @property-write string                   $photo        Свойство для загрузки основной фотографии
  * @property-read  string                   $thumbPath    Путь к миниатюре
- * @property-read  string                   $thumbURL     URL иниатюры
- * @property       bool                     $special      Спецпредложение
+ * @property-read  string                   $thumbURL     URL миниатюры
+ * @property       bool                     $special      Спец. предложение
  * @property       GoodsCatalog_Brand|int   $brand        Бренд или его идентификатор
  * @property-read  array(GoodsCatalogPhoto) $photos       Дополнительные фотографии
  * @property-read  string                   $clientURL    URL страницы товара в КИ
@@ -156,8 +156,7 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractActiveRecord::delete()
+	 * @see GoodsCatalog_AbstractActiveRecord::delete()
 	 */
 	public function delete()
 	{
@@ -399,7 +398,6 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
 		catch (DomainException $e)
 		{
 			return null;
-			$e = $e; // PHPMD hack
 		}
 
 		return $brand;

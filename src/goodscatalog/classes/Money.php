@@ -77,7 +77,6 @@ class GoodsCatalog_Money
 		switch (true)
 		{
 			case is_numeric($amount):
-				//$this->amount = floatval($amount);
 				$this->amount = $amount;
 			break;
 
@@ -87,7 +86,7 @@ class GoodsCatalog_Money
 				$amount = str_replace($lc['mon_thousands_sep'], '', $amount);
 				// Меняем разделитель дробной части на точку
 				$amount = str_replace(array($lc['mon_decimal_point'], $lc['decimal_point']), '.', $amount);
-				// Удаяем лишние символы
+				// Удаляем лишние символы
 				$amount = preg_replace('/[^\d\.]/', '', $amount);
 				$this->amount = floatval($amount);
 			break;
@@ -115,7 +114,7 @@ class GoodsCatalog_Money
 	/**
 	 * Возвращает строковое представление денежной суммы
 	 *
-	 * @return void
+	 * @return string
 	 *
 	 * @since 1.02
 	 */

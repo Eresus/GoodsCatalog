@@ -67,6 +67,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 				return false;
 			break;
 		}
+		return true;
 	}
 	//-----------------------------------------------------------------------------
 
@@ -433,7 +434,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 	 *
 	 * @param GoodsCatalog_Good $good
 	 *
-	 * @return string|false
+	 * @return string|bool
 	 */
 	private function photoActions($good)
 	{
@@ -444,19 +445,23 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 			break;
 
 			case arg('action') == 'photo_insert':
-				return $this->addPhoto($good);
+				$this->addPhoto($good);
+				return true;
 			break;
 
 			case arg('photo_up'):
-				return $this->movePhotoUp();
+				$this->movePhotoUp();
+				return true;
 			break;
 
 			case arg('photo_down'):
-				return $this->movePhotoDown();
+				$this->movePhotoDown();
+				return true;
 			break;
 
 			case arg('photo_delete'):
-				return $this->deletePhoto();
+				$this->deletePhoto();
+				return true;
 			break;
 
 			default:
