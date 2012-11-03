@@ -1,42 +1,42 @@
 <div class="ui-button-box">
-	<a href="admin.php?mod=content&section={$section}&action=add" class="ui-button ui-button-list-add">Добавить товар</a>
+ <a href="admin.php?mod=content&section={$section}&action=add" class="ui-button ui-button-list-add">Р”РѕР±Р°РІРёС‚СЊ С‚РѕРІР°СЂ</a>
 </div>
 
 {if count($goods) > 0}
 <table class="goods-list ui-widget ui-widget-content">
-	<tr>
-		<th>&nbsp;</th>
-		<th>Артикул</th>
-		<th>Название</th>
-		{if $this->settings.mainPhotoEnabled}<th>Основное фото</th>{/if}
-		<th>Цена</th>
-		{if $this->settings.specialsEnabled}<th>Спец.</th>{/if}
-	</tr>
-	{foreach $goods good}
-	<tr class="goods-list-item">
-		<td class="controls">
-			<a href="{sprintf($urlEdit, $good->id)}" title="Изменить"><img src="{$Eresus->root}{$theme->getIcon('item-edit.png')}" alt="[изменить]" /></a>
-			<a href="{sprintf($urlToggle, $good->id)}" title="{if $good->active}Отключить{else}Включить{/if}"><img src="{$Eresus->root}{if $good->active}{$theme->getIcon('item-active.png')}{else}{$theme->getIcon('item-inactive.png')}{/if}"	alt="[{if $good->active}отключить{else}включить{/if}]" /></a>
-			<a href="{sprintf($urlUp, $good->id)}" title="Поднять"><img src="{$Eresus->root}{$theme->getIcon('move-up.png')}" alt="[поднять]" /></a>
-			<a href="{sprintf($urlDown, $good->id)}" title="Опустить"><img src="{$Eresus->root}{$theme->getIcon('move-down.png')}" alt="[опустить]" /></a>
-			&nbsp;
-			<a href="{sprintf($urlDelete, $good->id)}" title="Удалить" class="delete"><img src="{$Eresus->root}{$theme->getIcon('item-delete.png')}" alt="[удалить]" /></a>
-		</td>
-		<td class="article">{$good->article}</td>
-		<td class="title">{$good->title}</td>
-		{if $this->settings.mainPhotoEnabled}<td class="photo">{if $good->thumbURL}<img src="{$good->thumbURL}" alt="Основное фото" />{/if}</td>{/if}
-		<td class="cost">{$good->cost}</td>
-		{if $this->settings.specialsEnabled}<td class="special">{if $good->special}да{/if}</td>{/if}
-	</tr>
-	{/foreach}
+ <tr>
+	<th>&nbsp;</th>
+	<th>РђСЂС‚РёРєСѓР»</th>
+	<th>РќР°Р·РІР°РЅРёРµ</th>
+	{if $this->settings.mainPhotoEnabled}<th>РћСЃРЅРѕРІРЅРѕРµ С„РѕС‚Рѕ</th>{/if}
+	<th>Р¦РµРЅР°</th>
+	{if $this->settings.specialsEnabled}<th>РЎРїРµС†.</th>{/if}
+ </tr>
+ {foreach $goods good}
+ <tr class="goods-list-item">
+	<td class="controls">
+	 <a href="{sprintf($urlEdit, $good->id)}" title="РР·РјРµРЅРёС‚СЊ"><img src="{$Eresus->root}{$theme->getIcon('item-edit.png')}" alt="[РёР·РјРµРЅРёС‚СЊ]" /></a>
+	 <a href="{sprintf($urlToggle, $good->id)}" title="{if $good->active}РћС‚РєР»СЋС‡РёС‚СЊ{else}Р’РєР»СЋС‡РёС‚СЊ{/if}"><img src="{$Eresus->root}{if $good->active}{$theme->getIcon('item-active.png')}{else}{$theme->getIcon('item-inactive.png')}{/if}"	alt="[{if $good->active}РѕС‚РєР»СЋС‡РёС‚СЊ{else}РІРєР»СЋС‡РёС‚СЊ{/if}]" /></a>
+	 <a href="{sprintf($urlUp, $good->id)}" title="РџРѕРґРЅСЏС‚СЊ"><img src="{$Eresus->root}{$theme->getIcon('move-up.png')}" alt="[РїРѕРґРЅСЏС‚СЊ]" /></a>
+	 <a href="{sprintf($urlDown, $good->id)}" title="РћРїСѓСЃС‚РёС‚СЊ"><img src="{$Eresus->root}{$theme->getIcon('move-down.png')}" alt="[РѕРїСѓСЃС‚РёС‚СЊ]" /></a>
+	 &nbsp;
+	 <a href="{sprintf($urlDelete, $good->id)}" title="РЈРґР°Р»РёС‚СЊ" class="delete"><img src="{$Eresus->root}{$theme->getIcon('item-delete.png')}" alt="[СѓРґР°Р»РёС‚СЊ]" /></a>
+	</td>
+	<td class="article">{$good->article}</td>
+	<td class="title">{$good->title}</td>
+	{if $this->settings.mainPhotoEnabled}<td class="photo">{if $good->thumbURL}<img src="{$good->thumbURL}" alt="РћСЃРЅРѕРІРЅРѕРµ С„РѕС‚Рѕ" />{/if}</td>{/if}
+	<td class="cost">{$good->cost}</td>
+	{if $this->settings.specialsEnabled}<td class="special">{if $good->special}РґР°{/if}</td>{/if}
+ </tr>
+ {/foreach}
 </table>
 {if $pagination}
 {$pagination->render()}
 {/if}
 {else}
 <div class="ui-widget">
-	<div class="ui-widget-content ui-padding ui-helper-padding">
-		В этом разделе пока нет товаров.
-	</div>
+ <div class="ui-widget-content ui-padding ui-helper-padding">
+	Р’ СЌС‚РѕРј СЂР°Р·РґРµР»Рµ РїРѕРєР° РЅРµС‚ С‚РѕРІР°СЂРѕРІ.
+ </div>
 </div>
 {/if}

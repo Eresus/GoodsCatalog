@@ -1,61 +1,61 @@
 <div class="box ui-widget-content" style="min-width: 600px; float: left;">
-	<div class="header">Изменение бренда</div>
-	<div class="content">
+ <div class="header">РР·РјРµРЅРµРЅРёРµ Р±СЂРµРЅРґР°</div>
+ <div class="content">
 
-		<form action="admin.php" method="post" enctype="multipart/form-data" id="catalogAddDialog">
+	<form action="admin.php" method="post" enctype="multipart/form-data" id="catalogAddDialog">
 
-			<div class="hidden">
-				<input type="hidden" name="mod" value="ext-{$this->name}" />
-				<input type="hidden" name="ref" value="brands" />
-				<input type="hidden" name="update" value="{$brand->id}" />
-			</div>
+	 <div class="hidden">
+		<input type="hidden" name="mod" value="ext-{$this->name}" />
+		<input type="hidden" name="ref" value="brands" />
+		<input type="hidden" name="update" value="{$brand->id}" />
+	 </div>
 
-			<table width="100%">
-				<colgroup>
-					<col width="10%" />
-					<col width="*" />
-				</colgroup>
-				<tr>
-					<td class="formLabel">
-						<label for="catalog-title-input">Название</label>
-					</td>
-					<td>
-						<input type="text" name="title" id="catalog-title-input" maxlength="255" class="full-width" value="{$brand->title|escape}" />
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2">
-						<label for="wyswyg_description">Описание</label><br />
-						{wysiwyg name='description', value=$brand->description}
-					</td>
-				</tr>
-				<tr>
-					<th colspan="2">Логотип</td>
-				</tr>
-				{if $brand->logoURL}
-				<tr>
-					<td colspan="2" class="brand-logo-preview">
-						<img src="{$brand->logoURL}" alt="Логотип" />
-					</td>
-				</tr>
-				{/if}
-				<tr>
-					<td class="formLabel">
-						<label for="catalog-logo-input">{if $brand->logoURL}Заменить{else}Загрузить{/if}</label>
-					</td>
-					<td>
-						<input type="file" name="logo" id="catalog-logo-input" />
-						<div class="ui-minor">Формат JPEG, PNG или GIF. Размер файла не более {ini_get('upload_max_filesize')}</div>
-					</td>
-				</tr>
-				
-			</table>
+	 <table width="100%">
+		<colgroup>
+		 <col width="10%" />
+		 <col width="*" />
+		</colgroup>
+		<tr>
+		 <td class="formLabel">
+			<label for="catalog-title-input">РќР°Р·РІР°РЅРёРµ</label>
+		 </td>
+		 <td>
+			<input type="text" name="title" id="catalog-title-input" maxlength="255" class="full-width" value="{$brand->title|escape}" />
+		 </td>
+		</tr>
+		<tr>
+		 <td colspan="2">
+			<label for="wyswyg_description">РћРїРёСЃР°РЅРёРµ</label><br />
+			{wysiwyg name='description', value=$brand->description}
+		 </td>
+		</tr>
+		<tr>
+		 <th colspan="2">Р›РѕРіРѕС‚РёРї</td>
+		</tr>
+		{if $brand->logoURL}
+		<tr>
+		 <td colspan="2" class="brand-logo-preview">
+			<img src="{$brand->logoURL}" alt="Р›РѕРіРѕС‚РёРї" />
+		 </td>
+		</tr>
+		{/if}
+		<tr>
+		 <td class="formLabel">
+			<label for="catalog-logo-input">{if $brand->logoURL}Р—Р°РјРµРЅРёС‚СЊ{else}Р—Р°РіСЂСѓР·РёС‚СЊ{/if}</label>
+		 </td>
+		 <td>
+			<input type="file" name="logo" id="catalog-logo-input" />
+			<div class="ui-minor">Р¤РѕСЂРјР°С‚ JPEG, PNG РёР»Рё GIF. Р Р°Р·РјРµСЂ С„Р°Р№Р»Р° РЅРµ Р±РѕР»РµРµ {ini_get('upload_max_filesize')}</div>
+		 </td>
+		</tr>
 
-			<div class="ui-button-box">
-				<br />
-				<button type="submit">Сохранить</button>
-				<button type="button" class="cancel" onclick="history.back();">Отменить</button>
-			</div>
-		</form>
-	</div>
+	 </table>
+
+	 <div class="ui-button-box">
+		<br />
+		<button type="submit">РЎРѕС…СЂР°РЅРёС‚СЊ</button>
+		<button type="button" class="cancel" onclick="history.back();">РћС‚РјРµРЅРёС‚СЊ</button>
+	 </div>
+	</form>
+ </div>
 </div>

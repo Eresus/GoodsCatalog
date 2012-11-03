@@ -1,44 +1,44 @@
-<a href="{$listURL}">&laquo; Вернуться к списку</a>
-<h2>Свойства товара</h2>
+<a href="{$listURL}">&laquo; Р’РµСЂРЅСѓС‚СЊСЃСЏ Рє СЃРїРёСЃРєСѓ</a>
+<h2>РЎРІРѕР№СЃС‚РІР° С‚РѕРІР°СЂР°</h2>
 <dl>
-	<dt>Артикул</dt>
-	<dd>{$good->article}</dd>
+ <dt>РђСЂС‚РёРєСѓР»</dt>
+ <dd>{$good->article}</dd>
 
-	<dt>Название</dt>
-	<dd>{$good->title}</dd>
+ <dt>РќР°Р·РІР°РЅРёРµ</dt>
+ <dd>{$good->title}</dd>
 
-	<dt>Описание</dt>
-	<dd>{$good->description}</dd>
+ <dt>РћРїРёСЃР°РЅРёРµ</dt>
+ <dd>{$good->description}</dd>
 
-	<dt>Цена</dt>
-	<dd>{$good->cost}</dd>
+ <dt>Р¦РµРЅР°</dt>
+ <dd>{$good->cost}</dd>
 
-	{if $this->settings.mainPhotoEnabled}
-	<dt>Основная фотография</dt>
-	<dd>{if $good->photoURL}<img src="{$good->photoURL}" alt="" />{else}Нет Фотографии{/if}</dd>
+ {if $this->settings.mainPhotoEnabled}
+ <dt>РћСЃРЅРѕРІРЅР°СЏ С„РѕС‚РѕРіСЂР°С„РёСЏ</dt>
+ <dd>{if $good->photoURL}<img src="{$good->photoURL}" alt="" />{else}РќРµС‚ Р¤РѕС‚РѕРіСЂР°С„РёРё{/if}</dd>
 
-	<dt>Миниатюра</dt>
-	<dd>{if $good->thumbURL}<img src="{$good->thumbURL}" alt="" />{else}Нет миниатюры{/if}</dd>
-	{/if}
+ <dt>РњРёРЅРёР°С‚СЋСЂР°</dt>
+ <dd>{if $good->thumbURL}<img src="{$good->thumbURL}" alt="" />{else}РќРµС‚ РјРёРЅРёР°С‚СЋСЂС‹{/if}</dd>
+ {/if}
 </dl>
 
 {if $this->settings.extPhotosEnabled}
-<h2>Дополнительные фото</h2>
+<h2>Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ С„РѕС‚Рѕ</h2>
 {foreach $good->photos photo}
 <a href="{$photo->clientPopup}"><img src="{$photo->thumbURL}" /></a>
 {/foreach}
 {/if}
 
 {if $this->settings.brandsEnabled and $good->brand}
-<h2>Бренд</h2>
+<h2>Р‘СЂРµРЅРґ</h2>
 <dl>
-	<dt>Название</dt>
-	<dd>{$good->brand->title}</dd>
+ <dt>РќР°Р·РІР°РЅРёРµ</dt>
+ <dd>{$good->brand->title}</dd>
 
-	<dt>Описание</dt>
-	<dd>{$good->brand->description}</dd>
+ <dt>РћРїРёСЃР°РЅРёРµ</dt>
+ <dd>{$good->brand->description}</dd>
 
-	<dt>Логотип</dt>
-	<dd>{if $good->brand->logoURL}<img src="{$good->brand->logoURL}" alt="" />{else}Нет логотипа{/if}</dd>
+ <dt>Р›РѕРіРѕС‚РёРї</dt>
+ <dd>{if $good->brand->logoURL}<img src="{$good->brand->logoURL}" alt="" />{else}РќРµС‚ Р»РѕРіРѕС‚РёРїР°{/if}</dd>
 </dl>
 {/if}
