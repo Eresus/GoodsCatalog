@@ -30,7 +30,7 @@
 		 </td>
 		 <td>
 			<input type="file" name="logo" id="catalog-logo-input" />
-			<div class="ui-minor">Формат JPEG, PNG или GIF. Размер файла не более {ini_get('upload_max_filesize')}</div>
+			<div class="ui-minor">Формат JPEG, PNG или GIF. Размер файла не более {FormatSize(Eresus_PHP::getMaxUploadSize())}</div>
 		 </td>
 		</tr>
 		<tr>
