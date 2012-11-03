@@ -80,7 +80,8 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 	 */
 	protected function renderList()
 	{
-		global $page;
+		/** @var TAdminUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
@@ -234,7 +235,8 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 	 */
 	protected function renderEditDialog()
 	{
-		global $page;
+		/** @var TAdminUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		$id = arg('id', 'int');
 
@@ -245,7 +247,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 		catch (DomainException $e)
 		{
 			$this->reportBadURL($e);
-			return;
+			return '';
 		}
 
 		if ($this->plugin->settings['extPhotosEnabled'])
@@ -407,7 +409,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 	 */
 	private function buildSectionTree($root = 0, $level = 0)
 	{
-		global $Eresus;
+		$Eresus = Eresus_CMS::getLegacyKernel();
 
 		$sections = $Eresus->sections->children($root);
 		$result = array();

@@ -84,7 +84,8 @@ class GoodsCatalog_Helper
 	 */
 	public function linkJQuery()
 	{
-		global $Eresus, $page;
+		$page = Eresus_Kernel::app()->getPage();
+		$Eresus = Eresus_CMS::getLegacyKernel();
 
 		$page->linkScripts($Eresus->root . 'core/jquery/jquery.min.js');
 	}
@@ -99,7 +100,8 @@ class GoodsCatalog_Helper
 	 */
 	public function linkJQueryUI()
 	{
-		global $Eresus, $page;
+		$page = Eresus_Kernel::app()->getPage();
+		$Eresus = Eresus_CMS::getLegacyKernel();
 
 		$page->linkScripts($Eresus->root . 'core/jquery/jquery-ui.min.js');
 	}
@@ -152,8 +154,8 @@ class GoodsCatalog_Helper
 	{
 		$data = array();
 		$data['this'] = $this->plugin;
-		$data['page'] = $GLOBALS['page'];
-		$data['Eresus'] = $GLOBALS['Eresus'];
+		$data['page'] = Eresus_Kernel::app()->getPage();
+		$data['Eresus'] = Eresus_CMS::getLegacyKernel();
 		return $data;
 	}
 	//-----------------------------------------------------------------------------

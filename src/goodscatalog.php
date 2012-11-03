@@ -304,7 +304,8 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function settings()
 	{
-		global $page;
+		/** @var TAdminUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		$page->linkStyles($this->urlCode . 'admin.css');
 
@@ -439,7 +440,9 @@ class GoodsCatalog extends ContentPlugin
 				'caption'  => 'Бренды',
 				'hint'  => 'Управление брендами'
 			);
-			$GLOBALS['page']->addMenuItem($this->title, $menuItem);
+			/** @var TAdminUI $page */
+			$page = Eresus_Kernel::app()->getPage();
+			$page->addMenuItem($this->title, $menuItem);
 		}
 	}
 	//-----------------------------------------------------------------------------

@@ -464,7 +464,8 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
 	 */
 	protected function getClientURL()
 	{
-		$page = $GLOBALS['page'];
+		/** @var TClientUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		$url = $page->clientURL($this->section);
 		if ($page instanceof TClientUI && $page->subpage)

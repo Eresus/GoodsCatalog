@@ -63,19 +63,22 @@ class GoodsCatalog_GoodsClientUI_Test extends PHPUnit_Framework_TestCase
 		$plugin->expects($this->any())->method('getHelper')->will($this->returnValue($helper));
 		$test = new GoodsCatalog_GoodsClientUI($plugin);
 
-		$GLOBALS['page'] = $this->getMock('stdClass', array('httpError'));
-		$GLOBALS['page']->topic = null;
-		$GLOBALS['page']->subpage = 0;
-		$GLOBALS['page']->id = 1;
-		$GLOBALS['page']->expects($this->never())->method('httpError');
+		$page = $this->getMock('stdClass', array('httpError'));
+		$page->topic = null;
+		$page->subpage = 0;
+		$page->id = 1;
+		$page->expects($this->never())->method('httpError');
 
-		$db = $this->getMock('stdClass', array('fetchAll', 'fetch'), array(), 'DB_Mock');
-		$db->expects($this->once())->method('fetch')->will($this->returnValue(array('count' => 0)));
-		DB::setMock($db);
+		$app = $this->getMock('stdClass', array('getPage'));
+		$app->expects($this->any())->method('getPage')->will($this->returnValue($page));
+
+		$mock = $this->getMock('stdClass', array('app', 'fetchAll', 'fetch'));
+		$mock->expects($this->any())->method('app')->will($this->returnValue($app));
+		$mock->expects($this->once())->method('fetch')->will($this->returnValue(array('count' => 0)));
+		DB::setMock($mock);
 
 		$test->getHTML();
 	}
-	//-----------------------------------------------------------------------------
 
 	/**
 	 * В КИ "подробно" отображается товар, даже если он неактивен
@@ -92,13 +95,16 @@ class GoodsCatalog_GoodsClientUI_Test extends PHPUnit_Framework_TestCase
 		$page->expects($this->once())->method('httpError')->with(404)->
 			will($this->throwException(new DomainException()));
 		$page->topic = 1;
-		$GLOBALS['page'] = $page;
+
+		$app = $this->getMock('stdClass', array('getPage'));
+		$app->expects($this->any())->method('getPage')->will($this->returnValue($page));
 
 		$good = array('active' => false);
 
-		$db = $this->getMock('stdClass', array('fetch'), array());
-		$db->expects($this->once())->method('fetch')->will($this->returnValue($good));
-		DB::setMock($db);
+		$mock = $this->getMock('stdClass', array('fetch', 'app'), array());
+		$mock->expects($this->any())->method('app')->will($this->returnValue($app));
+		$mock->expects($this->once())->method('fetch')->will($this->returnValue($good));
+		DB::setMock($mock);
 
 		$m_renderIrem = new ReflectionMethod('GoodsCatalog_GoodsClientUI', 'renderItem');
 		$m_renderIrem->setAccessible(true);

@@ -283,3 +283,6 @@ class ezcQuerySelect
 }
 
 class EresusRuntimeException extends RuntimeException {}
+
+class Eresus_CMS extends MockFacade {}
+class Eresus_Kernel extends MockFacade {}

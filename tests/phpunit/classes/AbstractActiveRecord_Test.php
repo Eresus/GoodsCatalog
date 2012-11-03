@@ -75,26 +75,25 @@ class GoodsCatalog_AbstractActiveRecord_Test extends PHPUnit_Framework_TestCase
 	 */
 	public function test_plugin()
 	{
-		if (version_compare(PHP_VERSION, '5.3.2', '<'))
-		{
-			$this->markTestSkipped('PHP 5.3.2 required');
-		}
+		$Eresus = new stdClass();
+		$Eresus->plugins = new PluginsStub();
+
+		$Eresus_CMS = $this->getMock('stdClass', array('getLegacyKernel'));
+		$Eresus_CMS->expects($this->any())->method('getLegacyKernel')
+			->will($this->returnValue($Eresus));
+		Eresus_CMS::setMock($Eresus_CMS);
 
 		$plugin = new ReflectionMethod('GoodsCatalog_AbstractActiveRecord', 'plugin');
 		$plugin->setAccessible(true);
 
-		$GLOBALS['Eresus'] = new stdClass();
-		$GLOBALS['Eresus']->plugins = new PluginsStub();
-
-		$this->assertSame($GLOBALS['Eresus']->plugins->plugin, $plugin->invoke(null), 'Pass 1.1');
-		$this->assertSame($GLOBALS['Eresus']->plugins->plugin, $plugin->invoke(null), 'Pass 1.2');
+		$this->assertSame($Eresus->plugins->plugin, $plugin->invoke(null), 'Pass 1.1');
+		$this->assertSame($Eresus->plugins->plugin, $plugin->invoke(null), 'Pass 1.2');
 
 		$stub = new stdClass();
 		$this->assertSame($stub, $plugin->invoke(null, $stub), 'Pass 2.1');
 		$this->assertSame($stub, $plugin->invoke(null), 'Pass 2.2');
 
 	}
-	//-----------------------------------------------------------------------------
 
 	/**
 	 * Проверяем конструктор

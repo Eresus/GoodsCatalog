@@ -59,7 +59,8 @@ class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
 	 */
 	protected function renderList()
 	{
-		global $page;
+		/** @var TAdminUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();

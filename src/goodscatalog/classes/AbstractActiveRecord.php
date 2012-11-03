@@ -498,7 +498,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
 
 		if (!self::$plugin)
 		{
-			self::$plugin = $GLOBALS['Eresus']->plugins->load('goodscatalog');
+			self::$plugin = Eresus_CMS::getLegacyKernel()->plugins->load('goodscatalog');
 		}
 		return self::$plugin;
 	}

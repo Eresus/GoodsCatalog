@@ -62,13 +62,13 @@ class GoodsCatalog_GoodsAdminUI_Test extends PHPUnit_Framework_TestCase
 	 */
 	public function testGetDbTable()
 	{
-		if (version_compare(PHP_VERSION, '5.3.2', '<'))
-		{
-			$this->markTestSkipped('PHP 5.3.2 required');
-		}
+		$Eresus = new stdClass();
+		$Eresus->sections = new GoodsCatalogGoodsAdminUITest_SectionsStub();
 
-		$GLOBALS['Eresus'] = new stdClass();
-		$GLOBALS['Eresus']->sections = new GoodsCatalogGoodsAdminUITest_SectionsStub();
+		$Eresus_CMS = $this->getMock('stdClass', array('getLegacyKernel'));
+		$Eresus_CMS->expects($this->any())->method('getLegacyKernel')
+			->will($this->returnValue($Eresus));
+		Eresus_CMS::setMock($Eresus_CMS);
 
 		$buildSectionTree = new ReflectionMethod('GoodsCatalog_GoodsAdminUI', 'buildSectionTree');
 		$buildSectionTree->setAccessible(true);

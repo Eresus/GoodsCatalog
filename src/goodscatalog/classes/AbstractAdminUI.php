@@ -110,8 +110,10 @@ abstract class GoodsCatalog_AbstractAdminUI extends GoodsCatalog_AbstractUI
 		}
 
 		/* Дополнительные файлы */
-		$GLOBALS['page']->linkStyles($this->plugin->getCodeURL() . 'admin.css');
-		$GLOBALS['page']->linkScripts($this->plugin->getCodeURL() . 'admin.js');
+		/** @var TAdminUI $page */
+		$page = Eresus_Kernel::app()->getPage();
+		$page->linkStyles($this->plugin->getCodeURL() . 'admin.css');
+		$page->linkScripts($this->plugin->getCodeURL() . 'admin.js');
 
 		return $html;
 	}

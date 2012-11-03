@@ -57,7 +57,8 @@ class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
 	 */
 	public function getHTML()
 	{
-		global $page;
+		/** @var TClientUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		if ($page->topic)
 		{
@@ -81,10 +82,8 @@ class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
 	 */
 	private function renderList()
 	{
-		/**
-		 * @var TClientUI
-		 */
-		global $page;
+		/** @var TClientUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
@@ -123,13 +122,16 @@ class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
 	/**
 	 * Возвращает разметку описания товара
 	 *
+	 * @throws DomainException
+	 *
 	 * @return string  HTML
 	 *
 	 * @since 1.00
 	 */
 	private function renderItem()
 	{
-		global $page;
+		/** @var TClientUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		try
 		{
