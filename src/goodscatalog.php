@@ -308,6 +308,8 @@ class GoodsCatalog extends ContentPlugin
 
 		$page->linkStyles($this->urlCode . 'admin.css');
 
+		Eresus_Kernel::app()->getPage()->linkJsLib('webshim');
+
 		// Данные для подстановки в шаблон
 		$data = $this->getHelper()->prepareTmplData();
 		$data['logoExists'] = FS::isFile($this->getLogoFileName());
