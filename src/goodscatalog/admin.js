@@ -46,7 +46,7 @@ jQuery('#content .goods-list-item a.delete').live('click', function (e)
 
 jQuery('#content .photo-list-item a.delete').live('click', function (e)
 {
-	return confirm("Подтверждаете удаление фотогарфии?");
+	return confirm("Подтверждаете удаление фотографии?");
 });
 
 jQuery('#content .brand-list-item a.delete').live('click', function (e)
