@@ -83,14 +83,14 @@
 	<tr class="catalog-logoEnabled-related">
 	 <td class="formLabel">Отступ</td>
 	 <td>
-		<input type="number" min="1" name="logoVPadding" value="{$this->settings.logoVPadding}" maxlength="4" size="4" class="number"{if !$this->settings.logoEnabled} disabled="disabled"{/if} />
+		<input type="number" min="1" name="logoVPadding" required="required" value="{$this->settings.logoVPadding}" maxlength="4" size="4" class="number"{if !$this->settings.logoEnabled} disabled="disabled"{/if} />
 		точек по вертикали
 	 </td>
 	</tr>
 	<tr class="catalog-logoEnabled-related">
 	 <td class="formLabel">Отступ</td>
 	 <td>
-		<input type="number" min="1" name="logoHPadding" value="{$this->settings.logoHPadding}" maxlength="4" size="4" class="number"{if !$this->settings.logoEnabled} disabled="disabled"{/if} />
+		<input type="number" min="1" name="logoHPadding" required="required" value="{$this->settings.logoHPadding}" maxlength="4" size="4" class="number"{if !$this->settings.logoEnabled} disabled="disabled"{/if} />
 		точек по горизонтали
 	 </td>
 	</tr>
@@ -121,14 +121,14 @@
 	<tr class="catalog-photoEnabled-related">
 	 <td class="formLabel">Макс. ширина</td>
 	 <td>
-		<input type="number" min="1" name="photoMaxWidth" value="{$this->settings.photoMaxWidth}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotosEnabled} disabled="disabled"{/if} />
+		<input type="number" min="1" name="photoMaxWidth" required="required" value="{$this->settings.photoMaxWidth}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotosEnabled} disabled="disabled"{/if} />
 		точек
 	 </td>
 	</tr>
 	<tr class="catalog-photoEnabled-related">
 	 <td class="formLabel">Макс. высота</td>
 	 <td>
-		<input type="number" min="1" name="photoMaxHeight" value="{$this->settings.photoMaxHeight}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotosEnabled} disabled="disabled"{/if} />
+		<input type="number" min="1" name="photoMaxHeight" required="required" value="{$this->settings.photoMaxHeight}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotosEnabled} disabled="disabled"{/if} />
 		точек
 	 </td>
 	</tr>
@@ -137,14 +137,14 @@
 	<tr class="catalog-photoEnabled-related">
 	 <td class="formLabel">Макс. ширина</td>
 	 <td>
-		<input type="number" min="1" name="thumbWidth" value="{$this->settings.thumbWidth}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotosEnabled} disabled="disabled"{/if} />
+		<input type="number" min="1" name="thumbWidth" required="required" value="{$this->settings.thumbWidth}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotosEnabled} disabled="disabled"{/if} />
 		точек
 	 </td>
 	</tr>
 	<tr class="catalog-photoEnabled-related">
 	 <td class="formLabel">Макс. высота</td>
 	 <td>
-		<input type="number" min="1" name="thumbHeight" value="{$this->settings.thumbHeight}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotosEnabled} disabled="disabled"{/if} />
+		<input type="number" min="1" name="thumbHeight" required="required" value="{$this->settings.thumbHeight}" maxlength="4" size="4" class="number"{if !$this->settings.mainPhotoEnabled && !$this->settings.extPhotosEnabled} disabled="disabled"{/if} />
 		точек
 	 </td>
 	</tr>
@@ -166,14 +166,14 @@
 	<tr class="catalog-brandsEnabled-related">
 	 <td class="formLabel">Макс. ширина</td>
 	 <td>
-		<input type="number" min="1" name="brandLogoMaxWidth" value="{$this->settings.brandLogoMaxWidth}" maxlength="4" size="4" class="number"{if !$this->settings.brandsEnabled} disabled="disabled"{/if} />
+		<input type="number" min="1" name="brandLogoMaxWidth" required="required" value="{$this->settings.brandLogoMaxWidth}" maxlength="4" size="4" class="number"{if !$this->settings.brandsEnabled} disabled="disabled"{/if} />
 		точек
 	 </td>
 	</tr>
 	<tr class="catalog-brandsEnabled-related">
 	 <td class="formLabel">Макс. высота</td>
 	 <td>
-		<input type="number" min="1" name="brandLogoMaxHeight" value="{$this->settings.brandLogoMaxHeight}" maxlength="4" size="4" class="number"{if !$this->settings.brandsEnabled} disabled="disabled"{/if} />
+		<input type="number" min="1" name="brandLogoMaxHeight" required="required" value="{$this->settings.brandLogoMaxHeight}" maxlength="4" size="4" class="number"{if !$this->settings.brandsEnabled} disabled="disabled"{/if} />
 		точек
 	 </td>
 	</tr>
