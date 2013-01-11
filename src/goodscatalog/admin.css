@@ -184,6 +184,11 @@ form table th
 	text-align: center;
 }
 
+.goods-list-item .controls
+{
+	white-space: nowrap;
+}
+
 a.good-photo-preview img
 {
 	background-color: #eee;
