@@ -37,15 +37,16 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
+class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
 {
 	/**
-	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractAdminUI::getActiveRecordClass()
+	 * @return string
+	 *
+	 * @see GoodsCatalog_AbstractAdminUI::getActiveRecordClass()
 	 */
 	protected function getActiveRecordClass()
 	{
-		return 'GoodsCatalogBrand';
+		return 'GoodsCatalog_Brand';
 	}
 	//-----------------------------------------------------------------------------
 
@@ -58,7 +59,8 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 	 */
 	protected function renderList()
 	{
-		global $page;
+		/** @var TAdminUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
@@ -73,8 +75,8 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 		$maxCount = 10; // Количество групп на страницу. В настройках не изменяется.
 		$startFrom = ($pg - 1) * $maxCount;
 
-		$data['brands'] = GoodsCatalogBrand::find($maxCount, $startFrom);
-		$totalPages = ceil(GoodsCatalogBrand::count() / $maxCount);
+		$data['brands'] = GoodsCatalog_Brand::find($maxCount, $startFrom);
+		$totalPages = ceil(GoodsCatalog_Brand::count() / $maxCount);
 		if ($totalPages > 1)
 		{
 			$data['pagination'] = new PaginationHelper($totalPages, $pg, $page->url(array('pg' => '%s')));
@@ -107,7 +109,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 
 		try
 		{
-			$brand = new GoodsCatalogBrand($id);
+			$brand = new GoodsCatalog_Brand($id);
 
 			try
 			{
@@ -115,8 +117,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 			}
 			catch (Exception $e)
 			{
-				ErrorMessage(iconv('utf-8', 'cp1251', 'Не удалось удалить бренд: ') .
-					$e->getMessage());
+				ErrorMessage('Не удалось удалить бренд: ' .	$e->getMessage());
 			}
 		}
 		catch (DomainException $e)
@@ -160,7 +161,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 	 */
 	protected function addItem()
 	{
-		$brand = new GoodsCatalogBrand();
+		$brand = new GoodsCatalog_Brand();
 		$brand->title = arg('title');
 		$brand->active = true;
 		$brand->description = arg('description');
@@ -176,7 +177,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 		catch (Exception $e)
 		{
 			Core::logException($e);
-			ErrorMessage(iconv('utf-8', 'cp1251', 'Произошла внутренняя ошибка при добавлении бренда.'));
+			ErrorMessage('Произошла внутренняя ошибка при добавлении бренда.');
 		}
 
 		HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');
@@ -196,7 +197,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 
 		try
 		{
-			$brand = new GoodsCatalogBrand($id);
+			$brand = new GoodsCatalog_Brand($id);
 		}
 		catch (DomainException $e)
 		{
@@ -231,7 +232,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 		$id = arg('update', 'int');
 		try
 		{
-			$brand = new GoodsCatalogBrand($id);
+			$brand = new GoodsCatalog_Brand($id);
 		}
 		catch (DomainException $e)
 		{
@@ -252,7 +253,7 @@ class GoodsCatalogBrandsAdminUI extends GoodsCatalogAbstractAdminUI
 		catch (Exception $e)
 		{
 			Core::logException($e);
-			ErrorMessage(iconv('utf-8', 'cp1251', 'Произошла внутренняя ошибка при изменении бренда.'));
+			ErrorMessage('Произошла внутренняя ошибка при изменении бренда.');
 		}
 
 		HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');

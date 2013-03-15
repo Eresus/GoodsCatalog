@@ -2,7 +2,7 @@
 /**
  * Каталог товаров
  *
- * Абстрактный пользовательскй интерфейс управления (АИ)
+ * Абстрактный пользовательский интерфейс управления (АИ)
  *
  * @version ${product.version}
  *
@@ -33,20 +33,19 @@
 
 
 /**
- * Абстрактный пользовательскй интерфейс управления (АИ)
+ * Абстрактный пользовательский интерфейс управления (АИ)
  *
  * @package GoodsCatalog
  */
-abstract class GoodsCatalogAbstractAdminUI
-extends GoodsCatalogAbstractUI
+abstract class GoodsCatalog_AbstractAdminUI extends GoodsCatalog_AbstractUI
 {
 	/**
 	 * Возвращает HTML интерфейса управления
 	 *
 	 * Метод "понимает" HTTP-запросы на следующие базовые действия:
 	 *
-	 * - Добавлние объекта. Аргумент "action" должен быть "insert". Будет вызван метод addItem
-	 * - Переключение активности. Аргумент "toggle" должен содержать ID объекта. Вызовет toogleItem
+	 * - Добавление объекта. Аргумент "action" должен быть "insert". Будет вызван метод addItem
+	 * - Переключение активности. Аргумент "toggle" должен содержать ID объекта. Вызовет toggleItem
 	 * - Удаление. Аргумент "delete" должен содержать ID объекта. Вызовет deleteItem
 	 * - Изменение объекта. Аргумент "update" должен содержать ID объекта. Вызовет updateItem
 	 * - Диалог добавления. Аргумент "action" должен быть "add". Вызовет renderAddDialog
@@ -111,8 +110,10 @@ extends GoodsCatalogAbstractUI
 		}
 
 		/* Дополнительные файлы */
-		$GLOBALS['page']->linkStyles($this->plugin->getCodeURL() . 'admin.css');
-		$GLOBALS['page']->linkScripts($this->plugin->getCodeURL() . 'admin.js');
+		/** @var TAdminUI $page */
+		$page = Eresus_Kernel::app()->getPage();
+		$page->linkStyles($this->plugin->getCodeURL() . 'admin.css');
+		$page->linkScripts($this->plugin->getCodeURL() . 'admin.js');
 
 		return $html;
 	}
@@ -129,10 +130,7 @@ extends GoodsCatalogAbstractUI
 	 */
 	protected function reportBadURL(Exception $e)
 	{
-		ErrorMessage(iconv('utf-8', 'cp1251', 'Неправильный адрес'));
-
-		return;
-		$e = $e; // PHPMD hack
+		ErrorMessage('Неправильный адрес');
 	}
 	//-----------------------------------------------------------------------------
 
@@ -157,7 +155,7 @@ extends GoodsCatalogAbstractUI
 	 * @return void
 	 *
 	 * @uses arg()
-	 * @uses GoodsCatalogAbstractActiveRecord::save()
+	 * @uses GoodsCatalog_AbstractActiveRecord::save()
 	 * @uses ErrorMessage()
 	 * @uses HTTP::goback()
 	 * @uses reportBadURL()
@@ -179,8 +177,7 @@ extends GoodsCatalogAbstractUI
 			}
 			catch (Exception $e)
 			{
-				ErrorMessage(iconv('utf-8', 'cp1251', 'Не удалось сохранить изменения: ') .
-					$e->getMessage());
+				ErrorMessage('Не удалось сохранить изменения: ' .	$e->getMessage());
 			}
 		}
 		catch (DomainException $e)

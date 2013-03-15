@@ -15,6 +15,18 @@
  * $Id: admin.css 275 2010-06-23 22:37:42Z ghost $
  */
 
+select
+{
+	max-width: 30em;
+	overflow: hidden;
+}
+
+option
+{
+	max-width: 30em;
+	overflow: hidden;
+}
+
 /**
  * Элемент должен заполнить максимум горизонтального пространства 
  */
@@ -170,6 +182,11 @@ form table th
 .goods-list-item .special
 {
 	text-align: center;
+}
+
+.goods-list-item .controls
+{
+	white-space: nowrap;
 }
 
 a.good-photo-preview img

@@ -37,16 +37,16 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogGoodsClientUI
-extends GoodsCatalogAbstractUI
+class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
 {
 	/**
-	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractUI::getActiveRecordClass()
+	 * @return string
+	 *
+	 * @see GoodsCatalog_AbstractUI::getActiveRecordClass()
 	 */
 	protected function getActiveRecordClass()
 	{
-		return 'GoodsCatalogGood';
+		return 'GoodsCatalog_Good';
 	}
 	//-----------------------------------------------------------------------------
 
@@ -57,7 +57,8 @@ extends GoodsCatalogAbstractUI
 	 */
 	public function getHTML()
 	{
-		global $page;
+		/** @var TClientUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		if ($page->topic)
 		{
@@ -81,7 +82,8 @@ extends GoodsCatalogAbstractUI
 	 */
 	private function renderList()
 	{
-		global $page;
+		/** @var TClientUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
@@ -90,8 +92,8 @@ extends GoodsCatalogAbstractUI
 		$maxCount = $this->plugin->settings['goodsPerPage'];
 		$startFrom = ($pg - 1) * $maxCount;
 
-		$data['goods'] = GoodsCatalogGood::find($page->id, $maxCount, $startFrom, true);
-		$totalPages = ceil(GoodsCatalogGood::count($page->id, true) / $maxCount);
+		$data['goods'] = GoodsCatalog_Good::find($page->id, $maxCount, $startFrom, true);
+		$totalPages = ceil(GoodsCatalog_Good::count($page->id, true) / $maxCount);
 
 		if ($pg > $totalPages && $pg != 1)
 		{
@@ -120,22 +122,28 @@ extends GoodsCatalogAbstractUI
 	/**
 	 * Возвращает разметку описания товара
 	 *
+	 * @throws DomainException
+	 *
 	 * @return string  HTML
 	 *
 	 * @since 1.00
 	 */
 	private function renderItem()
 	{
-		global $page;
+		/** @var TClientUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		try
 		{
-			$good = new GoodsCatalogGood(intval($page->topic));
+			$good = new GoodsCatalog_Good(intval($page->topic));
+			if (!$good->active)
+			{
+				throw new DomainException;
+			}
 		}
 		catch (DomainException $e)
 		{
 			$page->httpError(404);
-			$e = $e; // PHPMD hack
 		}
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();

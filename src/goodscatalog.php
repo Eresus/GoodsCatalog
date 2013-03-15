@@ -1,29 +1,29 @@
 <?php
 /**
- * Каталог товаров
+ * РљР°С‚Р°Р»РѕРі С‚РѕРІР°СЂРѕРІ
  *
- * Модуль позволяет создать на сайте простой каталог товаров
+ * РњРѕРґСѓР»СЊ РїРѕР·РІРѕР»СЏРµС‚ СЃРѕР·РґР°С‚СЊ РЅР° СЃР°Р№С‚Рµ РїСЂРѕСЃС‚РѕР№ РєР°С‚Р°Р»РѕРі С‚РѕРІР°СЂРѕРІ
  *
  * @version ${product.version}
  *
- * @copyright 2010, ООО "Два слона", http://dvaslona.ru/
+ * @copyright 2010, РћРћРћ "Р”РІР° СЃР»РѕРЅР°", http://dvaslona.ru/
  * @license http://www.gnu.org/licenses/gpl.txt	GPL License 3
- * @author Михаил Красильников <mk@3wstyle.ru>
+ * @author РњРёС…Р°РёР» РљСЂР°СЃРёР»СЊРЅРёРєРѕРІ <mk@3wstyle.ru>
  *
- * Данная программа является свободным программным обеспечением. Вы
- * вправе распространять ее и/или модифицировать в соответствии с
- * условиями версии 3 либо (по вашему выбору) с условиями более поздней
- * версии Стандартной Общественной Лицензии GNU, опубликованной Free
+ * Р”Р°РЅРЅР°СЏ РїСЂРѕРіСЂР°РјРјР° СЏРІР»СЏРµС‚СЃСЏ СЃРІРѕР±РѕРґРЅС‹Рј РїСЂРѕРіСЂР°РјРјРЅС‹Рј РѕР±РµСЃРїРµС‡РµРЅРёРµРј. Р’С‹
+ * РІРїСЂР°РІРµ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅСЏС‚СЊ РµРµ Рё/РёР»Рё РјРѕРґРёС„РёС†РёСЂРѕРІР°С‚СЊ РІ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРё СЃ
+ * СѓСЃР»РѕРІРёСЏРјРё РІРµСЂСЃРёРё 3 Р»РёР±Рѕ (РїРѕ РІР°С€РµРјСѓ РІС‹Р±РѕСЂСѓ) СЃ СѓСЃР»РѕРІРёСЏРјРё Р±РѕР»РµРµ РїРѕР·РґРЅРµР№
+ * РІРµСЂСЃРёРё РЎС‚Р°РЅРґР°СЂС‚РЅРѕР№ РћР±С‰РµСЃС‚РІРµРЅРЅРѕР№ Р›РёС†РµРЅР·РёРё GNU, РѕРїСѓР±Р»РёРєРѕРІР°РЅРЅРѕР№ Free
  * Software Foundation.
  *
- * Мы распространяем эту программу в надежде на то, что она будет вам
- * полезной, однако НЕ ПРЕДОСТАВЛЯЕМ НА НЕЕ НИКАКИХ ГАРАНТИЙ, в том
- * числе ГАРАНТИИ ТОВАРНОГО СОСТОЯНИЯ ПРИ ПРОДАЖЕ и ПРИГОДНОСТИ ДЛЯ
- * ИСПОЛЬЗОВАНИЯ В КОНКРЕТНЫХ ЦЕЛЯХ. Для получения более подробной
- * информации ознакомьтесь со Стандартной Общественной Лицензией GNU.
+ * РњС‹ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅСЏРµРј СЌС‚Сѓ РїСЂРѕРіСЂР°РјРјСѓ РІ РЅР°РґРµР¶РґРµ РЅР° С‚Рѕ, С‡С‚Рѕ РѕРЅР° Р±СѓРґРµС‚ РІР°Рј
+ * РїРѕР»РµР·РЅРѕР№, РѕРґРЅР°РєРѕ РќР• РџР Р•Р”РћРЎРўРђР’Р›РЇР•Рњ РќРђ РќР•Р• РќРРљРђРљРРҐ Р“РђР РђРќРўРР™, РІ С‚РѕРј
+ * С‡РёСЃР»Рµ Р“РђР РђРќРўРР РўРћР’РђР РќРћР“Рћ РЎРћРЎРўРћРЇРќРРЇ РџР Р РџР РћР”РђР–Р• Рё РџР РР“РћР”РќРћРЎРўР Р”Р›РЇ
+ * РРЎРџРћР›Р¬Р—РћР’РђРќРРЇ Р’ РљРћРќРљР Р•РўРќР«РҐ Р¦Р•Р›РЇРҐ. Р”Р»СЏ РїРѕР»СѓС‡РµРЅРёСЏ Р±РѕР»РµРµ РїРѕРґСЂРѕР±РЅРѕР№
+ * РёРЅС„РѕСЂРјР°С†РёРё РѕР·РЅР°РєРѕРјСЊС‚РµСЃСЊ СЃРѕ РЎС‚Р°РЅРґР°СЂС‚РЅРѕР№ РћР±С‰РµСЃС‚РІРµРЅРЅРѕР№ Р›РёС†РµРЅР·РёРµР№ GNU.
  *
- * Вы должны были получить копию Стандартной Общественной Лицензии
- * GNU с этой программой. Если Вы ее не получили, смотрите документ на
+ * Р’С‹ РґРѕР»Р¶РЅС‹ Р±С‹Р»Рё РїРѕР»СѓС‡РёС‚СЊ РєРѕРїРёСЋ РЎС‚Р°РЅРґР°СЂС‚РЅРѕР№ РћР±С‰РµСЃС‚РІРµРЅРЅРѕР№ Р›РёС†РµРЅР·РёРё
+ * GNU СЃ СЌС‚РѕР№ РїСЂРѕРіСЂР°РјРјРѕР№. Р•СЃР»Рё Р’С‹ РµРµ РЅРµ РїРѕР»СѓС‡РёР»Рё, СЃРјРѕС‚СЂРёС‚Рµ РґРѕРєСѓРјРµРЅС‚ РЅР°
  * <http://www.gnu.org/licenses/>
  *
  * @package GoodsCatalog
@@ -32,90 +32,90 @@
  */
 
 /**
- * Основной класс плагина
+ * РћСЃРЅРѕРІРЅРѕР№ РєР»Р°СЃСЃ РїР»Р°РіРёРЅР°
  *
  * @package GoodsCatalog
  */
 class GoodsCatalog extends ContentPlugin
 {
 	/**
-	 * Версия плагина
+	 * Р’РµСЂСЃРёСЏ РїР»Р°РіРёРЅР°
 	 * @var string
 	 */
 	public $version = '${product.version}';
 
 	/**
-	 * Требуемая версия ядра
+	 * РўСЂРµР±СѓРµРјР°СЏ РІРµСЂСЃРёСЏ СЏРґСЂР°
 	 * @var string
 	 */
-	public $kernel = '2.16';
+	public $kernel = '3.00b';
 
 	/**
-	 * Название плагина
+	 * РќР°Р·РІР°РЅРёРµ РїР»Р°РіРёРЅР°
 	 * @var string
 	 */
-	public $title = 'Каталог товаров';
+	public $title = 'РљР°С‚Р°Р»РѕРі С‚РѕРІР°СЂРѕРІ';
 
 	/**
-	 * Описание плагина
+	 * РћРїРёСЃР°РЅРёРµ РїР»Р°РіРёРЅР°
 	 * @var string
 	 */
-	public $description = 'Простой каталог товаров';
+	public $description = 'РџСЂРѕСЃС‚РѕР№ РєР°С‚Р°Р»РѕРі С‚РѕРІР°СЂРѕРІ';
 
 	/**
-	 * Настройки плагина
+	 * РќР°СЃС‚СЂРѕР№РєРё РїР»Р°РіРёРЅР°
 	 *
 	 * @var array
 	 */
 	public $settings = array(
-		// Кол-во товаров на странице
+		// РљРѕР»-РІРѕ С‚РѕРІР°СЂРѕРІ РЅР° СЃС‚СЂР°РЅРёС†Рµ
 		'goodsPerPage' => 10,
 
-		/* Логотип */
-		// Использовать логотип
+		/* Р›РѕРіРѕС‚РёРї */
+		// РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р»РѕРіРѕС‚РёРї
 		'logoEnabled' => false,
-		// Положение логотипа
-		'logoPosition' => 'BL', // Значения: TL, TR, BL, Br. T - верх, B - низ, L - лево, R - право.
-		// Вертикальный отступ от края в пикселах
+		// РџРѕР»РѕР¶РµРЅРёРµ Р»РѕРіРѕС‚РёРїР°
+		'logoPosition' => 'BL', // Р—РЅР°С‡РµРЅРёСЏ: TL, TR, BL, Br. T - РІРµСЂС…, B - РЅРёР·, L - Р»РµРІРѕ, R - РїСЂР°РІРѕ.
+		// Р’РµСЂС‚РёРєР°Р»СЊРЅС‹Р№ РѕС‚СЃС‚СѓРї РѕС‚ РєСЂР°СЏ РІ РїРёРєСЃРµР»СЏС…
 		'logoVPadding' => 10,
-		// Горизонтальный отступ от края в пикселах
+		// Р“РѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅС‹Р№ РѕС‚СЃС‚СѓРї РѕС‚ РєСЂР°СЏ РІ РїРёРєСЃРµР»СЏС…
 		'logoHPadding' => 10,
 
-		// Использовать основную фотографию
+		// РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РѕСЃРЅРѕРІРЅСѓСЋ С„РѕС‚РѕРіСЂР°С„РёСЋ
 		'mainPhotoEnabled' => false,
 
-		// Использовать дополнительные фотографии
+		// РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ С„РѕС‚РѕРіСЂР°С„РёРё
 		'extPhotosEnabled' => false,
 
-		/* Фотографии */
+		/* Р¤РѕС‚РѕРіСЂР°С„РёРё */
 		'photoMaxWidth' => 800,
 		'photoMaxHeight' => 600,
 
-		/* Миниатюры */
+		/* РњРёРЅРёР°С‚СЋСЂС‹ */
 		'thumbWidth' => 200,
 		'thumbHeight' => 150,
 
-		// Использовать бренды
+		// РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ Р±СЂРµРЅРґС‹
 		'brandsEnabled' => false,
 
-		/* Логотип бренда */
+		/* Р›РѕРіРѕС‚РёРї Р±СЂРµРЅРґР° */
 		'brandLogoMaxWidth' => 300,
 		'brandLogoMaxHeight' => 300,
 
-		// Использовать Спецпредложения
+		// РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РЎРїРµС†РїСЂРµРґР»РѕР¶РµРЅРёСЏ
 		'specialsEnabled' => false
 	);
 
 	/**
-	 * Объект-помощник
+	 * РћР±СЉРµРєС‚-РїРѕРјРѕС‰РЅРёРє
 	 *
-	 * @var GoodsCatalogHelper
+	 * @var GoodsCatalog_Helper
 	 * @since 1.00
 	 */
 	private $helper;
 
 	/**
-	 * Конструктор
+	 * РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 	 *
 	 * @return GoodsCatalog
 	 *
@@ -125,15 +125,12 @@ class GoodsCatalog extends ContentPlugin
 	{
 		parent::__construct();
 
-		// Настраиваем автозагрузку классов
-		EresusClassAutoloader::add($this->dirCode . 'autoload.php');
-
 		$this->listenEvents('adminOnMenuRender');
 	}
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Возвращает URL директории файлов плагина
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ URL РґРёСЂРµРєС‚РѕСЂРёРё С„Р°Р№Р»РѕРІ РїР»Р°РіРёРЅР°
 	 *
 	 * @return string
 	 *
@@ -146,7 +143,7 @@ class GoodsCatalog extends ContentPlugin
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Возвращает путь к директории данных плагина
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ РїСѓС‚СЊ Рє РґРёСЂРµРєС‚РѕСЂРёРё РґР°РЅРЅС‹С… РїР»Р°РіРёРЅР°
 	 *
 	 * @return string
 	 *
@@ -159,7 +156,7 @@ class GoodsCatalog extends ContentPlugin
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Возвращает URL директории данных плагина
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ URL РґРёСЂРµРєС‚РѕСЂРёРё РґР°РЅРЅС‹С… РїР»Р°РіРёРЅР°
 	 *
 	 * @return string
 	 *
@@ -172,11 +169,13 @@ class GoodsCatalog extends ContentPlugin
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Действия при инсталляции
+	 * Р”РµР№СЃС‚РІРёСЏ РїСЂРё РёРЅСЃС‚Р°Р»Р»СЏС†РёРё
+	 *
+	 * @throws EresusRuntimeException
 	 *
 	 * @return void
 	 *
-	 * @see main/core/Plugin::install()
+	 * @see Plugin::install()
 	 * @since 1.00
 	 */
 	public function install()
@@ -186,21 +185,21 @@ class GoodsCatalog extends ContentPlugin
 		try
 		{
 			/*
-			 * Таблица товаров
+			 * РўР°Р±Р»РёС†Р° С‚РѕРІР°СЂРѕРІ
 			 */
 			$sql = "
-				`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
-				`section` int(10) unsigned NOT NULL COMMENT 'Привязка к разделу',
-				`active` bool NOT NULL default 0 COMMENT 'Активность',
-				`position` int(10) unsigned NOT NULL default '0' COMMENT 'Порядковый номер',
-				`article` varchar(255) NOT NULL default '' COMMENT 'Артикул',
-				`title` varchar(255) NOT NULL default '' COMMENT 'Название',
-				`about` text NOT NULL default '' COMMENT 'Краткое описание',
-				`description` longtext NOT NULL default '' COMMENT 'Описание',
-				`cost` double NOT NULL default 0 COMMENT 'Цена',
-				`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла основной фотографии',
-				`special` bool NOT NULL default 0 COMMENT 'Спецпредложение',
-				`brand` int(10) unsigned default NULL COMMENT 'Привязка к бренду',
+				`id` int(10) unsigned NOT NULL auto_increment COMMENT 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ',
+				`section` int(10) unsigned NOT NULL COMMENT 'РџСЂРёРІСЏР·РєР° Рє СЂР°Р·РґРµР»Сѓ',
+				`active` bool NOT NULL default 0 COMMENT 'РђРєС‚РёРІРЅРѕСЃС‚СЊ',
+				`position` int(10) unsigned NOT NULL default '0' COMMENT 'РџРѕСЂСЏРґРєРѕРІС‹Р№ РЅРѕРјРµСЂ',
+				`article` varchar(255) NOT NULL default '' COMMENT 'РђСЂС‚РёРєСѓР»',
+				`title` varchar(255) NOT NULL default '' COMMENT 'РќР°Р·РІР°РЅРёРµ',
+				`about` text NOT NULL default '' COMMENT 'РљСЂР°С‚РєРѕРµ РѕРїРёСЃР°РЅРёРµ',
+				`description` longtext NOT NULL default '' COMMENT 'РћРїРёСЃР°РЅРёРµ',
+				`cost` double NOT NULL default 0 COMMENT 'Р¦РµРЅР°',
+				`ext` varchar(4) NOT NULL default '' COMMENT 'Р Р°СЃС€РёСЂРµРЅРёРµ С„Р°Р№Р»Р° РѕСЃРЅРѕРІРЅРѕР№ С„РѕС‚РѕРіСЂР°С„РёРё',
+				`special` bool NOT NULL default 0 COMMENT 'РЎРїРµС†. РїСЂРµРґР»РѕР¶РµРЅРёРµ',
+				`brand` int(10) unsigned default NULL COMMENT 'РџСЂРёРІСЏР·РєР° Рє Р±СЂРµРЅРґСѓ',
 				PRIMARY KEY  (`id`),
 				KEY `admin_list` (`section`, `position`),
 				KEY `client_list` (`active`, `section`, `position`),
@@ -210,14 +209,14 @@ class GoodsCatalog extends ContentPlugin
 			$this->dbCreateTable($sql, 'goods');
 
 			/*
-			 * Таблица брендов
+			 * РўР°Р±Р»РёС†Р° Р±СЂРµРЅРґРѕРІ
 			 */
 			$sql = "
-				`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
-				`active` bool NOT NULL default 0 COMMENT 'Активность',
-				`title` varchar(255) NOT NULL default '' COMMENT 'Название',
-				`description` longtext NOT NULL default '' COMMENT 'Описание',
-				`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла логотипа',
+				`id` int(10) unsigned NOT NULL auto_increment COMMENT 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ',
+				`active` bool NOT NULL default 0 COMMENT 'РђРєС‚РёРІРЅРѕСЃС‚СЊ',
+				`title` varchar(255) NOT NULL default '' COMMENT 'РќР°Р·РІР°РЅРёРµ',
+				`description` longtext NOT NULL default '' COMMENT 'РћРїРёСЃР°РЅРёРµ',
+				`ext` varchar(4) NOT NULL default '' COMMENT 'Р Р°СЃС€РёСЂРµРЅРёРµ С„Р°Р№Р»Р° Р»РѕРіРѕС‚РёРїР°',
 				PRIMARY KEY  (`id`),
 				KEY `admin_list` (`title`),
 				KEY `client_list` (`active`, `title`)
@@ -225,14 +224,14 @@ class GoodsCatalog extends ContentPlugin
 			$this->dbCreateTable($sql, 'brands');
 
 			/*
-			 * Таблица дополнительных фотографий
+			 * РўР°Р±Р»РёС†Р° РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹С… С„РѕС‚РѕРіСЂР°С„РёР№
 			 */
 			$sql = "
-				`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
-				`active` bool NOT NULL default 0 COMMENT 'Активность',
-				`position` int(10) unsigned NOT NULL default '0' COMMENT 'Порядковый номер',
-				`good` int(10) unsigned default 0 COMMENT 'Привязка к товару',
-				`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла',
+				`id` int(10) unsigned NOT NULL auto_increment COMMENT 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ',
+				`active` bool NOT NULL default 0 COMMENT 'РђРєС‚РёРІРЅРѕСЃС‚СЊ',
+				`position` int(10) unsigned NOT NULL default '0' COMMENT 'РџРѕСЂСЏРґРєРѕРІС‹Р№ РЅРѕРјРµСЂ',
+				`good` int(10) unsigned default 0 COMMENT 'РџСЂРёРІСЏР·РєР° Рє С‚РѕРІР°СЂСѓ',
+				`ext` varchar(4) NOT NULL default '' COMMENT 'Р Р°СЃС€РёСЂРµРЅРёРµ С„Р°Р№Р»Р°',
 				PRIMARY KEY  (`id`),
 				KEY `admin_list` (`good`, `position`),
 				KEY `client_list` (`active`, `good`, `position`)
@@ -243,14 +242,14 @@ class GoodsCatalog extends ContentPlugin
 		{
 			$this->uninstall();
 			throw new EresusRuntimeException('Fail to create DB tables',
-				'Не удалось создать таблицы в базе данных. Подробная информация доступна в журнале.', $e);
+				'РќРµ СѓРґР°Р»РѕСЃСЊ СЃРѕР·РґР°С‚СЊ С‚Р°Р±Р»РёС†С‹ РІ Р±Р°Р·Рµ РґР°РЅРЅС‹С…. РџРѕРґСЂРѕР±РЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ РґРѕСЃС‚СѓРїРЅР° РІ Р¶СѓСЂРЅР°Р»Рµ.', $e);
 		}
 
-		/* Создаём директории данных */
+		/* РЎРѕР·РґР°С‘Рј РґРёСЂРµРєС‚РѕСЂРёРё РґР°РЅРЅС‹С… */
 		$this->mkdir('goods');
 		$this->mkdir('brands');
 
-		$ts = GoodsCatalogTemplateService::getInstance();
+		$ts = TemplateService::getInstance();
 
 		try
 		{
@@ -259,43 +258,44 @@ class GoodsCatalog extends ContentPlugin
 		catch (Exception $e)
 		{
 			$this->uninstall();
-			throw new EresusRuntimeException('Fail to install templates',
-				'Не удалось установить шаблоны плагина. Подробная информация доступна в журнале.', $e);
+			throw new EresusRuntimeException('Failed to install templates',
+				'РќРµ СѓРґР°Р»РѕСЃСЊ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ С€Р°Р±Р»РѕРЅС‹ РїР»Р°РіРёРЅР°. РџРѕРґСЂРѕР±РЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ РґРѕСЃС‚СѓРїРЅР° РІ Р¶СѓСЂРЅР°Р»Рµ.', $e);
 		}
 	}
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Действия при удалении плагина
+	 * Р”РµР№СЃС‚РІРёСЏ РїСЂРё СѓРґР°Р»РµРЅРёРё РїР»Р°РіРёРЅР°
+	 *
+	 * @throws EresusRuntimeException
 	 *
 	 * @return void
 	 *
-	 * @see main/core/Plugin::uninstall()
+	 * @see Plugin::uninstall()
 	 * @since 1.00
 	 */
 	public function uninstall()
 	{
-		$ts = GoodsCatalogTemplateService::getInstance();
+		$ts = TemplateService::getInstance();
 
 		try
 		{
-			$ts->uninstall($this->name);
+			$ts->uninstallTemplates($this->name);
 		}
 		catch (Exception $e)
 		{
-			throw new EresusRuntimeException('Fail to uninstall templates',
-				'Не удалось удалить шаблоны плагина. Подробная информация доступна в журнале.', $e);
+			throw new EresusRuntimeException('Failed to uninstall templates',
+				'РќРµ СѓРґР°Р»РѕСЃСЊ СѓРґР°Р»РёС‚СЊ С€Р°Р±Р»РѕРЅС‹ РїР»Р°РіРёРЅР°. РџРѕРґСЂРѕР±РЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ РґРѕСЃС‚СѓРїРЅР° РІ Р¶СѓСЂРЅР°Р»Рµ.', $e);
 		}
 
-		/* Удаляем директории данных */
+		/* РЈРґР°Р»СЏРµРј РґРёСЂРµРєС‚РѕСЂРёРё РґР°РЅРЅС‹С… */
 		$this->rmdir();
 
 		parent::uninstall();
 	}
-	//-----------------------------------------------------------------------------
 
 	/**
-	 * Диалог настроек
+	 * Р”РёР°Р»РѕРі РЅР°СЃС‚СЂРѕРµРє
 	 *
 	 * @return string
 	 *
@@ -303,38 +303,40 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function settings()
 	{
-		global $page;
+		/** @var TAdminUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		$page->linkStyles($this->urlCode . 'admin.css');
 
-		// Данные для подстановки в шаблон
+		Eresus_Kernel::app()->getPage()->linkJsLib('webshim');
+
+		// Р”Р°РЅРЅС‹Рµ РґР»СЏ РїРѕРґСЃС‚Р°РЅРѕРІРєРё РІ С€Р°Р±Р»РѕРЅ
 		$data = $this->getHelper()->prepareTmplData();
 		$data['logoExists'] = FS::isFile($this->getLogoFileName());
 
-		// Создаём экземпляр шаблона
+		// РЎРѕР·РґР°С‘Рј СЌРєР·РµРјРїР»СЏСЂ С€Р°Р±Р»РѕРЅР°
 		//$tmpl = $this->getHelper()->getAdminTemplate('settings.html');
-		$form = new EresusForm('ext/' . $this->name . '/templates/settings.html', LOCALE_CHARSET);
+		$form = new EresusForm('ext/' . $this->name . '/templates/settings.html');
 
 		foreach ($data as $key => $value)
 		{
 			$form->setValue($key, $value);
 		}
 
-		$ts = GoodsCatalogTemplateService::getInstance();
+		$ts = TemplateService::getInstance();
 
 		$this->settings['tmplList'] = $ts->getContents('goods-list.html', $this->name);
 		$this->settings['tmplItem'] = $ts->getContents('goods-item.html', $this->name);
 
-		// Компилируем шаблон и данные
+		// РљРѕРјРїРёР»РёСЂСѓРµРј С€Р°Р±Р»РѕРЅ Рё РґР°РЅРЅС‹Рµ
 		//$html = $tmpl->compile($data);
 		$html = $form->compile();
 
 		return $html;
 	}
-	//-----------------------------------------------------------------------------
 
 	/**
-	 * Дополнительные действия при сохранении настроек
+	 * Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РґРµР№СЃС‚РІРёСЏ РїСЂРё СЃРѕС…СЂР°РЅРµРЅРёРё РЅР°СЃС‚СЂРѕРµРє
 	 *
 	 * @return void
 	 *
@@ -343,7 +345,7 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function onSettingsUpdate()
 	{
-		$ts = GoodsCatalogTemplateService::getInstance();
+		$ts = TemplateService::getInstance();
 
 		$ts->setContents(arg('tmplList'), 'goods-list.html', $this->name);
 		$ts->setContents(arg('tmplItem'), 'goods-item.html', $this->name);
@@ -353,7 +355,7 @@ class GoodsCatalog extends ContentPlugin
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Загружает файл логотипа
+	 * Р—Р°РіСЂСѓР¶Р°РµС‚ С„Р°Р№Р» Р»РѕРіРѕС‚РёРїР°
 	 *
 	 * @return void
 	 *
@@ -370,7 +372,7 @@ class GoodsCatalog extends ContentPlugin
 		$info = getimagesize($tmpFile);
 		if ($info['mime'] != 'image/png')
 		{
-			ErrorMessage('Логотип должен быть в формате PNG. Загруженный файл имеет формат "' .
+			ErrorMessage('Р›РѕРіРѕС‚РёРї РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РІ С„РѕСЂРјР°С‚Рµ PNG. Р—Р°РіСЂСѓР¶РµРЅРЅС‹Р№ С„Р°Р№Р» РёРјРµРµС‚ С„РѕСЂРјР°С‚ "' .
 				$info['mime'] . '"');
 			return;
 		}
@@ -381,7 +383,7 @@ class GoodsCatalog extends ContentPlugin
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Возвращает имя файла логотипа
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ РёРјСЏ С„Р°Р№Р»Р° Р»РѕРіРѕС‚РёРїР°
 	 *
 	 * @return string
 	 *
@@ -394,9 +396,9 @@ class GoodsCatalog extends ContentPlugin
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Возвращает объект-помощник
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ РѕР±СЉРµРєС‚-РїРѕРјРѕС‰РЅРёРє
 	 *
-	 * @return GoodsCatalogHelper
+	 * @return GoodsCatalog_Helper
 	 *
 	 * @since 1.00
 	 */
@@ -404,15 +406,14 @@ class GoodsCatalog extends ContentPlugin
 	{
 		if (!$this->helper)
 		{
-			$this->helper = new GoodsCatalogHelper($this);
+			$this->helper = new GoodsCatalog_Helper($this);
 		}
 		return $this->helper;
 	}
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * (non-PHPdoc)
-	 * @see main/core/Plugin::mkdir()
+	 * @see Plugin::mkdir()
 	 * @since 1.00
 	 */
 	public function mkdir($name = '')
@@ -422,7 +423,7 @@ class GoodsCatalog extends ContentPlugin
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Добавляет пункт "Бренды" в меню "Расширения"
+	 * Р”РѕР±Р°РІР»СЏРµС‚ РїСѓРЅРєС‚ "Р‘СЂРµРЅРґС‹" РІ РјРµРЅСЋ "Р Р°СЃС€РёСЂРµРЅРёСЏ"
 	 *
 	 * @return void
 	 *
@@ -430,22 +431,24 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function adminOnMenuRender()
 	{
-		/* Добавляем пункт только если включена соответствующая опция */
+		/* Р”РѕР±Р°РІР»СЏРµРј РїСѓРЅРєС‚ С‚РѕР»СЊРєРѕ РµСЃР»Рё РІРєР»СЋС‡РµРЅР° СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰Р°СЏ РѕРїС†РёСЏ */
 		if ($this->settings['brandsEnabled'])
 		{
 			$menuItem = array(
 				'access'  => EDITOR,
 				'link'  => $this->name . '&ref=brands',
-				'caption'  => 'Бренды',
-				'hint'  => 'Управление брендами'
+				'caption'  => 'Р‘СЂРµРЅРґС‹',
+				'hint'  => 'РЈРїСЂР°РІР»РµРЅРёРµ Р±СЂРµРЅРґР°РјРё'
 			);
-			$GLOBALS['page']->addMenuItem($this->title, $menuItem);
+			/** @var TAdminUI $page */
+			$page = Eresus_Kernel::app()->getPage();
+			$page->addMenuItem($this->title, $menuItem);
 		}
 	}
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Возвращает контент дополнительных интерфейсов
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ РєРѕРЅС‚РµРЅС‚ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹С… РёРЅС‚РµСЂС„РµР№СЃРѕРІ
 	 *
 	 * @return string  HTML
 	 *
@@ -455,19 +458,19 @@ class GoodsCatalog extends ContentPlugin
 	{
 		if ($this->settings['brandsEnabled'] == false)
 		{
-			return ErrorBox('Функционал управления брендами отключен. ' .
-				'Вы можете включить его в <a href="admin.php?mod=plgmgr&id=' . $this->name .
-				'">настройках</a>.');
+			return ErrorBox('Р¤СѓРЅРєС†РёРѕРЅР°Р» СѓРїСЂР°РІР»РµРЅРёСЏ Р±СЂРµРЅРґР°РјРё РѕС‚РєР»СЋС‡РµРЅ. ' .
+				'Р’С‹ РјРѕР¶РµС‚Рµ РІРєР»СЋС‡РёС‚СЊ РµРіРѕ РІ <a href="admin.php?mod=plgmgr&id=' . $this->name .
+				'">РЅР°СЃС‚СЂРѕР№РєР°С…</a>.');
 		}
 
-		$ui = new GoodsCatalogBrandsAdminUI($this);
+		$ui = new GoodsCatalog_BrandsAdminUI($this);
 
 		return $ui->getHTML();
 	}
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Формирование HTML-кода АИ
+	 * Р¤РѕСЂРјРёСЂРѕРІР°РЅРёРµ HTML-РєРѕРґР° РђР
 	 *
 	 * @return string  HTML
 	 *
@@ -475,14 +478,14 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function adminRenderContent()
 	{
-		$ui = new GoodsCatalogGoodsAdminUI($this);
+		$ui = new GoodsCatalog_GoodsAdminUI($this);
 
 		return $ui->getHTML();
 	}
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Формирование HTML-кода КИ
+	 * Р¤РѕСЂРјРёСЂРѕРІР°РЅРёРµ HTML-РєРѕРґР° РљР
 	 *
 	 * @return string  HTML
 	 *
@@ -490,7 +493,7 @@ class GoodsCatalog extends ContentPlugin
 	 */
 	public function clientRenderContent()
 	{
-		$ui = new GoodsCatalogGoodsClientUI($this);
+		$ui = new GoodsCatalog_GoodsClientUI($this);
 
 		return $ui->getHTML();
 	}

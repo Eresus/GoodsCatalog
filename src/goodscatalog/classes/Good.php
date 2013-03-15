@@ -43,21 +43,20 @@
  * @property       string                   $title        Название
  * @property       string                   $about        Краткое описание
  * @property       string                   $description  Описание
- * @property       GoodsCatalogMoney        $cost         Цена
+ * @property       GoodsCatalog_Money        $cost         Цена
  * @property-read  string                   $photoPath    Путь к основной фотографии
  * @property-read  string                   $photoURL     URL основной фотографии
  * @property-write string                   $photo        Свойство для загрузки основной фотографии
  * @property-read  string                   $thumbPath    Путь к миниатюре
- * @property-read  string                   $thumbURL     URL иниатюры
- * @property       bool                     $special      Спецпредложение
- * @property-read  GoodsCatalogBrand        $brand        Бренд или null
- * @property-write GoodsCatalogBrand|int    $brand        Бренд или его идентификатор
+ * @property-read  string                   $thumbURL     URL миниатюры
+ * @property       bool                     $special      Спец. предложение
+ * @property       GoodsCatalog_Brand|int   $brand        Бренд или его идентификатор
  * @property-read  array(GoodsCatalogPhoto) $photos       Дополнительные фотографии
  * @property-read  string                   $clientURL    URL страницы товара в КИ
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
+class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
 {
 	/**
 	 * Свойство для отслеживания изменения раздела
@@ -157,8 +156,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractActiveRecord::delete()
+	 * @see GoodsCatalog_AbstractActiveRecord::delete()
 	 */
 	public function delete()
 	{
@@ -273,7 +271,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 */
 	protected function setCost($value)
 	{
-		$cost = new GoodsCatalogMoney($value);
+		$cost = new GoodsCatalog_Money($value);
 		$this->setProperty('cost', $cost->getAmount());
 	}
 	//-----------------------------------------------------------------------------
@@ -281,13 +279,13 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	/**
 	 * Геттер свойства $cost
 	 *
-	 * @return GoodsCatalogMoney
+	 * @return GoodsCatalog_Money
 	 *
 	 * @since 1.00m
 	 */
 	protected function getCost()
 	{
-		$cost = new GoodsCatalogMoney($this->getProperty('cost'));
+		$cost = new GoodsCatalog_Money($this->getProperty('cost'));
 		return strval($cost);
 	}
 	//-----------------------------------------------------------------------------
@@ -387,7 +385,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	/**
 	 * Геттер свойства $brand
 	 *
-	 * @return GoodsCatalogBrand
+	 * @return GoodsCatalog_Brand
 	 *
 	 * @since 1.00
 	 */
@@ -395,12 +393,11 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	{
 		try
 		{
-			$brand = new GoodsCatalogBrand($this->getProperty('brand'));
+			$brand = new GoodsCatalog_Brand($this->getProperty('brand'));
 		}
 		catch (DomainException $e)
 		{
 			return null;
-			$e = $e; // PHPMD hack
 		}
 
 		return $brand;
@@ -410,7 +407,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	/**
 	 * Сеттер свойства $brand
 	 *
-	 * @param int|GoodsCatalogBrand $value
+	 * @param int|GoodsCatalog_Brand $value
 	 *
 	 * @return void
 	 *
@@ -418,7 +415,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 */
 	protected function setBrand($value)
 	{
-		if ($value instanceof GoodsCatalogBrand)
+		if ($value instanceof GoodsCatalog_Brand)
 		{
 			$value = $value->id;
 		}
@@ -454,7 +451,7 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 */
 	protected function getPhotos()
 	{
-		return GoodsCatalogPhoto::find($this->id);
+		return GoodsCatalog_Photo::find($this->id);
 	}
 	//-----------------------------------------------------------------------------
 
@@ -467,7 +464,8 @@ class GoodsCatalogGood extends GoodsCatalogAbstractActiveRecord
 	 */
 	protected function getClientURL()
 	{
-		$page = $GLOBALS['page'];
+		/** @var TClientUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		$url = $page->clientURL($this->section);
 		if ($page instanceof TClientUI && $page->subpage)

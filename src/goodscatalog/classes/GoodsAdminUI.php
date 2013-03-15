@@ -37,19 +37,19 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
+class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
 {
 	/**
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractAdminUI::getActiveRecordClass()
+	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractAdminUI::getActiveRecordClass()
 	 */
 	protected function getActiveRecordClass()
 	{
-		return 'GoodsCatalogGood';
+		return 'GoodsCatalog_Good';
 	}
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractAdminUI::extendedActions()
+	 * @see src/goodscatalog/classes/GoodsCatalog_AbstractAdminUI::extendedActions()
 	 */
 	protected function extendedActions()
 	{
@@ -67,6 +67,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 				return false;
 			break;
 		}
+		return true;
 	}
 	//-----------------------------------------------------------------------------
 
@@ -79,7 +80,8 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	 */
 	protected function renderList()
 	{
-		global $page;
+		/** @var TAdminUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
@@ -97,8 +99,8 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		$maxCount = $this->plugin->settings['goodsPerPage'];
 		$startFrom = ($pg - 1) * $maxCount;
 
-		$data['goods'] = GoodsCatalogGood::find($data['section'], $maxCount, $startFrom);
-		$totalPages = ceil(GoodsCatalogGood::count($data['section']) / $maxCount);
+		$data['goods'] = GoodsCatalog_Good::find($data['section'], $maxCount, $startFrom);
+		$totalPages = ceil(GoodsCatalog_Good::count($data['section']) / $maxCount);
 		if ($totalPages > 1)
 		{
 			$data['pagination'] = new PaginationHelper($totalPages, $pg, $page->url(array('pg' => '%s')));
@@ -130,7 +132,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
 		$data['section'] = arg('section', 'int');
-		$data['brands'] = GoodsCatalogBrand::find(null, null, true);
+		$data['brands'] = GoodsCatalog_Brand::find(null, null, true);
 
 		// Создаём экземпляр шаблона
 		$tmpl = $this->plugin->getHelper()->getAdminTemplate('goods-add.html');
@@ -152,7 +154,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	 */
 	protected function addItem()
 	{
-		$good = new GoodsCatalogGood();
+		$good = new GoodsCatalog_Good();
 		$good->section = arg('section', 'int');
 		$good->article = arg('article');
 		$good->title = arg('title');
@@ -180,7 +182,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		catch (Exception $e)
 		{
 			Core::logException($e);
-			ErrorMessage(iconv('utf-8', 'cp1251', 'Произошла внутренняя ошибка при добавлении товара.'));
+			ErrorMessage('Произошла внутренняя ошибка при добавлении товара.');
 		}
 
 		/*
@@ -204,7 +206,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 
 		try
 		{
-			$good = new GoodsCatalogGood($id);
+			$good = new GoodsCatalog_Good($id);
 
 			try
 			{
@@ -212,8 +214,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			}
 			catch (Exception $e)
 			{
-				ErrorMessage(iconv('utf-8', 'cp1251', 'Не удалось удалить товар: ') .
-					$e->getMessage());
+				ErrorMessage('Не удалось удалить товар: ' . $e->getMessage());
 			}
 		}
 		catch (DomainException $e)
@@ -234,18 +235,19 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	 */
 	protected function renderEditDialog()
 	{
-		global $page;
+		/** @var TAdminUI $page */
+		$page = Eresus_Kernel::app()->getPage();
 
 		$id = arg('id', 'int');
 
 		try
 		{
-			$good = new GoodsCatalogGood($id);
+			$good = new GoodsCatalog_Good($id);
 		}
 		catch (DomainException $e)
 		{
 			$this->reportBadURL($e);
-			return;
+			return '';
 		}
 
 		if ($this->plugin->settings['extPhotosEnabled'])
@@ -260,8 +262,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		 * Основные свойства
 		 */
 
-		$form = new EresusForm('ext/' . $this->plugin->name . '/templates/goods-edit-form.html' ,
-			LOCALE_CHARSET);
+		$form = new EresusForm('ext/' . $this->plugin->name . '/templates/goods-edit-form.html');
 
 		// Данные для подстановки в шаблон
 		$data = $this->plugin->getHelper()->prepareTmplData();
@@ -271,7 +272,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		}
 
 		$form->setValue('good', $good);
-		$form->setValue('brands', GoodsCatalogBrand::find(null, null, true));
+		$form->setValue('brands', GoodsCatalog_Brand::find(null, null, true));
 
 		$form->setValue('sections', $this->buildSectionTree());
 
@@ -280,7 +281,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		 */
 		if ($this->plugin->settings['extPhotosEnabled'])
 		{
-			$form->setValue('photos', GoodsCatalogPhoto::find($good->id));
+			$form->setValue('photos', GoodsCatalog_Photo::find($good->id));
 
 			/* Шаблоны адресов действий */
 			$form->setValue('urlEdit', str_replace('&', '&amp;', $page->url(array('photo_id' => '%s'))));
@@ -317,7 +318,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		$id = arg('update', 'int');
 		try
 		{
-			$good = new GoodsCatalogGood($id);
+			$good = new GoodsCatalog_Good($id);
 		}
 		catch (DomainException $e)
 		{
@@ -347,7 +348,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 		catch (Exception $e)
 		{
 			Core::logException($e);
-			ErrorMessage(iconv('utf-8', 'cp1251', 'Произошла внутренняя ошибка при изменении товара.'));
+			ErrorMessage('Произошла внутренняя ошибка при изменении товара.');
 		}
 
 		HTTP::goback();
@@ -363,7 +364,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	{
 		try
 		{
-			$good = new GoodsCatalogGood(arg('up', 'int'));
+			$good = new GoodsCatalog_Good(arg('up', 'int'));
 		}
 		catch (DomainException $e)
 		{
@@ -384,7 +385,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	{
 		try
 		{
-			$good = new GoodsCatalogGood(arg('down', 'int'));
+			$good = new GoodsCatalog_Good(arg('down', 'int'));
 		}
 		catch (DomainException $e)
 		{
@@ -408,7 +409,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	 */
 	private function buildSectionTree($root = 0, $level = 0)
 	{
-		global $Eresus;
+		$Eresus = Eresus_CMS::getLegacyKernel();
 
 		$sections = $Eresus->sections->children($root);
 		$result = array();
@@ -433,9 +434,9 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	/**
 	 * Действия с дополнительными фотографиями
 	 *
-	 * @param GoodsCatalogGood $good
+	 * @param GoodsCatalog_Good $good
 	 *
-	 * @return string|false
+	 * @return string|bool
 	 */
 	private function photoActions($good)
 	{
@@ -446,19 +447,23 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			break;
 
 			case arg('action') == 'photo_insert':
-				return $this->addPhoto($good);
+				$this->addPhoto($good);
+				return true;
 			break;
 
 			case arg('photo_up'):
-				return $this->movePhotoUp();
+				$this->movePhotoUp();
+				return true;
 			break;
 
 			case arg('photo_down'):
-				return $this->movePhotoDown();
+				$this->movePhotoDown();
+				return true;
 			break;
 
 			case arg('photo_delete'):
-				return $this->deletePhoto();
+				$this->deletePhoto();
+				return true;
 			break;
 
 			default:
@@ -471,7 +476,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	/**
 	 * Возвращает диалог добавления дополнительной фотографии
 	 *
-	 * @param GoodsCatalogGood $good
+	 * @param GoodsCatalog_Good $good
 	 */
 	private function renderPhotoAddDialog($good)
 	{
@@ -492,7 +497,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	/**
 	 * Добавляет дополнительную фотографию
 	 *
-	 * @param GoodsCatalogGood $good
+	 * @param GoodsCatalog_Good $good
 	 *
 	 * @return void
 	 *
@@ -512,7 +517,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			{
 				continue;
 			}
-			$photo = new GoodsCatalogPhoto();
+			$photo = new GoodsCatalog_Photo();
 			$photo->good = $good->id;
 			$photo->photo = $name; // $_FILES[$name];
 			try
@@ -526,8 +531,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			catch (Exception $e)
 			{
 				Core::logException($e);
-				ErrorMessage(iconv('utf-8', 'cp1251',
-					'Произошла внутренняя ошибка при добавлении фотографии.'));
+				ErrorMessage('Произошла внутренняя ошибка при добавлении фотографии.');
 			}
 		}
 
@@ -544,7 +548,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	{
 		try
 		{
-			$photo = new GoodsCatalogPhoto(arg('photo_up', 'int'));
+			$photo = new GoodsCatalog_Photo(arg('photo_up', 'int'));
 		}
 		catch (DomainException $e)
 		{
@@ -565,7 +569,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 	{
 		try
 		{
-			$photo = new GoodsCatalogPhoto(arg('photo_down', 'int'));
+			$photo = new GoodsCatalog_Photo(arg('photo_down', 'int'));
 		}
 		catch (DomainException $e)
 		{
@@ -590,7 +594,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 
 		try
 		{
-			$photo = new GoodsCatalogPhoto($id);
+			$photo = new GoodsCatalog_Photo($id);
 
 			try
 			{
@@ -598,8 +602,7 @@ class GoodsCatalogGoodsAdminUI extends GoodsCatalogAbstractAdminUI
 			}
 			catch (Exception $e)
 			{
-				ErrorMessage(iconv('utf-8', 'cp1251', 'Не удалось удалить фотографию: ') .
-					$e->getMessage());
+				ErrorMessage('Не удалось удалить фотографию: ' . $e->getMessage());
 			}
 		}
 		catch (DomainException $e)

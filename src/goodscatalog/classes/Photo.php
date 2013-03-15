@@ -36,7 +36,7 @@
  * ActiveRecord фотографии
  *
  * @property       int                   $id           Идентификатор
- * @property       GoodsCatalogGood      $good         Товар
+ * @property       GoodsCatalog_Good     $good         Товар
  * @property       int                   $position     Порядковый номер
  * @property-read  string                $photoPath    Путь к основной фотографии
  * @property-read  string                $photoURL     URL основной фотографии
@@ -44,17 +44,18 @@
  * @property-write string                $photo        Свойство для загрузки основной фотографии
  * @property-read  string                $thumbPath    Путь к миниатюре
  * @property-read  string                $thumbURL     URL миниатюры
+ * @property       string                $ext          Расширение файла основной фотографии
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
+class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
 {
 	/**
 	 * Конструктор
 	 *
 	 * @param int $id  Идентификатор
 	 *
-	 * @return GoodsCatalogPhoto
+	 * @return GoodsCatalog_Photo
 	 *
 	 * @since 1.00
 	 */
@@ -131,8 +132,7 @@ class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractActiveRecord::delete()
+	 * @see GoodsCatalog_AbstractActiveRecord::delete()
 	 */
 	public function delete()
 	{
@@ -344,7 +344,7 @@ class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
 	/**
 	 * Геттер свойства $good
 	 *
-	 * @return GoodsCatalogGood
+	 * @return GoodsCatalog_Good
 	 *
 	 * @since 1.00
 	 */
@@ -352,12 +352,11 @@ class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
 	{
 		try
 		{
-			$good = new GoodsCatalogGood($this->getProperty('good'));
+			$good = new GoodsCatalog_Good($this->getProperty('good'));
 		}
 		catch (DomainException $e)
 		{
 			return null;
-			$e = $e; // PHPMD hack
 		}
 
 		return $good;
@@ -367,7 +366,7 @@ class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
 	/**
 	 * Сеттер свойства $good
 	 *
-	 * @param int|GoodsCatalogGood $value
+	 * @param int|GoodsCatalog_Good $value
 	 *
 	 * @return void
 	 *
@@ -375,7 +374,7 @@ class GoodsCatalogPhoto extends GoodsCatalogAbstractActiveRecord
 	 */
 	protected function setGood($value)
 	{
-		if ($value instanceof GoodsCatalogGood)
+		if ($value instanceof GoodsCatalog_Good)
 		{
 			$value = $value->id;
 		}

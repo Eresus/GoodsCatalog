@@ -18,7 +18,6 @@
 	<!-- Исходные файлы -->
 	<fileset dir="src" id="files.sources">
 		<include name="**" />
-		<exclude name=".svn" />
 	</fileset>
 	
 		<!-- Исходные файлы PHP -->
@@ -39,11 +38,15 @@
 
 		<mkdir dir="${logs.dir}" />
 		<exec
-			command="phpunit --log-junit ${logs.dir}/phpunit.xml --coverage-clover ${logs.dir}/phpunit.coverage.xml --coverage-html ${phpunit.coverage.html} ${project.basedir}/tests/phpunit/AllTests.php"
-			checkreturn="true"
-			logoutput="true"
-		/>
-		 
+				command="phpunit
+				--log-junit ${logs.dir}/phpunit.xml
+				--coverage-clover ${logs.dir}/phpunit.coverage.xml
+				--coverage-html ${phpunit.coverage.html}
+				--configuration ${project.basedir}/tests/phpunit/phpunit.xml"
+				checkreturn="true"
+				logoutput="true"
+				/>
+
 	</target>
 
 	<!--
@@ -70,19 +73,30 @@
 	=====================================================================
 	-->
 	<target name="checkstyle" description="Check for coding standards">
-	
+
 		<mkdir dir="${logs.dir}" />
+
+		<if>
+			<equals arg1="${phpcs.format}" arg2="checkstyle" />
+			<then>
+				<property name="phpcs.file.extension" value="xml" />
+			</then>
+			<else>
+				<property name="phpcs.file.extension" value="${phpcs.format}" />
+			</else>
+		</if>
+
 		<phpcodesniffer
-			standard="Eresus"
-			haltonerror="false"
-		>
+				standard="Eresus"
+				haltonerror="false"
+				>
 			<formatter
-				type="${phpcs.format}"
-				outfile="${logs.dir}/phpcs.${phpcs.format}"
-			/>
+					type="${phpcs.format}"
+					outfile="${logs.dir}/phpcs.${phpcs.file.extension}"
+					/>
 			<fileset refid="files.sources.php" />
 		</phpcodesniffer>
-		
+
 	</target>
 
 	<!--
@@ -125,20 +139,12 @@
 	-->
 	<target name="docs" description="Generate documentation">
 
-		<delete dir="${docs.dir}" includeemptydirs="true" failonerror="true" />
+		<delete dir="${docs.dir}" includeemptydirs="true" failonerror="false" />
+		<mkdir dir="${docs.dir}"/>
 
-		<phpdoc title="GoodsCatalog API"
-		  destdir="${docs.dir}"
-		  sourcecode="no"
-			parseprivate="false"
-		  output="${docs.converter}">
+		<phpdoc2 title="GoodsCatalog API" destdir="${docs.dir}">
 		   <fileset refid="files.sources" />
-		   <projdocfileset dir=".">
-		      <include name="README" />
-		      <include name="INSTALL" />
-		      <include name="CHANGELOG" />
-		   </projdocfileset>
-		</phpdoc>
+		</phpdoc2>
 
 	</target>
 

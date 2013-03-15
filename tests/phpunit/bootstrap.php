@@ -32,15 +32,7 @@
  * $Id$
  */
 
-if (class_exists('PHP_CodeCoverage_Filter', false))
-{
-	PHP_CodeCoverage_Filter::getInstance()->addFileToBlacklist(__FILE__);
-}
-else
-{
-	PHPUnit_Util_Filter::addFileToFilter(__FILE__);
-}
-
+define('TESTS_SRC_DIR', realpath(__DIR__ . '/../../src'));
 
 /**
  * Фасад к моку для эмуляции статичных методов
@@ -289,3 +281,8 @@ class ezcQuerySelect
 	const ASC = 'ASC';
 	const DESC = 'DESC';
 }
+
+class EresusRuntimeException extends RuntimeException {}
+
+class Eresus_CMS extends MockFacade {}
+class Eresus_Kernel extends MockFacade {}

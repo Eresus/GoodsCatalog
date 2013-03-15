@@ -2,7 +2,7 @@
 /**
  * Каталог товаров
  *
- * Абстрактная реализация паттерна ActiveRecord
+ * Абстрактная реализация шаблона ActiveRecord
  *
  * @version ${product.version}
  *
@@ -33,13 +33,13 @@
 
 
 /**
- * Абстрактная реализация паттерна ActiveRecord
+ * Абстрактная реализация шаблона ActiveRecord
  *
  * @package GoodsCatalog
  *
  * @since 1.00
  */
-abstract class GoodsCatalogAbstractActiveRecord
+abstract class GoodsCatalog_AbstractActiveRecord
 {
 	/**
 	 * Описание файла для загрузки - элемент из массива $_FILES
@@ -110,7 +110,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 *                 соответствующего объекта. Иначе этот объект будет считаться новым (см.
 	 *                 {@link isNew()})
 	 *
-	 * @return GoodsCatalogAbstractActiveRecord
+	 * @return GoodsCatalog_AbstractActiveRecord
 	 *
 	 * @uses loadById
 	 * @uses eresus_log
@@ -193,11 +193,11 @@ abstract class GoodsCatalogAbstractActiveRecord
 	/**
 	 * Возвращает полное имя таблицы БД (для статических вызовов)
 	 *
-	 * @param string $className  Имя класса, потомка GoodsCatalogAbstractActiveRecord, для которого
+	 * @param string $className  Имя класса, потомка GoodsCatalog_AbstractActiveRecord, для которого
 	 *                           надо получить имя таблицы
 	 * @return string
 	 *
-	 * @throws EresusTypeException если класс $className не потомок GoodsCatalogAbstractActiveRecord
+	 * @throws EresusTypeException если класс $className не потомок GoodsCatalog_AbstractActiveRecord
 	 * @uses getDbTable
 	 * @since 1.00
 	 */
@@ -205,7 +205,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	{
 		$stub = new $className();
 
-		if (!($stub instanceof GoodsCatalogAbstractActiveRecord))
+		if (!($stub instanceof GoodsCatalog_AbstractActiveRecord))
 		{
 			throw new EresusTypeException();
 		}
@@ -218,7 +218,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 * "Магический" метод для доступа к свойствам объекта
 	 *
 	 * Если есть метод, имя которого состоит из префикса "get" и имени свойства, вызывает этот
-	 * метод для полчения значения. В противном случае вызывает {@link getProperty}.
+	 * метод для получения значения. В противном случае вызывает {@link getProperty}.
 	 *
 	 * @param string $key  Имя поля
 	 *
@@ -480,7 +480,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Возвращает экземпляр основного класса плгина
+	 * Возвращает экземпляр основного класса плагина
 	 *
 	 * @param GoodsCatalog $plugin  Использовать этот экземпляр вместо автоопределения.
 	 *                              Для модульных тестов.
@@ -498,7 +498,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 
 		if (!self::$plugin)
 		{
-			self::$plugin = $GLOBALS['Eresus']->plugins->load('goodscatalog');
+			self::$plugin = Eresus_CMS::getLegacyKernel()->plugins->load('goodscatalog');
 		}
 		return self::$plugin;
 	}
@@ -528,7 +528,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 		}
 
 		/*
-		 * Фильтруем значение, присваеваемое свойству, в соответствии с типом этого свойства
+		 * Фильтруем значение, присваиваемое свойству, в соответствии с типом этого свойства
 		 */
 		switch ($attrs[$key]['type'])
 		{
@@ -635,7 +635,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 * Проверяет, поддерживается ли формат изображения файла
 	 *
 	 * Список поддерживаемых форматов задан в приватном свойстве $supportedFormats.
-	 * Если формат не поддерживается будет врошено исключение EresusRuntimeException.
+	 * Если формат не поддерживается будет вброшено исключение EresusRuntimeException.
 	 *
 	 * @param string $mime  Тип MIME, который надо проверить
 	 *
@@ -649,7 +649,7 @@ abstract class GoodsCatalogAbstractActiveRecord
 		if (!in_array($mime, $this->supportedFormats))
 		{
 			throw new EresusRuntimeException("Unsupported file type: $mime",
-				iconv('utf-8', 'cp1251', "Неподдерживаемый тип файла: $mime."));
+				"Неподдерживаемый тип файла: $mime.");
 		}
 	}
 	//-----------------------------------------------------------------------------
@@ -674,12 +674,10 @@ abstract class GoodsCatalogAbstractActiveRecord
 		{
 			case UPLOAD_ERR_INI_SIZE:
 			case UPLOAD_ERR_FORM_SIZE:
-				throw new RuntimeException(iconv('utf-8', 'cp1251',
-					'Размер загружаемого файла превышает максимально допустимый'));
+				throw new RuntimeException('Размер загружаемого файла превышает максимально допустимый');
 			break;
 			case UPLOAD_ERR_PARTIAL:
-				throw new RuntimeException(iconv('utf-8', 'cp1251',
-					'Во время загрузки файла произошёл сбой. Попробуйте ещё раз'));
+				throw new RuntimeException('Во время загрузки файла произошёл сбой. Попробуйте ещё раз');
 				break;
 		}
 
@@ -742,6 +740,10 @@ abstract class GoodsCatalogAbstractActiveRecord
 	 */
 	private function filterString($value, $attrs)
 	{
+		/*
+		 * Функции mb_* здесь не используются, т. к. мы работаем с байтами, а не символами.
+		 * И да, при этом substr может обрезать символ «по середине».
+		 */
 		if (isset($attrs['maxlength']) && strlen($value) > $attrs['maxlength'])
 		{
 			$value = substr($value, 0, $attrs['maxlength']);

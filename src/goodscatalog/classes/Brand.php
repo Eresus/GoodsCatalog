@@ -39,13 +39,14 @@
  * @property       bool   $active       Активность бренда
  * @property       string $title        Название
  * @property       string $description  Описание бренда
+ * @property       string $ext          Расширение файла логотипа
  * @property-read  string $logoPath     Путь к файлу логотипа
  * @property-read  string $logoURL      URL файла логотипа
  * @property-write string $logo         Свойство для загрузки нового логотипа
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
+class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
 {
 	/**
 	 * Метод возвращает имя таблицы БД
@@ -92,8 +93,7 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * (non-PHPdoc)
-	 * @see src/goodscatalog/classes/GoodsCatalogAbstractActiveRecord::delete()
+	 * @see GoodsCatalog_AbstractActiveRecord::delete()
 	 */
 	public function delete()
 	{
@@ -147,7 +147,7 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 	 * @param int   $offset      Пропустить $offset первых брендов
 	 * @param bool  $activeOnly  Искать только активные бренды
 	 *
-	 * @return array(GoodsCatalogBrand)  Массив объектов GoodsCatalogBrand
+	 * @return array(GoodsCatalog_Brand)  Массив объектов GoodsCatalog_Brand
 	 *
 	 * @uses eresus_log()
 	 * @uses DB::getHandler()
@@ -262,7 +262,7 @@ class GoodsCatalogBrand extends GoodsCatalogAbstractActiveRecord
 		{
 			foreach ($raw as $item)
 			{
-				$image = new GoodsCatalogBrand();
+				$image = new GoodsCatalog_Brand();
 				$image->loadFromArray($item);
 				$result []= $image;
 			}

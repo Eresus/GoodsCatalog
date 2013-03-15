@@ -39,7 +39,7 @@
  *
  * @package GoodsCatalog
  */
-class GoodsCatalogHelper
+class GoodsCatalog_Helper
 {
 	/**
 	 * Объект плагина
@@ -53,7 +53,7 @@ class GoodsCatalogHelper
 	 *
 	 * @param GoodsCatalog $plugin
 	 *
-	 * @return GoodsCatalogHelper
+	 * @return GoodsCatalog_Helper
 	 */
 	public function __construct(GoodsCatalog $plugin)
 	{
@@ -84,7 +84,8 @@ class GoodsCatalogHelper
 	 */
 	public function linkJQuery()
 	{
-		global $Eresus, $page;
+		$page = Eresus_Kernel::app()->getPage();
+		$Eresus = Eresus_CMS::getLegacyKernel();
 
 		$page->linkScripts($Eresus->root . 'core/jquery/jquery.min.js');
 	}
@@ -99,7 +100,8 @@ class GoodsCatalogHelper
 	 */
 	public function linkJQueryUI()
 	{
-		global $Eresus, $page;
+		$page = Eresus_Kernel::app()->getPage();
+		$Eresus = Eresus_CMS::getLegacyKernel();
 
 		$page->linkScripts($Eresus->root . 'core/jquery/jquery-ui.min.js');
 	}
@@ -132,7 +134,7 @@ class GoodsCatalogHelper
 	 */
 	public function getClientTemplate($name)
 	{
-		$ts = GoodsCatalogTemplateService::getInstance();
+		$ts = TemplateService::getInstance();
 		$tmpl = $ts->getTemplate($name, $this->plugin->name);
 
 		return $tmpl;
@@ -142,7 +144,7 @@ class GoodsCatalogHelper
 	/**
 	 * Возвращает массив данных для шаблона.
 	 *
-	 * Массив предварительно наполняется частоиспользуемыми переменными.
+	 * Массив предварительно наполняется часто используемыми переменными.
 	 *
 	 * @return array
 	 *
@@ -152,8 +154,8 @@ class GoodsCatalogHelper
 	{
 		$data = array();
 		$data['this'] = $this->plugin;
-		$data['page'] = $GLOBALS['page'];
-		$data['Eresus'] = $GLOBALS['Eresus'];
+		$data['page'] = Eresus_Kernel::app()->getPage();
+		$data['Eresus'] = Eresus_CMS::getLegacyKernel();
 		return $data;
 	}
 	//-----------------------------------------------------------------------------
