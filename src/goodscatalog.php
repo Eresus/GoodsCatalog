@@ -498,5 +498,22 @@ class GoodsCatalog extends ContentPlugin
 		return $ui->getHTML();
 	}
 	//-----------------------------------------------------------------------------
-
+	
+	/**
+	 * Удаляет товары при удалении раздела
+	 *
+	 * @return void
+	 *
+	 * @since 2.00
+	 */
+	public function onSectionDelete($id) 
+	{
+		set_time_limit(0);
+		$goods = GoodsCatalogGood::find($id);
+		foreach ($goods as $good)
+		{
+			$good->delete();
+		}
+	}
+	//----------------------------------------------------------------------------- 
 }
