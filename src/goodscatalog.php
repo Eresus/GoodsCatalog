@@ -312,7 +312,7 @@ class GoodsCatalog extends ContentPlugin
 
 		// Данные для подстановки в шаблон
 		$data = $this->getHelper()->prepareTmplData();
-		$data['logoExists'] = FS::isFile($this->getLogoFileName());
+		$data['logoExists'] = is_file($this->getLogoFileName());
 
 		// Создаём экземпляр шаблона
 		//$tmpl = $this->getHelper()->getAdminTemplate('settings.html');
