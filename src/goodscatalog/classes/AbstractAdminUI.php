@@ -184,5 +184,7 @@ abstract class GoodsCatalog_AbstractAdminUI extends GoodsCatalog_AbstractUI
     abstract protected function renderAddDialog();
 
     abstract protected function renderEditDialog();
+
+    abstract protected function renderList();
 }
 
