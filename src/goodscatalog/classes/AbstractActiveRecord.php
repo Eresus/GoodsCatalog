@@ -292,7 +292,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
                 ->where($q->expr->eq('id', $q->bindValue($this->id, null, PDO::PARAM_INT)));
         }
 
-        foreach ($this->attrs as $key => $attrs)
+        foreach ($this->getAttrs() as $key => $attrs)
         {
             if (isset($this->rawData[$key]))
             {
