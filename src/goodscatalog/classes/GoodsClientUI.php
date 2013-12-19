@@ -110,7 +110,7 @@ class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
 		}
 
 		// Создаём экземпляр шаблона
-		$tmpl = $this->plugin->getHelper()->getClientTemplate('goods-list.html');
+		$tmpl = $this->plugin->templates()->client('goods-list.html');
 
 		// Компилируем шаблон и данные
 		$html = $tmpl->compile($data);
@@ -155,7 +155,7 @@ class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
 		}
 
 		// Создаём экземпляр шаблона
-		$tmpl = $this->plugin->getHelper()->getClientTemplate('goods-item.html');
+		$tmpl = $this->plugin->templates()->client('goods-item.html');
 
 		// Компилируем шаблон и данные
 		$html = $tmpl->compile($data);
