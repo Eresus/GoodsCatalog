@@ -166,8 +166,8 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
         eresus_log(__METHOD__, LOG_DEBUG, '(%d, %d)', $good, $activeOnly);
 
         $q = DB::getHandler()->createSelectQuery();
-        $q->select('count(DISTINCT id) as `count`')
-            ->from(self::getDbTableStatic(__CLASS__));
+        $q->select('count(DISTINCT id) as `count`');
+        $q->from(self::getDbTableStatic(__CLASS__));
 
         $e = $q->expr;
         $condition = $e->eq('good', $q->bindValue($good, null, PDO::PARAM_INT));
@@ -380,8 +380,9 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
     {
         eresus_log(__METHOD__, LOG_DEBUG, '("%s", %d, %d)', $query, $limit, $offset);
 
-        $query->select('*')->from(self::getDbTableStatic(__CLASS__))
-            ->orderBy('position');
+        $query->select('*');
+        $query->from(self::getDbTableStatic(__CLASS__));
+        $query->orderBy('position');
 
         if ($limit !== null)
         {

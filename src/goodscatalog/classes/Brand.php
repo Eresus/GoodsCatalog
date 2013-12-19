@@ -119,8 +119,8 @@ class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
         eresus_log(__METHOD__, LOG_DEBUG, '()');
 
         $q = DB::getHandler()->createSelectQuery();
-        $q->select('count(DISTINCT id) as `count`')
-            ->from(self::getDbTableStatic(__CLASS__));
+        $q->select('count(DISTINCT id) as `count`');
+        $q->from(self::getDbTableStatic(__CLASS__));
 
         if ($activeOnly)
         {
@@ -217,10 +217,10 @@ class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
      * Выбирает бренды из БД
      *
      * @param ezcQuerySelect $query             Запрос
-     * @param int $limit[optional]   Вернуть не более $limit брендов
-     * @param int $offset[optional]  Пропустить $offset первых брендов
+     * @param int $limit   Вернуть не более $limit брендов
+     * @param int $offset  Пропустить $offset первых брендов
      *
-     * @return array(GoodsCatalogBrand)
+     * @return GoodsCatalog_Brand[]
      *
      * @since 1.00
      */
@@ -228,8 +228,9 @@ class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
     {
         eresus_log(__METHOD__, LOG_DEBUG, '("%s", %d, %d)', $query, $limit, $offset);
 
-        $query->select('*')->from(self::getDbTableStatic(__CLASS__))
-            ->orderBy('title');
+        $query->select('*');
+        $query->from(self::getDbTableStatic(__CLASS__));
+        $query->orderBy('title');
 
         if ($limit !== null)
         {

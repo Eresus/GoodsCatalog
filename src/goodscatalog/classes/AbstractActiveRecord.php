@@ -385,14 +385,15 @@ abstract class GoodsCatalog_AbstractActiveRecord
 
         $q = DB::getHandler()->createSelectQuery();
         $e = $q->expr;
-        $q->select('*')->from($this->getDbTable())
-            ->where($e->lAnd(
-                $e->eq($this->ownerProperty,
-                    $q->bindValue($this->getProperty($this->ownerProperty), null, PDO::PARAM_INT)),
-                $e->lt('position', $q->bindValue($this->position, null, PDO::PARAM_INT))
-            ))
-            ->orderBy('position', ezcQuerySelect::DESC)
-            ->limit(1);
+        $q->select('*');
+        $q->from($this->getDbTable());
+        $q->where($e->lAnd(
+            $e->eq($this->ownerProperty,
+                $q->bindValue($this->getProperty($this->ownerProperty), null, PDO::PARAM_INT)),
+            $e->lt('position', $q->bindValue($this->position, null, PDO::PARAM_INT))
+        ))
+        ->orderBy('position', ezcQuerySelect::DESC);
+        $q->limit(1);
 
         $raw = DB::fetch($q);
 
@@ -402,6 +403,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
         }
 
         $class = get_class($this);
+        /** @var GoodsCatalog_AbstractActiveRecord $swap */
         $swap = new $class;
         $swap->loadFromArray($raw);
 
@@ -429,14 +431,15 @@ abstract class GoodsCatalog_AbstractActiveRecord
     {
         $q = DB::getHandler()->createSelectQuery();
         $e = $q->expr;
-        $q->select('*')->from($this->getDbTable())
-            ->where($e->lAnd(
-                $e->eq($this->ownerProperty,
-                    $q->bindValue($this->getProperty($this->ownerProperty), null, PDO::PARAM_INT)),
-                $e->gt('position', $q->bindValue($this->position, null, PDO::PARAM_INT))
-            ))
-            ->orderBy('position', ezcQuerySelect::ASC)
-            ->limit(1);
+        $q->select('*');
+        $q->from($this->getDbTable());
+        $q->where($e->lAnd(
+            $e->eq($this->ownerProperty,
+                $q->bindValue($this->getProperty($this->ownerProperty), null, PDO::PARAM_INT)),
+            $e->gt('position', $q->bindValue($this->position, null, PDO::PARAM_INT))
+        ))
+        ->orderBy('position', ezcQuerySelect::ASC);
+        $q->limit(1);
 
         $raw = DB::fetch($q);
 
@@ -446,6 +449,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
         }
 
         $class = get_class($this);
+        /** @var GoodsCatalog_AbstractActiveRecord $swap */
         $swap = new $class;
         $swap->loadFromArray($raw);
 
@@ -585,9 +589,9 @@ abstract class GoodsCatalog_AbstractActiveRecord
     {
         $db = DB::getHandler();
         $q = $db->createSelectQuery();
-        $q->select('*')
-            ->from($this->getDbTable())
-            ->where($q->expr->eq('id', $q->bindValue($id, null, PDO::PARAM_INT)))
+        $q->select('*');
+        $q->from($this->getDbTable());
+        $q->where($q->expr->eq('id', $q->bindValue($id, null, PDO::PARAM_INT)))
             ->limit(1);
 
         $this->rawData = DB::fetch($q);
@@ -672,9 +676,9 @@ abstract class GoodsCatalog_AbstractActiveRecord
     {
         $q = DB::getHandler()->createSelectQuery();
         $e = $q->expr;
-        $q->select($q->alias($e->max('position'), 'maxval'))
-            ->from($this->getDbTable())
-            ->where($e->eq($this->ownerProperty,
+        $q->select($q->alias($e->max('position'), 'maxval'));
+        $q->from($this->getDbTable());
+        $q->where($e->eq($this->ownerProperty,
                 $q->bindValue($this->getProperty($this->ownerProperty), null, PDO::PARAM_INT)));
         $result = DB::fetch($q);
         $this->position = $result['maxval'] + 1;

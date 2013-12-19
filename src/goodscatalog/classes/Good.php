@@ -47,7 +47,7 @@
  * @property-read  string                   $thumbURL     URL миниатюры
  * @property       bool                     $special      Спец. предложение
  * @property       GoodsCatalog_Brand|int   $brand        Бренд или его идентификатор
- * @property-read  array(GoodsCatalogPhoto) $photos       Дополнительные фотографии
+ * @property-read  GoodsCatalog_Photo[]     $photos       Дополнительные фотографии
  * @property-read  string                   $clientURL    URL страницы товара в КИ
  *
  * @package GoodsCatalog
@@ -200,8 +200,8 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
         eresus_log(__METHOD__, LOG_DEBUG, '(%d, %d)', $section, $activeOnly);
 
         $q = DB::getHandler()->createSelectQuery();
-        $q->select('count(DISTINCT id) as `count`')
-            ->from(self::getDbTableStatic(__CLASS__));
+        $q->select('count(DISTINCT id) as `count`');
+        $q->from(self::getDbTableStatic(__CLASS__));
 
         $e = $q->expr;
         $condition = $e->eq('section', $q->bindValue($section, null, PDO::PARAM_INT));
@@ -227,7 +227,7 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
      * @param int $offset[optional]      Пропустить $offset первых брендов
      * @param bool $activeOnly[optional]  Искать только активные бренды
      *
-     * @return array(GoodsCatalogBrand)
+     * @return GoodsCatalog_Brand[]
      *
      * @since 1.00
      */
@@ -470,8 +470,9 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
     {
         eresus_log(__METHOD__, LOG_DEBUG, '("%s", %d, %d)', $query, $limit, $offset);
 
-        $query->select('*')->from(self::getDbTableStatic(__CLASS__))
-            ->orderBy('position');
+        $query->select('*');
+        $query->from(self::getDbTableStatic(__CLASS__));
+        $query->orderBy('position');
 
         if ($limit !== null)
         {

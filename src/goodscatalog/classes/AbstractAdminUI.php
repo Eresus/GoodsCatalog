@@ -157,6 +157,7 @@ abstract class GoodsCatalog_AbstractAdminUI extends GoodsCatalog_AbstractUI
         try
         {
             $class = $this->activeRecordClass;
+            /** @var GoodsCatalog_AbstractActiveRecord $item */
             $item = new $class($id);
 
             try
