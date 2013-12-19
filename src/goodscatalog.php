@@ -242,19 +242,6 @@ class GoodsCatalog extends ContentPlugin
         /* Создаём директории данных */
         $this->mkdir('goods');
         $this->mkdir('brands');
-
-        $ts = TemplateService::getInstance();
-
-        try
-        {
-            $ts->installTemplates($this->dirCode . 'distrib/templates', $this->name);
-        }
-        catch (Exception $e)
-        {
-            $this->uninstall();
-            throw new EresusRuntimeException('Failed to install templates',
-                'Не удалось установить шаблоны плагина. Подробная информация доступна в журнале.', $e);
-        }
     }
 
     /**
@@ -269,18 +256,6 @@ class GoodsCatalog extends ContentPlugin
      */
     public function uninstall()
     {
-        $ts = TemplateService::getInstance();
-
-        try
-        {
-            $ts->uninstallTemplates($this->name);
-        }
-        catch (Exception $e)
-        {
-            throw new EresusRuntimeException('Failed to uninstall templates',
-                'Не удалось удалить шаблоны плагина. Подробная информация доступна в журнале.', $e);
-        }
-
         /* Удаляем директории данных */
         $this->rmdir();
 
@@ -316,10 +291,8 @@ class GoodsCatalog extends ContentPlugin
             $form->setValue($key, $value);
         }
 
-        $ts = TemplateService::getInstance();
-
-        $this->settings['tmplList'] = $ts->getContents('goods-list.html', $this->name);
-        $this->settings['tmplItem'] = $ts->getContents('goods-item.html', $this->name);
+        $this->settings['tmplList'] = $this->templates()->clientRead('goods-list.html');
+        $this->settings['tmplItem'] = $this->templates()->clientRead('goods-item.html');
 
         // Компилируем шаблон и данные
         //$html = $tmpl->compile($data);
@@ -338,10 +311,8 @@ class GoodsCatalog extends ContentPlugin
      */
     public function onSettingsUpdate()
     {
-        $ts = TemplateService::getInstance();
-
-        $ts->setContents(arg('tmplList'), 'goods-list.html', $this->name);
-        $ts->setContents(arg('tmplItem'), 'goods-item.html', $this->name);
+        $this->templates()->clientWrite('goods-list.html', arg('tmplList'));
+        $this->templates()->clientWrite('goods-item.html', arg('tmplItem'));
 
         $this->uploadLogo();
     }
