@@ -45,8 +45,6 @@ class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
         return 'GoodsCatalog_Brand';
     }
 
-    //-----------------------------------------------------------------------------
-
     /**
      * Возвращает разметку интерфейса списка брендов
      *
@@ -84,15 +82,13 @@ class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
         }
 
         // Создаём экземпляр шаблона
-        $tmpl = $this->plugin->getHelper()->getAdminTemplate('brands-list.html');
+        $tmpl = $this->plugin->templates()->admin('brands-list.html');
 
         // Компилируем шаблон и данные
         $html = $tmpl->compile($data);
 
         return $html;
     }
-
-    //-----------------------------------------------------------------------------
 
     /**
      * Удаляет бренд
@@ -126,8 +122,6 @@ class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
         HTTP::goback();
     }
 
-    //-----------------------------------------------------------------------------
-
     /**
      * Возвращает разметку диалога добавления бренда
      *
@@ -141,15 +135,13 @@ class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
         $data = $this->plugin->getHelper()->prepareTmplData();
 
         // Создаём экземпляр шаблона
-        $tmpl = $this->plugin->getHelper()->getAdminTemplate('brands-add.html');
+        $tmpl = $this->plugin->templates()->admin('brands-add.html');
 
         // Компилируем шаблон и данные
         $html = $tmpl->compile($data);
 
         return $html;
     }
-
-    //-----------------------------------------------------------------------------
 
     /**
      * Добавляет бренд
@@ -183,8 +175,6 @@ class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
         HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');
     }
 
-    //-----------------------------------------------------------------------------
-
     /**
      * Возвращает разметку диалога изменения бренда
      *
@@ -211,15 +201,13 @@ class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
         $data['brand'] = $brand;
 
         // Создаём экземпляр шаблона
-        $tmpl = $this->plugin->getHelper()->getAdminTemplate('brands-edit.html');
+        $tmpl = $this->plugin->templates()->admin('brands-edit.html');
 
         // Компилируем шаблон и данные
         $html = $tmpl->compile($data);
 
         return $html;
     }
-
-    //-----------------------------------------------------------------------------
 
     /**
      * Изменяет бренд
@@ -260,5 +248,5 @@ class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
 
         HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');
     }
-    //-----------------------------------------------------------------------------
 }
+

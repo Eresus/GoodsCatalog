@@ -103,7 +103,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
         }
 
         // Создаём экземпляр шаблона
-        $tmpl = $this->plugin->getHelper()->getAdminTemplate('goods-list.html');
+        $tmpl = $this->plugin->templates()->admin('goods-list.html');
 
         // Компилируем шаблон и данные
         $html = $tmpl->compile($data);
@@ -126,7 +126,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
         $data['brands'] = GoodsCatalog_Brand::find(null, null, true);
 
         // Создаём экземпляр шаблона
-        $tmpl = $this->plugin->getHelper()->getAdminTemplate('goods-add.html');
+        $tmpl = $this->plugin->templates()->admin('goods-add.html');
 
         // Компилируем шаблон и данные
         $html = $tmpl->compile($data);
@@ -284,7 +284,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
         $data['listURL'] = str_replace('&', '&amp;', $page->url(array('id' => false)));
 
         // Создаём экземпляр шаблона
-        $tmpl = $this->plugin->getHelper()->getAdminTemplate('goods-edit.html');
+        $tmpl = $this->plugin->templates()->admin('goods-edit.html');
 
         // Компилируем шаблон и данные
         $html = $tmpl->compile($data);
@@ -462,7 +462,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
         $data['good'] = $good;
 
         // Создаём экземпляр шаблона
-        $tmpl = $this->plugin->getHelper()->getAdminTemplate('photo-add.html');
+        $tmpl = $this->plugin->templates()->admin('photo-add.html');
 
         // Компилируем шаблон и данные
         $html = $tmpl->compile($data);

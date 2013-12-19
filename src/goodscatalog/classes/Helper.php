@@ -100,21 +100,6 @@ class GoodsCatalog_Helper
     }
 
     /**
-     * Возвращает экземпляр шаблона АИ с указанным именем
-     *
-     * @param string $name  Имя файла шаблона относительно директории шаблонов плагина
-     *
-     * @return Template
-     *
-     * @since 1.00
-     */
-    public function getAdminTemplate($name)
-    {
-        $tmpl = new Template('ext/' . $this->plugin->name . '/templates/' . $name);
-        return $tmpl;
-    }
-
-    /**
      * Возвращает массив данных для шаблона.
      *
      * Массив предварительно наполняется часто используемыми переменными.
