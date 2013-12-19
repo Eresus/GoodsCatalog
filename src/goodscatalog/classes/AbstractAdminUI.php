@@ -136,6 +136,8 @@ abstract class GoodsCatalog_AbstractAdminUI extends GoodsCatalog_AbstractUI
         return false;
     }
 
+    abstract protected function addItem();
+
     /**
      * Переключает активность объекта
      *
@@ -174,5 +176,13 @@ abstract class GoodsCatalog_AbstractAdminUI extends GoodsCatalog_AbstractUI
 
         HTTP::goback();
     }
+
+    abstract protected function deleteItem();
+
+    abstract protected function updateItem();
+
+    abstract protected function renderAddDialog();
+
+    abstract protected function renderEditDialog();
 }
 
