@@ -1,14 +1,12 @@
 <?php
 /**
- * Каталог товаров
- *
  * Деньги
  *
  * @version ${product.version}
  *
  * @copyright 2010, ООО "Два слона", http://dvaslona.ru/
- * @license http://www.gnu.org/licenses/gpl.txt	GPL License 3
- * @author Михаил Красильников <mk@3wstyle.ru>
+ * @license http://www.gnu.org/licenses/gpl.txt GPL License 3
+ * @author Михаил Красильников <mk@dvaslona.ru>
  *
  * Данная программа является свободным программным обеспечением. Вы
  * вправе распространять ее и/или модифицировать в соответствии с
@@ -27,8 +25,6 @@
  * <http://www.gnu.org/licenses/>
  *
  * @package GoodsCatalog
- *
- * $Id$
  */
 
 
@@ -41,93 +37,86 @@
  */
 class GoodsCatalog_Money
 {
-	/**
-	 * Количество денег
-	 *
-	 * @var float
-	 */
-	private $amount;
+    /**
+     * Количество денег
+     *
+     * @var float
+     */
+    private $amount;
 
-	/**
-	 * Создаёт новый объект "Деньги"
-	 *
-	 * @param float $amount  начальное количество денег
-	 *
-	 * @return GoodsCatalog_Money
-	 *
-	 * @since 1.02
-	 */
-	public function __construct($amount = 0)
-	{
-		$this->setAmount($amount);
-	}
-	//-----------------------------------------------------------------------------
+    /**
+     * Создаёт новый объект "Деньги"
+     *
+     * @param float $amount  начальное количество денег
+     *
+     * @since 1.02
+     */
+    public function __construct($amount = 0)
+    {
+        $this->setAmount($amount);
+    }
 
-	/**
-	 * Задаёт количество денег
-	 *
-	 * @param GoodsCatalog_Money|float|string $amount
-	 *
-	 * @return void
-	 *
-	 * @since 1.02
-	 */
-	public function setAmount($amount)
-	{
-		switch (true)
-		{
-			case is_numeric($amount):
-				$this->amount = $amount;
-			break;
+    /**
+     * Задаёт количество денег
+     *
+     * @param GoodsCatalog_Money|float|string $amount
+     *
+     * @return void
+     *
+     * @since 1.02
+     */
+    public function setAmount($amount)
+    {
+        switch (true)
+        {
+            case is_numeric($amount):
+                $this->amount = $amount;
+                break;
+            case is_string($amount):
+                $lc = localeconv();
+                // Удаляем разделители тысяч
+                $amount = str_replace($lc['mon_thousands_sep'], '', $amount);
+                // Меняем разделитель дробной части на точку
+                $amount = str_replace(array($lc['mon_decimal_point'], $lc['decimal_point']), '.', $amount);
+                // Удаляем лишние символы
+                $amount = preg_replace('/[^\d\.]/', '', $amount);
+                $this->amount = floatval($amount);
+                break;
+            case $amount instanceof self:
+                $this->amount = $amount->amount;
+                break;
+        }
+    }
 
-			case is_string($amount):
-				$lc = localeconv();
-				// Удаляем разделители тысяч
-				$amount = str_replace($lc['mon_thousands_sep'], '', $amount);
-				// Меняем разделитель дробной части на точку
-				$amount = str_replace(array($lc['mon_decimal_point'], $lc['decimal_point']), '.', $amount);
-				// Удаляем лишние символы
-				$amount = preg_replace('/[^\d\.]/', '', $amount);
-				$this->amount = floatval($amount);
-			break;
+    /**
+     * Возвращает количество денег
+     *
+     * @return float
+     *
+     * @since 1.02
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
 
-			case $amount instanceof self:
-				$this->amount = $amount->amount;
-			break;
-		}
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Возвращает количество денег
-	 *
-	 * @return float
-	 *
-	 * @since 1.02
-	 */
-	public function getAmount()
-	{
-		return $this->amount;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Возвращает строковое представление денежной суммы
-	 *
-	 * @return string
-	 *
-	 * @since 1.02
-	 */
-	public function __toString()
-	{
-		$lc = localeconv();
-		$hasDecimals = $this->amount != round($this->amount);
-		if ($lc['mon_decimal_point'] == '')
-		{
-			$lc['mon_decimal_point'] = '.';
-		}
-		return number_format($this->amount, $hasDecimals ? 2 : 0, $lc['mon_decimal_point'],
-			$lc['mon_thousands_sep']);
-	}
-	//-----------------------------------------------------------------------------
+    /**
+     * Возвращает строковое представление денежной суммы
+     *
+     * @return string
+     *
+     * @since 1.02
+     */
+    public function __toString()
+    {
+        $lc = localeconv();
+        $hasDecimals = $this->amount != round($this->amount);
+        if ($lc['mon_decimal_point'] == '')
+        {
+            $lc['mon_decimal_point'] = '.';
+        }
+        return number_format($this->amount, $hasDecimals ? 2 : 0, $lc['mon_decimal_point'],
+            $lc['mon_thousands_sep']);
+    }
 }
+

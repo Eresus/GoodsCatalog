@@ -1,14 +1,12 @@
 <?php
 /**
- * Каталог товаров
- *
  * Класс-помощник
  *
  * @version ${product.version}
  *
  * @copyright 2010, ООО "Два слона", http://dvaslona.ru/
  * @license http://www.gnu.org/licenses/gpl.txt    GPL License 3
- * @author Михаил Красильников <mk@3wstyle.ru>
+ * @author Михаил Красильников <mk@dvaslona.ru>
  *
  * Данная программа является свободным программным обеспечением. Вы
  * вправе распространять ее и/или модифицировать в соответствии с
@@ -27,8 +25,6 @@
  * <http://www.gnu.org/licenses/>
  *
  * @package GoodsCatalog
- *
- * $Id$
  */
 
 
@@ -60,8 +56,6 @@ class GoodsCatalog_Helper
         $this->plugin = $plugin;
     }
 
-    //-----------------------------------------------------------------------------
-
     /**
      * Метод возвращает имя для временного файла в области, доступной для безопасного чтения
      * и записи.
@@ -74,8 +68,6 @@ class GoodsCatalog_Helper
     {
         return $this->plugin->getDataDir() . 'tmp_upload.bin';
     }
-
-    //-----------------------------------------------------------------------------
 
     /**
      * Подключает библиотеку jQuery
@@ -92,8 +84,6 @@ class GoodsCatalog_Helper
         $page->linkScripts($Eresus->root . 'core/jquery/jquery.min.js');
     }
 
-    //-----------------------------------------------------------------------------
-
     /**
      * Подключает библиотеку jQueryUI
      *
@@ -109,8 +99,6 @@ class GoodsCatalog_Helper
         $page->linkScripts($Eresus->root . 'core/jquery/jquery-ui.min.js');
     }
 
-    //-----------------------------------------------------------------------------
-
     /**
      * Возвращает экземпляр шаблона АИ с указанным именем
      *
@@ -125,8 +113,6 @@ class GoodsCatalog_Helper
         $tmpl = new Template('ext/' . $this->plugin->name . '/templates/' . $name);
         return $tmpl;
     }
-
-    //-----------------------------------------------------------------------------
 
     /**
      * Возвращает массив данных для шаблона.
@@ -145,5 +131,5 @@ class GoodsCatalog_Helper
         $data['Eresus'] = Eresus_CMS::getLegacyKernel();
         return $data;
     }
-    //-----------------------------------------------------------------------------
 }
+

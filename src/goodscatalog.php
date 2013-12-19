@@ -7,8 +7,8 @@
  * @version ${product.version}
  *
  * @copyright 2010, ООО "Два слона", http://dvaslona.ru/
- * @license http://www.gnu.org/licenses/gpl.txt	GPL License 3
- * @author Михаил Красильников <mk@3wstyle.ru>
+ * @license http://www.gnu.org/licenses/gpl.txt GPL License 3
+ * @author Михаил Красильников <mk@dvaslona.ru>
  *
  * Данная программа является свободным программным обеспечением. Вы
  * вправе распространять ее и/или модифицировать в соответствии с
@@ -27,8 +27,6 @@
  * <http://www.gnu.org/licenses/>
  *
  * @package GoodsCatalog
- *
- * $Id$
  */
 
 /**
@@ -38,156 +36,152 @@
  */
 class GoodsCatalog extends ContentPlugin
 {
-	/**
-	 * Версия плагина
-	 * @var string
-	 */
-	public $version = '${product.version}';
+    /**
+     * Версия плагина
+     * @var string
+     */
+    public $version = '${product.version}';
 
-	/**
-	 * Требуемая версия ядра
-	 * @var string
-	 */
-	public $kernel = '3.00b';
+    /**
+     * Требуемая версия ядра
+     * @var string
+     */
+    public $kernel = '3.01a';
 
-	/**
-	 * Название плагина
-	 * @var string
-	 */
-	public $title = 'Каталог товаров';
+    /**
+     * Название плагина
+     * @var string
+     */
+    public $title = 'Каталог товаров';
 
-	/**
-	 * Описание плагина
-	 * @var string
-	 */
-	public $description = 'Простой каталог товаров';
+    /**
+     * Описание плагина
+     * @var string
+     */
+    public $description = 'Простой каталог товаров';
 
-	/**
-	 * Настройки плагина
-	 *
-	 * @var array
-	 */
-	public $settings = array(
-		// Кол-во товаров на странице
-		'goodsPerPage' => 10,
+    /**
+     * Настройки плагина
+     *
+     * @var array
+     */
+    public $settings = array(
+        // Кол-во товаров на странице
+        'goodsPerPage' => 10,
 
-		/* Логотип */
-		// Использовать логотип
-		'logoEnabled' => false,
-		// Положение логотипа
-		'logoPosition' => 'BL', // Значения: TL, TR, BL, Br. T - верх, B - низ, L - лево, R - право.
-		// Вертикальный отступ от края в пикселях
-		'logoVPadding' => 10,
-		// Горизонтальный отступ от края в пикселях
-		'logoHPadding' => 10,
+        /* Логотип */
+        // Использовать логотип
+        'logoEnabled' => false,
+        // Положение логотипа
+        'logoPosition' => 'BL', // Значения: TL, TR, BL, Br. T - верх, B - низ, L - лево, R - право.
+        // Вертикальный отступ от края в пикселях
+        'logoVPadding' => 10,
+        // Горизонтальный отступ от края в пикселях
+        'logoHPadding' => 10,
 
-		// Использовать основную фотографию
-		'mainPhotoEnabled' => false,
+        // Использовать основную фотографию
+        'mainPhotoEnabled' => false,
 
-		// Использовать дополнительные фотографии
-		'extPhotosEnabled' => false,
+        // Использовать дополнительные фотографии
+        'extPhotosEnabled' => false,
 
-		/* Фотографии */
-		'photoMaxWidth' => 800,
-		'photoMaxHeight' => 600,
+        /* Фотографии */
+        'photoMaxWidth' => 800,
+        'photoMaxHeight' => 600,
 
-		/* Миниатюры */
-		'thumbWidth' => 200,
-		'thumbHeight' => 150,
+        /* Миниатюры */
+        'thumbWidth' => 200,
+        'thumbHeight' => 150,
 
-		// Использовать бренды
-		'brandsEnabled' => false,
+        // Использовать бренды
+        'brandsEnabled' => false,
 
-		/* Логотип бренда */
-		'brandLogoMaxWidth' => 300,
-		'brandLogoMaxHeight' => 300,
+        /* Логотип бренда */
+        'brandLogoMaxWidth' => 300,
+        'brandLogoMaxHeight' => 300,
 
-		// Использовать Спецпредложения
-		'specialsEnabled' => false
-	);
+        // Использовать Спецпредложения
+        'specialsEnabled' => false
+    );
 
-	/**
-	 * Объект-помощник
-	 *
-	 * @var GoodsCatalog_Helper
-	 * @since 1.00
-	 */
-	private $helper;
+    /**
+     * Объект-помощник
+     *
+     * @var GoodsCatalog_Helper
+     * @since 1.00
+     */
+    private $helper;
 
-	/**
-	 * Конструктор
-	 *
-	 * @return GoodsCatalog
-	 *
-	 * @since 1.00
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     * Конструктор
+     *
+     * @return GoodsCatalog
+     *
+     * @since 1.00
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		$this->listenEvents('adminOnMenuRender');
-	}
-	//-----------------------------------------------------------------------------
+        $this->listenEvents('adminOnMenuRender');
+    }
 
-	/**
-	 * Возвращает URL директории файлов плагина
-	 *
-	 * @return string
-	 *
-	 * @since 1.00
-	 */
-	public function getCodeURL()
-	{
-		return $this->urlCode;
-	}
-	//-----------------------------------------------------------------------------
+    /**
+     * Возвращает URL директории файлов плагина
+     *
+     * @return string
+     *
+     * @since 1.00
+     */
+    public function getCodeURL()
+    {
+        return $this->urlCode;
+    }
 
-	/**
-	 * Возвращает путь к директории данных плагина
-	 *
-	 * @return string
-	 *
-	 * @since 1.00
-	 */
-	public function getDataDir()
-	{
-		return $this->dirData;
-	}
-	//-----------------------------------------------------------------------------
+    /**
+     * Возвращает путь к директории данных плагина
+     *
+     * @return string
+     *
+     * @since 1.00
+     */
+    public function getDataDir()
+    {
+        return $this->dirData;
+    }
 
-	/**
-	 * Возвращает URL директории данных плагина
-	 *
-	 * @return string
-	 *
-	 * @since 1.00
-	 */
-	public function getDataURL()
-	{
-		return $this->urlData;
-	}
-	//-----------------------------------------------------------------------------
+    /**
+     * Возвращает URL директории данных плагина
+     *
+     * @return string
+     *
+     * @since 1.00
+     */
+    public function getDataURL()
+    {
+        return $this->urlData;
+    }
 
-	/**
-	 * Действия при инсталляции
-	 *
-	 * @throws EresusRuntimeException
-	 *
-	 * @return void
-	 *
-	 * @see Plugin::install()
-	 * @since 1.00
-	 */
-	public function install()
-	{
-		parent::install();
+    /**
+     * Действия при инсталляции
+     *
+     * @throws EresusRuntimeException
+     *
+     * @return void
+     *
+     * @see Plugin::install()
+     * @since 1.00
+     */
+    public function install()
+    {
+        parent::install();
 
-		try
-		{
-			/*
-			 * Таблица товаров
-			 */
-			$sql = "
+        try
+        {
+            /*
+             * Таблица товаров
+             */
+            $sql = "
 				`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
 				`section` int(10) unsigned NOT NULL COMMENT 'Привязка к разделу',
 				`active` bool NOT NULL default 0 COMMENT 'Активность',
@@ -206,12 +200,12 @@ class GoodsCatalog extends ContentPlugin
 				KEY `admin_special` (`special`),
 				KEY `client_special` (`active`, `special`)
 			";
-			$this->dbCreateTable($sql, 'goods');
+            $this->dbCreateTable($sql, 'goods');
 
-			/*
-			 * Таблица брендов
-			 */
-			$sql = "
+            /*
+             * Таблица брендов
+             */
+            $sql = "
 				`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
 				`active` bool NOT NULL default 0 COMMENT 'Активность',
 				`title` varchar(255) NOT NULL default '' COMMENT 'Название',
@@ -221,12 +215,12 @@ class GoodsCatalog extends ContentPlugin
 				KEY `admin_list` (`title`),
 				KEY `client_list` (`active`, `title`)
 			";
-			$this->dbCreateTable($sql, 'brands');
+            $this->dbCreateTable($sql, 'brands');
 
-			/*
-			 * Таблица дополнительных фотографий
-			 */
-			$sql = "
+            /*
+             * Таблица дополнительных фотографий
+             */
+            $sql = "
 				`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
 				`active` bool NOT NULL default 0 COMMENT 'Активность',
 				`position` int(10) unsigned NOT NULL default '0' COMMENT 'Порядковый номер',
@@ -236,284 +230,274 @@ class GoodsCatalog extends ContentPlugin
 				KEY `admin_list` (`good`, `position`),
 				KEY `client_list` (`active`, `good`, `position`)
 			";
-			$this->dbCreateTable($sql, 'photos');
-		}
-		catch (Exception $e)
-		{
-			$this->uninstall();
-			throw new EresusRuntimeException('Fail to create DB tables',
-				'Не удалось создать таблицы в базе данных. Подробная информация доступна в журнале.', $e);
-		}
+            $this->dbCreateTable($sql, 'photos');
+        }
+        catch (Exception $e)
+        {
+            $this->uninstall();
+            throw new EresusRuntimeException('Fail to create DB tables',
+                'Не удалось создать таблицы в базе данных. Подробная информация доступна в журнале.', $e);
+        }
 
-		/* Создаём директории данных */
-		$this->mkdir('goods');
-		$this->mkdir('brands');
+        /* Создаём директории данных */
+        $this->mkdir('goods');
+        $this->mkdir('brands');
 
-		$ts = TemplateService::getInstance();
+        $ts = TemplateService::getInstance();
 
-		try
-		{
-			$ts->installTemplates($this->dirCode . 'distrib/templates', $this->name);
-		}
-		catch (Exception $e)
-		{
-			$this->uninstall();
-			throw new EresusRuntimeException('Failed to install templates',
-				'Не удалось установить шаблоны плагина. Подробная информация доступна в журнале.', $e);
-		}
-	}
-	//-----------------------------------------------------------------------------
+        try
+        {
+            $ts->installTemplates($this->dirCode . 'distrib/templates', $this->name);
+        }
+        catch (Exception $e)
+        {
+            $this->uninstall();
+            throw new EresusRuntimeException('Failed to install templates',
+                'Не удалось установить шаблоны плагина. Подробная информация доступна в журнале.', $e);
+        }
+    }
 
-	/**
-	 * Действия при удалении плагина
-	 *
-	 * @throws EresusRuntimeException
-	 *
-	 * @return void
-	 *
-	 * @see Plugin::uninstall()
-	 * @since 1.00
-	 */
-	public function uninstall()
-	{
-		$ts = TemplateService::getInstance();
+    /**
+     * Действия при удалении плагина
+     *
+     * @throws EresusRuntimeException
+     *
+     * @return void
+     *
+     * @see Plugin::uninstall()
+     * @since 1.00
+     */
+    public function uninstall()
+    {
+        $ts = TemplateService::getInstance();
 
-		try
-		{
-			$ts->uninstallTemplates($this->name);
-		}
-		catch (Exception $e)
-		{
-			throw new EresusRuntimeException('Failed to uninstall templates',
-				'Не удалось удалить шаблоны плагина. Подробная информация доступна в журнале.', $e);
-		}
+        try
+        {
+            $ts->uninstallTemplates($this->name);
+        }
+        catch (Exception $e)
+        {
+            throw new EresusRuntimeException('Failed to uninstall templates',
+                'Не удалось удалить шаблоны плагина. Подробная информация доступна в журнале.', $e);
+        }
 
-		/* Удаляем директории данных */
-		$this->rmdir();
+        /* Удаляем директории данных */
+        $this->rmdir();
 
-		parent::uninstall();
-	}
+        parent::uninstall();
+    }
 
-	/**
-	 * Диалог настроек
-	 *
-	 * @return string
-	 *
-	 * @since 1.00
-	 */
-	public function settings()
-	{
-		/** @var TAdminUI $page */
-		$page = Eresus_Kernel::app()->getPage();
+    /**
+     * Диалог настроек
+     *
+     * @return string
+     *
+     * @since 1.00
+     */
+    public function settings()
+    {
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
 
-		$page->linkStyles($this->urlCode . 'admin.css');
+        $page->linkStyles($this->urlCode . 'admin.css');
 
-		Eresus_Kernel::app()->getPage()->linkJsLib('webshim');
+        Eresus_Kernel::app()->getPage()->linkJsLib('webshim');
 
-		// Данные для подстановки в шаблон
-		$data = $this->getHelper()->prepareTmplData();
-		$data['logoExists'] = is_file($this->getLogoFileName());
+        // Данные для подстановки в шаблон
+        $data = $this->getHelper()->prepareTmplData();
+        $data['logoExists'] = is_file($this->getLogoFileName());
 
-		// Создаём экземпляр шаблона
-		//$tmpl = $this->getHelper()->getAdminTemplate('settings.html');
-		$form = new EresusForm('ext/' . $this->name . '/templates/settings.html');
+        // Создаём экземпляр шаблона
+        //$tmpl = $this->getHelper()->getAdminTemplate('settings.html');
+        $form = new EresusForm('ext/' . $this->name . '/templates/settings.html');
 
-		foreach ($data as $key => $value)
-		{
-			$form->setValue($key, $value);
-		}
+        foreach ($data as $key => $value)
+        {
+            $form->setValue($key, $value);
+        }
 
-		$ts = TemplateService::getInstance();
+        $ts = TemplateService::getInstance();
 
-		$this->settings['tmplList'] = $ts->getContents('goods-list.html', $this->name);
-		$this->settings['tmplItem'] = $ts->getContents('goods-item.html', $this->name);
+        $this->settings['tmplList'] = $ts->getContents('goods-list.html', $this->name);
+        $this->settings['tmplItem'] = $ts->getContents('goods-item.html', $this->name);
 
-		// Компилируем шаблон и данные
-		//$html = $tmpl->compile($data);
-		$html = $form->compile();
+        // Компилируем шаблон и данные
+        //$html = $tmpl->compile($data);
+        $html = $form->compile();
 
-		return $html;
-	}
+        return $html;
+    }
 
-	/**
-	 * Дополнительные действия при сохранении настроек
-	 *
-	 * @return void
-	 *
-	 * @see main/core/Plugin::onSettingsUpdate()
-	 * @since 1.00
-	 */
-	public function onSettingsUpdate()
-	{
-		$ts = TemplateService::getInstance();
+    /**
+     * Дополнительные действия при сохранении настроек
+     *
+     * @return void
+     *
+     * @see main/core/Plugin::onSettingsUpdate()
+     * @since 1.00
+     */
+    public function onSettingsUpdate()
+    {
+        $ts = TemplateService::getInstance();
 
-		$ts->setContents(arg('tmplList'), 'goods-list.html', $this->name);
-		$ts->setContents(arg('tmplItem'), 'goods-item.html', $this->name);
+        $ts->setContents(arg('tmplList'), 'goods-list.html', $this->name);
+        $ts->setContents(arg('tmplItem'), 'goods-item.html', $this->name);
 
-		$this->uploadLogo();
-	}
-	//-----------------------------------------------------------------------------
+        $this->uploadLogo();
+    }
 
-	/**
-	 * Загружает файл логотипа
-	 *
-	 * @return void
-	 *
-	 * @since 1.00
-	 */
-	private function uploadLogo()
-	{
-		$tmpFile = $this->getHelper()->getTempFileName();
-		if (!upload('logoImage', $tmpFile))
-		{
-			return;
-		}
+    /**
+     * Загружает файл логотипа
+     *
+     * @return void
+     *
+     * @since 1.00
+     */
+    private function uploadLogo()
+    {
+        $tmpFile = $this->getHelper()->getTempFileName();
+        if (!upload('logoImage', $tmpFile))
+        {
+            return;
+        }
 
-		$info = getimagesize($tmpFile);
-		if ($info['mime'] != 'image/png')
-		{
-			ErrorMessage('Логотип должен быть в формате PNG. Загруженный файл имеет формат "' .
-				$info['mime'] . '"');
-			return;
-		}
+        $info = getimagesize($tmpFile);
+        if ($info['mime'] != 'image/png')
+        {
+            ErrorMessage('Логотип должен быть в формате PNG. Загруженный файл имеет формат "' .
+            $info['mime'] . '"');
+            return;
+        }
 
-		rename($tmpFile, $this->getLogoFileName());
+        rename($tmpFile, $this->getLogoFileName());
 
-	}
-	//-----------------------------------------------------------------------------
+    }
 
-	/**
-	 * Возвращает имя файла логотипа
-	 *
-	 * @return string
-	 *
-	 * @since 1.00
-	 */
-	private function getLogoFileName()
-	{
-		return $this->dirData . 'logo.png';
-	}
-	//-----------------------------------------------------------------------------
+    /**
+     * Возвращает имя файла логотипа
+     *
+     * @return string
+     *
+     * @since 1.00
+     */
+    private function getLogoFileName()
+    {
+        return $this->dirData . 'logo.png';
+    }
 
-	/**
-	 * Возвращает объект-помощник
-	 *
-	 * @return GoodsCatalog_Helper
-	 *
-	 * @since 1.00
-	 */
-	public function getHelper()
-	{
-		if (!$this->helper)
-		{
-			$this->helper = new GoodsCatalog_Helper($this);
-		}
-		return $this->helper;
-	}
-	//-----------------------------------------------------------------------------
+    /**
+     * Возвращает объект-помощник
+     *
+     * @return GoodsCatalog_Helper
+     *
+     * @since 1.00
+     */
+    public function getHelper()
+    {
+        if (!$this->helper)
+        {
+            $this->helper = new GoodsCatalog_Helper($this);
+        }
+        return $this->helper;
+    }
 
-	/**
-	 * @see Plugin::mkdir()
-	 * @since 1.00
-	 */
-	public function mkdir($name = '')
-	{
-		return parent::mkdir($name);
-	}
-	//-----------------------------------------------------------------------------
+    /**
+     * @see Plugin::mkdir()
+     * @since 1.00
+     */
+    public function mkdir($name = '')
+    {
+        return parent::mkdir($name);
+    }
 
-	/**
-	 * Добавляет пункт "Бренды" в меню "Расширения"
-	 *
-	 * @return void
-	 *
-	 * @since 1.00
-	 */
-	public function adminOnMenuRender()
-	{
-		/* Добавляем пункт только если включена соответствующая опция */
-		if ($this->settings['brandsEnabled'])
-		{
-			$menuItem = array(
-				'access'  => EDITOR,
-				'link'  => $this->name . '&ref=brands',
-				'caption'  => 'Бренды',
-				'hint'  => 'Управление брендами'
-			);
-			/** @var TAdminUI $page */
-			$page = Eresus_Kernel::app()->getPage();
-			$page->addMenuItem($this->title, $menuItem);
-		}
-	}
-	//-----------------------------------------------------------------------------
+    /**
+     * Добавляет пункт "Бренды" в меню "Расширения"
+     *
+     * @return void
+     *
+     * @since 1.00
+     */
+    public function adminOnMenuRender()
+    {
+        /* Добавляем пункт только если включена соответствующая опция */
+        if ($this->settings['brandsEnabled'])
+        {
+            $menuItem = array(
+                'access' => EDITOR,
+                'link' => $this->name . '&ref=brands',
+                'caption' => 'Бренды',
+                'hint' => 'Управление брендами'
+            );
+            /** @var TAdminUI $page */
+            $page = Eresus_Kernel::app()->getPage();
+            $page->addMenuItem($this->title, $menuItem);
+        }
+    }
 
-	/**
-	 * Возвращает контент дополнительных интерфейсов
-	 *
-	 * @return string  HTML
-	 *
-	 * @since 1.00
-	 */
-	public function adminRender()
-	{
-		if ($this->settings['brandsEnabled'] == false)
-		{
-			return ErrorBox('Функционал управления брендами отключен. ' .
-				'Вы можете включить его в <a href="admin.php?mod=plgmgr&id=' . $this->name .
-				'">настройках</a>.');
-		}
+    /**
+     * Возвращает контент дополнительных интерфейсов
+     *
+     * @return string  HTML
+     *
+     * @since 1.00
+     */
+    public function adminRender()
+    {
+        if ($this->settings['brandsEnabled'] == false)
+        {
+            return ErrorBox('Функционал управления брендами отключен. ' .
+            'Вы можете включить его в <a href="admin.php?mod=plgmgr&id=' . $this->name .
+            '">настройках</a>.');
+        }
 
-		$ui = new GoodsCatalog_BrandsAdminUI($this);
+        $ui = new GoodsCatalog_BrandsAdminUI($this);
 
-		return $ui->getHTML();
-	}
-	//-----------------------------------------------------------------------------
+        return $ui->getHTML();
+    }
 
-	/**
-	 * Формирование HTML-кода АИ
-	 *
-	 * @return string  HTML
-	 *
-	 * @since 1.00
-	 */
-	public function adminRenderContent()
-	{
-		$ui = new GoodsCatalog_GoodsAdminUI($this);
+    /**
+     * Формирование HTML-кода АИ
+     *
+     * @return string  HTML
+     *
+     * @since 1.00
+     */
+    public function adminRenderContent()
+    {
+        $ui = new GoodsCatalog_GoodsAdminUI($this);
 
-		return $ui->getHTML();
-	}
-	//-----------------------------------------------------------------------------
+        return $ui->getHTML();
+    }
 
-	/**
-	 * Формирование HTML-кода КИ
-	 *
-	 * @return string  HTML
-	 *
-	 * @since 1.00
-	 */
-	public function clientRenderContent()
-	{
-		$ui = new GoodsCatalog_GoodsClientUI($this);
+    /**
+     * Формирование HTML-кода КИ
+     *
+     * @return string  HTML
+     *
+     * @since 1.00
+     */
+    public function clientRenderContent()
+    {
+        $ui = new GoodsCatalog_GoodsClientUI($this);
 
-		return $ui->getHTML();
-	}
-	//-----------------------------------------------------------------------------
-	
-	/**
-	 * Удаляет товары при удалении раздела
-	 *
-	 * @return void
-	 *
-	 * @since 2.00
-	 */
-	public function onSectionDelete($id) 
-	{
-		set_time_limit(0);
-		$goods = GoodsCatalogGood::find($id);
-		foreach ($goods as $good)
-		{
-			$good->delete();
-		}
-	}
-	//----------------------------------------------------------------------------- 
+        return $ui->getHTML();
+    }
+
+    /**
+     * Удаляет товары при удалении раздела
+     *
+     * @return void
+     *
+     * @since 2.00
+     */
+    public function onSectionDelete($id)
+    {
+        set_time_limit(0);
+        $goods = GoodsCatalogGood::find($id);
+        foreach ($goods as $good)
+        {
+            $good->delete();
+        }
+    }
 }
+

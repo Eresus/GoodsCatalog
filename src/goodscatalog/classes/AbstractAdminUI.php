@@ -1,14 +1,12 @@
 <?php
 /**
- * Каталог товаров
- *
  * Абстрактный пользовательский интерфейс управления (АИ)
  *
  * @version ${product.version}
  *
  * @copyright 2010, ООО "Два слона", http://dvaslona.ru/
- * @license http://www.gnu.org/licenses/gpl.txt	GPL License 3
- * @author Михаил Красильников <mk@3wstyle.ru>
+ * @license http://www.gnu.org/licenses/gpl.txt GPL License 3
+ * @author Михаил Красильников <mk@dvaslona.ru>
  *
  * Данная программа является свободным программным обеспечением. Вы
  * вправе распространять ее и/или модифицировать в соответствии с
@@ -27,8 +25,6 @@
  * <http://www.gnu.org/licenses/>
  *
  * @package GoodsCatalog
- *
- * $Id$
  */
 
 
@@ -39,153 +35,144 @@
  */
 abstract class GoodsCatalog_AbstractAdminUI extends GoodsCatalog_AbstractUI
 {
-	/**
-	 * Возвращает HTML интерфейса управления
-	 *
-	 * Метод "понимает" HTTP-запросы на следующие базовые действия:
-	 *
-	 * - Добавление объекта. Аргумент "action" должен быть "insert". Будет вызван метод addItem
-	 * - Переключение активности. Аргумент "toggle" должен содержать ID объекта. Вызовет toggleItem
-	 * - Удаление. Аргумент "delete" должен содержать ID объекта. Вызовет deleteItem
-	 * - Изменение объекта. Аргумент "update" должен содержать ID объекта. Вызовет updateItem
-	 * - Диалог добавления. Аргумент "action" должен быть "add". Вызовет renderAddDialog
-	 * - Диалог изменения. Аргумент "id" должен содержать ID объекта. Вызовет renderEditDialog
-	 *
-	 * Если ни одно из действий не подошло и метод {@link extendedActions} вернул FALSE, вызовет
-	 * метод renderList для отрисовки списка объектов.
-	 *
-	 * Кроме этого метод подключает к странице admin.js и admin.css
-	 *
-	 * @return string
-	 *
-	 * @uses $page
-	 * @uses $plugin
-	 * @uses arg()
-	 * @uses addItem()
-	 * @uses deleteItem()
-	 * @uses GoodsCatalog::getCodeURL()
-	 * @uses renderAddDialog()
-	 * @uses renderEditDialog()
-	 * @uses renderList()
-	 * @uses toggleItem()
-	 * @uses updateItem()
-	 * @uses WebPage::linkScripts()
-	 * @uses WebPage::linkStyles()
-	 */
-	public function getHTML()
-	{
-		switch (true)
-		{
-			case arg('action') == 'insert':
-				$this->addItem();
-			break;
+    /**
+     * Возвращает HTML интерфейса управления
+     *
+     * Метод "понимает" HTTP-запросы на следующие базовые действия:
+     *
+     * - Добавление объекта. Аргумент "action" должен быть "insert". Будет вызван метод addItem
+     * - Переключение активности. Аргумент "toggle" должен содержать ID объекта. Вызовет toggleItem
+     * - Удаление. Аргумент "delete" должен содержать ID объекта. Вызовет deleteItem
+     * - Изменение объекта. Аргумент "update" должен содержать ID объекта. Вызовет updateItem
+     * - Диалог добавления. Аргумент "action" должен быть "add". Вызовет renderAddDialog
+     * - Диалог изменения. Аргумент "id" должен содержать ID объекта. Вызовет renderEditDialog
+     *
+     * Если ни одно из действий не подошло и метод {@link extendedActions} вернул FALSE, вызовет
+     * метод renderList для отрисовки списка объектов.
+     *
+     * Кроме этого метод подключает к странице admin.js и admin.css
+     *
+     * @return string
+     *
+     * @uses $page
+     * @uses $plugin
+     * @uses arg()
+     * @uses addItem()
+     * @uses deleteItem()
+     * @uses GoodsCatalog::getCodeURL()
+     * @uses renderAddDialog()
+     * @uses renderEditDialog()
+     * @uses renderList()
+     * @uses toggleItem()
+     * @uses updateItem()
+     * @uses WebPage::linkScripts()
+     * @uses WebPage::linkStyles()
+     */
+    public function getHTML()
+    {
+        switch (true)
+        {
+            case arg('action') == 'insert':
+                $this->addItem();
+                break;
+            case arg('toggle'):
+                $this->toggleItem();
+                break;
+            case arg('delete'):
+                $this->deleteItem();
+                break;
+            case arg('update'):
+                $this->updateItem();
+                break;
+            case arg('action') == 'add':
+                $html = $this->renderAddDialog();
+                break;
+            case arg('id'):
+                $html = $this->renderEditDialog();
+                break;
+            default:
+                $html = $this->extendedActions();
+                if ($html === false)
+                {
+                    $html = $this->renderList();
+                }
+                break;
+        }
 
-			case arg('toggle'):
-				$this->toggleItem();
-			break;
+        /* Дополнительные файлы */
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        $page->linkStyles($this->plugin->getCodeURL() . 'admin.css');
+        $page->linkScripts($this->plugin->getCodeURL() . 'admin.js');
 
-			case arg('delete'):
-				$this->deleteItem();
-			break;
+        return $html;
+    }
 
-			case arg('update'):
-				$this->updateItem();
-			break;
+    /**
+     * Помещает в сессию сообщение о неправильном адресе
+     *
+     * @param Exception $e
+     *
+     * @return void
+     *
+     * @uses ErrorMessage()
+     */
+    protected function reportBadURL(Exception $e)
+    {
+        ErrorMessage('Неправильный адрес');
+    }
 
-			case arg('action') == 'add':
-				$html = $this->renderAddDialog();
-			break;
+    /**
+     * Потомки могут перекрывать этот метод для добавления дополнительных действий над объектами
+     *
+     * Список основных действий см. в описании {@link getHTML()}.
+     *
+     * Метод должен возвращать HTML или FALSE если ни одно действие не выполнено.
+     *
+     * return false
+     */
+    protected function extendedActions()
+    {
+        return false;
+    }
 
-			case arg('id'):
-				$html = $this->renderEditDialog();
-			break;
+    /**
+     * Переключает активность объекта
+     *
+     * @return void
+     *
+     * @uses arg()
+     * @uses GoodsCatalog_AbstractActiveRecord::save()
+     * @uses ErrorMessage()
+     * @uses HTTP::goback()
+     * @uses reportBadURL()
+     * @since 1.00
+     */
+    protected function toggleItem()
+    {
+        $id = arg('toggle', 'int');
 
-			default:
-				$html = $this->extendedActions();
-				if ($html === false)
-				{
-					$html = $this->renderList();
-				}
-			break;
-		}
+        try
+        {
+            $class = $this->activeRecordClass;
+            $item = new $class($id);
 
-		/* Дополнительные файлы */
-		/** @var TAdminUI $page */
-		$page = Eresus_Kernel::app()->getPage();
-		$page->linkStyles($this->plugin->getCodeURL() . 'admin.css');
-		$page->linkScripts($this->plugin->getCodeURL() . 'admin.js');
+            try
+            {
+                $item->active = !$item->active;
+                $item->save();
+            }
+            catch (Exception $e)
+            {
+                ErrorMessage('Не удалось сохранить изменения: ' . $e->getMessage());
+            }
+        }
+        catch (DomainException $e)
+        {
+            $this->reportBadURL($e);
+        }
 
-		return $html;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Помещает в сессию сообщение о неправильном адресе
-	 *
-	 * @param Exception $e
-	 *
-	 * @return void
-	 *
-	 * @uses ErrorMessage()
-	 */
-	protected function reportBadURL(Exception $e)
-	{
-		ErrorMessage('Неправильный адрес');
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Потомки могут перекрывать этот метод для добавления дополнительных действий над объектами
-	 *
-	 * Список основных действий см. в описании {@link getHTML()}.
-	 *
-	 * Метод должен возвращать HTML или FALSE если ни одно действие не выполнено.
-	 *
-	 * return false
-	 */
-	protected function extendedActions()
-	{
-		return false;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Переключает активность объекта
-	 *
-	 * @return void
-	 *
-	 * @uses arg()
-	 * @uses GoodsCatalog_AbstractActiveRecord::save()
-	 * @uses ErrorMessage()
-	 * @uses HTTP::goback()
-	 * @uses reportBadURL()
-	 * @since 1.00
-	 */
-	protected function toggleItem()
-	{
-		$id = arg('toggle', 'int');
-
-		try
-		{
-			$class = $this->activeRecordClass;
-			$item = new $class($id);
-
-			try
-			{
-				$item->active = ! $item->active;
-				$item->save();
-			}
-			catch (Exception $e)
-			{
-				ErrorMessage('Не удалось сохранить изменения: ' .	$e->getMessage());
-			}
-		}
-		catch (DomainException $e)
-		{
-			$this->reportBadURL($e);
-		}
-
-		HTTP::goback();
-	}
-	//-----------------------------------------------------------------------------
+        HTTP::goback();
+    }
 }
+
