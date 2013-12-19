@@ -91,7 +91,7 @@ class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
 
         if ($pg > $totalPages && $pg != 1)
         {
-            $page->httpError(404);
+            throw new Eresus_HTTP_Exception_NotFound;
         }
 
         if ($totalPages > 1)

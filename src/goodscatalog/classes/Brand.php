@@ -98,7 +98,7 @@ class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
             @$result = unlink($filename);
             if (!$result)
             {
-                ErrorMessage("Can not delete file $filename");
+                Eresus_Kernel::app()->getPage()->addErrorMessage("Can not delete file $filename");
             }
         }
 
