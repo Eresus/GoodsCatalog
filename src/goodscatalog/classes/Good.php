@@ -609,6 +609,8 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
             $lw = imageSX($logo);
             $lh = imageSY($logo);
 
+            $x = 0;
+            $y = 0;
             switch ($settings['logoPosition'])
             {
                 case 'TL':
