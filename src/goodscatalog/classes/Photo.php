@@ -113,7 +113,7 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
      */
     public function save()
     {
-        eresus_log(__METHOD__, LOG_DEBUG, '()');
+        Eresus_Kernel::log(__METHOD__, LOG_DEBUG, '()');
 
         if ($this->isNew())
         {
@@ -122,8 +122,6 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
 
         parent::save();
     }
-
-    //-----------------------------------------------------------------------------
 
     /**
      * @see GoodsCatalog_AbstractActiveRecord::delete()
@@ -135,7 +133,8 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
             @$result = unlink($this->photoPath);
             if (!$result)
             {
-                ErrorMessage("Can not delete file {$this->photoPath}");
+                Eresus_Kernel::app()->getPage()->addErrorMessage(
+                    "Can not delete file {$this->photoPath}");
             }
         }
 
@@ -144,7 +143,8 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
             @$result = unlink($this->thumbPath);
             if (!$result)
             {
-                ErrorMessage("Can not delete file {$this->thumbPath}");
+                Eresus_Kernel::app()->getPage()->addErrorMessage(
+                    "Can not delete file {$this->thumbPath}");
             }
         }
 
@@ -163,9 +163,9 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
      */
     public static function count($good, $activeOnly = false)
     {
-        eresus_log(__METHOD__, LOG_DEBUG, '(%d, %d)', $good, $activeOnly);
+        Eresus_Kernel::log(__METHOD__, LOG_DEBUG, '(%d, %d)', $good, $activeOnly);
 
-        $q = DB::getHandler()->createSelectQuery();
+        $q = Eresus_DB::getHandler()->createSelectQuery();
         $q->select('count(DISTINCT id) as `count`');
         $q->from(self::getDbTableStatic(__CLASS__));
 
@@ -181,7 +181,7 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
 
         $q->where($condition);
 
-        $result = DB::fetch($q);
+        $result = $q->fetch();
         return $result['count'];
     }
 
@@ -199,9 +199,9 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
      */
     public static function find($good, $limit = null, $offset = null, $activeOnly = false)
     {
-        eresus_log(__METHOD__, LOG_DEBUG, '(%d, %d, %d, %d)', $good, $limit, $offset, $activeOnly);
+        Eresus_Kernel::log(__METHOD__, LOG_DEBUG, '(%d, %d, %d, %d)', $good, $limit, $offset, $activeOnly);
 
-        $q = DB::getHandler()->createSelectQuery();
+        $q = Eresus_DB::getHandler()->createSelectQuery();
         $e = $q->expr;
 
         $where = $e->eq('good', $q->bindValue($good, null, PDO::PARAM_INT));
@@ -378,7 +378,7 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
      */
     private static function load($query, $limit = null, $offset = null)
     {
-        eresus_log(__METHOD__, LOG_DEBUG, '("%s", %d, %d)', $query, $limit, $offset);
+        Eresus_Kernel::log(__METHOD__, LOG_DEBUG, '("%s", %d, %d)', $query, $limit, $offset);
 
         $query->select('*');
         $query->from(self::getDbTableStatic(__CLASS__));
@@ -397,7 +397,7 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
 
         }
 
-        $raw = DB::fetchAll($query);
+        $raw = $query->fetchAll();
         $result = array();
         if (count($raw))
         {
@@ -437,15 +437,13 @@ class GoodsCatalog_Photo extends GoodsCatalog_AbstractActiveRecord
 
         if (!$dirCreated)
         {
-            throw new EresusFsRuntimeException('Can not create directory.');
+            throw new RuntimeException('Can not create directory.');
         }
 
         if (!upload($this->upload, $this->photoPath))
         {
-            throw new EresusFsRuntimeException('Upload failed.');
+            throw new RuntimeException('Upload failed.');
         }
-
-        useLib('glib');
 
         /*
          * Если изображение слишком больше - уменьшаем

@@ -111,7 +111,8 @@ class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
             }
             catch (Exception $e)
             {
-                ErrorMessage('Не удалось удалить бренд: ' . $e->getMessage());
+                Eresus_Kernel::app()->getPage()->addErrorMessage('Не удалось удалить бренд: '
+                    . $e->getMessage());
             }
         }
         catch (DomainException $e)
@@ -162,17 +163,18 @@ class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
         {
             $brand->save();
         }
-        catch (EresusRuntimeException $e)
+        catch (RuntimeException $e)
         {
-            ErrorMessage($e->getMessage());
+            Eresus_Kernel::app()->getPage()->addErrorMessage($e->getMessage());
         }
         catch (Exception $e)
         {
-            Core::logException($e);
-            ErrorMessage('Произошла внутренняя ошибка при добавлении бренда.');
+            Eresus_Kernel::logException($e);
+            Eresus_Kernel::app()->getPage()->addErrorMessage(
+                'Произошла внутренняя ошибка при добавлении бренда.');
         }
 
-        HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');
+        HTTP::redirect('admin.php?mod=ext-' . $this->plugin->getName() . '&ref=brands');
     }
 
     /**
@@ -236,17 +238,18 @@ class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
         {
             $brand->save();
         }
-        catch (EresusRuntimeException $e)
+        catch (RuntimeException $e)
         {
-            ErrorMessage($e->getMessage());
+            Eresus_Kernel::app()->getPage()->addErrorMessage($e->getMessage());
         }
         catch (Exception $e)
         {
-            Core::logException($e);
-            ErrorMessage('Произошла внутренняя ошибка при изменении бренда.');
+            Eresus_Kernel::logException($e);
+            Eresus_Kernel::app()->getPage()->addErrorMessage(
+                'Произошла внутренняя ошибка при изменении бренда.');
         }
 
-        HTTP::redirect('admin.php?mod=ext-' . $this->plugin->name . '&ref=brands');
+        HTTP::redirect('admin.php?mod=ext-' . $this->plugin->getName() . '&ref=brands');
     }
 }
 

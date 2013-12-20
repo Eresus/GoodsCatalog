@@ -123,7 +123,8 @@ class GoodsCatalog extends ContentPlugin
     {
         parent::__construct();
 
-        $this->listenEvents('adminOnMenuRender');
+        Eresus_Kernel::app()->getEventDispatcher()
+            ->addListener('cms.admin.start', array($this, 'adminOnMenuRender'));
     }
 
     /**
@@ -235,8 +236,7 @@ class GoodsCatalog extends ContentPlugin
         catch (Exception $e)
         {
             $this->uninstall();
-            throw new EresusRuntimeException('Fail to create DB tables',
-                'Не удалось создать таблицы в базе данных. Подробная информация доступна в журнале.', $e);
+            throw new RuntimeException('Fail to create DB tables', 0, $e);
         }
 
         /* Создаём директории данных */
@@ -284,7 +284,7 @@ class GoodsCatalog extends ContentPlugin
 
         // Создаём экземпляр шаблона
         //$tmpl = $this->getHelper()->getAdminTemplate('settings.html');
-        $form = new EresusForm('ext/' . $this->name . '/templates/settings.html');
+        $form = new EresusForm('ext/' . $this->getName() . '/templates/settings.html');
 
         foreach ($data as $key => $value)
         {
@@ -335,7 +335,8 @@ class GoodsCatalog extends ContentPlugin
         $info = getimagesize($tmpFile);
         if ($info['mime'] != 'image/png')
         {
-            ErrorMessage('Логотип должен быть в формате PNG. Загруженный файл имеет формат "' .
+            Eresus_Kernel::app()->getPage()->addErrorMessage(
+                'Логотип должен быть в формате PNG. Загруженный файл имеет формат "' .
             $info['mime'] . '"');
             return;
         }
@@ -395,7 +396,7 @@ class GoodsCatalog extends ContentPlugin
         {
             $menuItem = array(
                 'access' => EDITOR,
-                'link' => $this->name . '&ref=brands',
+                'link' => $this->getName() . '&ref=brands',
                 'caption' => 'Бренды',
                 'hint' => 'Управление брендами'
             );
@@ -417,7 +418,7 @@ class GoodsCatalog extends ContentPlugin
         if ($this->settings['brandsEnabled'] == false)
         {
             return ErrorBox('Функционал управления брендами отключен. ' .
-            'Вы можете включить его в <a href="admin.php?mod=plgmgr&id=' . $this->name .
+            'Вы можете включить его в <a href="admin.php?mod=plgmgr&id=' . $this->getName() .
             '">настройках</a>.');
         }
 

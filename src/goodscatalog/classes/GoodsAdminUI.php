@@ -160,19 +160,16 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
         {
             $good->save();
         }
-        catch (EresusRuntimeException $e)
-        {
-            ErrorMessage($e->getMessage());
-        }
         catch (RuntimeException $e)
         {
-            Core::logException($e);
+            Eresus_Kernel::logException($e);
             throw $e;
         }
         catch (Exception $e)
         {
-            Core::logException($e);
-            ErrorMessage('Произошла внутренняя ошибка при добавлении товара.');
+            Eresus_Kernel::logException($e);
+            Eresus_Kernel::app()->getPage()->addErrorMessage(
+                'Произошла внутренняя ошибка при добавлении товара.');
         }
 
         /*
@@ -203,7 +200,8 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
             }
             catch (Exception $e)
             {
-                ErrorMessage('Не удалось удалить товар: ' . $e->getMessage());
+                Eresus_Kernel::app()->getPage()->addErrorMessage('Не удалось удалить товар: '
+                    . $e->getMessage());
             }
         }
         catch (DomainException $e)
@@ -250,7 +248,8 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
          * Основные свойства
          */
 
-        $form = new EresusForm('ext/' . $this->plugin->name . '/templates/goods-edit-form.html');
+        $form = new EresusForm('ext/' . $this->plugin->getName()
+            . '/templates/goods-edit-form.html');
 
         // Данные для подстановки в шаблон
         $data = $this->plugin->getHelper()->prepareTmplData();
@@ -330,12 +329,13 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
         }
         catch (RuntimeException $e)
         {
-            ErrorMessage($e->getMessage());
+            Eresus_Kernel::app()->getPage()->addErrorMessage($e->getMessage());
         }
         catch (Exception $e)
         {
-            Core::logException($e);
-            ErrorMessage('Произошла внутренняя ошибка при изменении товара.');
+            Eresus_Kernel::logException($e);
+            Eresus_Kernel::app()->getPage()->addErrorMessage(
+                'Произошла внутренняя ошибка при изменении товара.');
         }
 
         HTTP::goback();
@@ -399,7 +399,7 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
         $result = array();
         foreach ($sections as $section)
         {
-            $section['selectable'] = $section['type'] == $this->plugin->name;
+            $section['selectable'] = $section['type'] == $this->plugin->getName();
             $children = $this->buildSectionTree($section['id'], $level + 1);
             if ($section['selectable'] || $children)
             {
@@ -500,14 +500,15 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
             {
                 $photo->save();
             }
-            catch (EresusRuntimeException $e)
+            catch (RuntimeException $e)
             {
-                ErrorMessage($e->getMessage());
+                Eresus_Kernel::app()->getPage()->addErrorMessage($e->getMessage());
             }
             catch (Exception $e)
             {
-                Core::logException($e);
-                ErrorMessage('Произошла внутренняя ошибка при добавлении фотографии.');
+                Eresus_Kernel::logException($e);
+                Eresus_Kernel::app()->getPage()->addErrorMessage(
+                    'Произошла внутренняя ошибка при добавлении фотографии.');
             }
         }
 
@@ -575,7 +576,8 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
             }
             catch (Exception $e)
             {
-                ErrorMessage('Не удалось удалить фотографию: ' . $e->getMessage());
+                Eresus_Kernel::app()->getPage()->addErrorMessage(
+                    'Не удалось удалить фотографию: ' . $e->getMessage());
             }
         }
         catch (DomainException $e)

@@ -136,7 +136,7 @@ class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
         }
         catch (DomainException $e)
         {
-            $page->httpError(404);
+            throw new Eresus_HTTP_Exception_NotFound;
         }
         // Данные для подстановки в шаблон
         $data = $this->plugin->getHelper()->prepareTmplData();

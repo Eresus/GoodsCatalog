@@ -114,7 +114,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
      */
     public function __construct($id = null)
     {
-        eresus_log(array(__METHOD__, get_class($this)), LOG_DEBUG, '(%s)', $id);
+        Eresus_Kernel::log(array(__METHOD__, get_class($this)), LOG_DEBUG, '(%s)', $id);
         if ($id !== null)
         {
             $this->loadById($id);
@@ -179,7 +179,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
      */
     public function getDbTable()
     {
-        return self::plugin()->name . '_' . $this->getTableName();
+        return self::plugin()->getName() . '_' . $this->getTableName();
     }
 
     /**
@@ -199,7 +199,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
 
         if (!($stub instanceof GoodsCatalog_AbstractActiveRecord))
         {
-            throw new EresusTypeException();
+            throw new Eresus_Exception_InvalidArgumentType;
         }
 
         return $stub->getDbTable();
@@ -277,9 +277,9 @@ abstract class GoodsCatalog_AbstractActiveRecord
      */
     public function save()
     {
-        eresus_log(__METHOD__, LOG_DEBUG, '()');
+        Eresus_Kernel::log(__METHOD__, LOG_DEBUG, '()');
 
-        $db = DB::getHandler();
+        $db = Eresus_DB::getHandler();
         if ($this->isNew())
         {
             $q = $db->createInsertQuery();
@@ -300,7 +300,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
             }
         }
 
-        DB::execute($q);
+        $q->execute();
 
         if ($this->isNew())
         {
@@ -346,16 +346,16 @@ abstract class GoodsCatalog_AbstractActiveRecord
      */
     public function delete()
     {
-        eresus_log(__METHOD__, LOG_DEBUG, '()');
+        Eresus_Kernel::log(__METHOD__, LOG_DEBUG, '()');
 
-        $db = DB::getHandler();
+        $db = Eresus_DB::getHandler();
         if (!$this->isNew())
         {
             $q = $db->createDeleteQuery();
             $q->deleteFrom($this->getDbTable())
                 ->where($q->expr->eq('id', $q->bindValue($this->id, null, PDO::PARAM_INT)));
 
-            DB::execute($q);
+            $q->execute();
         }
 
         $this->isNew = true;
@@ -383,7 +383,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
             return;
         }
 
-        $q = DB::getHandler()->createSelectQuery();
+        $q = Eresus_DB::getHandler()->createSelectQuery();
         $e = $q->expr;
         $q->select('*');
         $q->from($this->getDbTable());
@@ -395,7 +395,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
         ->orderBy('position', ezcQuerySelect::DESC);
         $q->limit(1);
 
-        $raw = DB::fetch($q);
+        $raw = $q->fetch();
 
         if (!$raw)
         {
@@ -429,7 +429,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
      */
     public function moveDown()
     {
-        $q = DB::getHandler()->createSelectQuery();
+        $q = Eresus_DB::getHandler()->createSelectQuery();
         $e = $q->expr;
         $q->select('*');
         $q->from($this->getDbTable());
@@ -441,7 +441,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
         ->orderBy('position', ezcQuerySelect::ASC);
         $q->limit(1);
 
-        $raw = DB::fetch($q);
+        $raw = $q->fetch();
 
         if (!$raw)
         {
@@ -479,7 +479,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
 
         if (!self::$plugin)
         {
-            self::$plugin = Eresus_CMS::getLegacyKernel()->plugins->load('goodscatalog');
+            self::$plugin = Eresus_Plugin_Registry::getInstance()->load('goodscatalog');
         }
         return self::$plugin;
     }
@@ -504,7 +504,8 @@ abstract class GoodsCatalog_AbstractActiveRecord
         $attrs = $this->getAttrs();
         if (!isset($attrs[$key]))
         {
-            throw new EresusPropertyNotExistsException($key, get_class($this));
+            throw new LogicException(sprintf('Property "%s" not exists in class "%s"', $key,
+                get_class($this)));
         }
 
         /*
@@ -522,7 +523,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
                 $value = $this->filterString($value, $attrs[$key]);
                 break;
             default:
-                throw new EresusTypeException();
+                throw new Eresus_Exception_InvalidArgumentType;
                 break;
         }
 
@@ -546,7 +547,8 @@ abstract class GoodsCatalog_AbstractActiveRecord
         $attrs = $this->getAttrs();
         if (!isset($attrs[$key]))
         {
-            throw new EresusPropertyNotExistsException($key, get_class($this));
+            throw new LogicException(sprintf('Property "%s" not exists in class "%s"', $key,
+                get_class($this)));
         }
 
         if (isset($this->rawData[$key]))
@@ -587,14 +589,14 @@ abstract class GoodsCatalog_AbstractActiveRecord
      */
     protected function loadById($id)
     {
-        $db = DB::getHandler();
+        $db = Eresus_DB::getHandler();
         $q = $db->createSelectQuery();
         $q->select('*');
         $q->from($this->getDbTable());
         $q->where($q->expr->eq('id', $q->bindValue($id, null, PDO::PARAM_INT)))
             ->limit(1);
 
-        $this->rawData = DB::fetch($q);
+        $this->rawData = $q->fetch();
 
         if (!$this->rawData)
         {
@@ -621,8 +623,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
     {
         if (!in_array($mime, $this->supportedFormats))
         {
-            throw new EresusRuntimeException("Unsupported file type: $mime",
-                "Неподдерживаемый тип файла: $mime.");
+            throw new DomainException("Неподдерживаемый тип файла: $mime.");
         }
     }
 
@@ -674,13 +675,13 @@ abstract class GoodsCatalog_AbstractActiveRecord
      */
     protected function autoPosition()
     {
-        $q = DB::getHandler()->createSelectQuery();
+        $q = Eresus_DB::getHandler()->createSelectQuery();
         $e = $q->expr;
         $q->select($q->alias($e->max('position'), 'maxval'));
         $q->from($this->getDbTable());
         $q->where($e->eq($this->ownerProperty,
                 $q->bindValue($this->getProperty($this->ownerProperty), null, PDO::PARAM_INT)));
-        $result = DB::fetch($q);
+        $result = $q->fetch();
         $this->position = $result['maxval'] + 1;
     }
 

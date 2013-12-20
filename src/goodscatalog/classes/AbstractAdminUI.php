@@ -119,7 +119,7 @@ abstract class GoodsCatalog_AbstractAdminUI extends GoodsCatalog_AbstractUI
      */
     protected function reportBadURL(Exception $e)
     {
-        ErrorMessage('Неправильный адрес');
+        Eresus_Kernel::app()->getPage()->addErrorMessage('Неправильный адрес');
     }
 
     /**
@@ -167,7 +167,8 @@ abstract class GoodsCatalog_AbstractAdminUI extends GoodsCatalog_AbstractUI
             }
             catch (Exception $e)
             {
-                ErrorMessage('Не удалось сохранить изменения: ' . $e->getMessage());
+                Eresus_Kernel::app()->getPage()->addErrorMessage('Не удалось сохранить изменения: '
+                    . $e->getMessage());
             }
         }
         catch (DomainException $e)

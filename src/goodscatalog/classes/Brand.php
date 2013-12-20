@@ -116,9 +116,9 @@ class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
      */
     public static function count($activeOnly = false)
     {
-        eresus_log(__METHOD__, LOG_DEBUG, '()');
+        Eresus_Kernel::log(__METHOD__, LOG_DEBUG, '()');
 
-        $q = DB::getHandler()->createSelectQuery();
+        $q = Eresus_DB::getHandler()->createSelectQuery();
         $q->select('count(DISTINCT id) as `count`');
         $q->from(self::getDbTableStatic(__CLASS__));
 
@@ -128,7 +128,7 @@ class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
             $q->where($e->eq('active', $q->bindValue(true, null, PDO::PARAM_BOOL)));
         }
 
-        $result = DB::fetch($q);
+        $result = $q->fetch();
         return $result['count'];
     }
 
@@ -149,9 +149,9 @@ class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
      */
     public static function find($limit = null, $offset = null, $activeOnly = false)
     {
-        eresus_log(__METHOD__, LOG_DEBUG, '(%d, %d, %d)', $limit, $offset, $activeOnly);
+        Eresus_Kernel::log(__METHOD__, LOG_DEBUG, '(%d, %d, %d)', $limit, $offset, $activeOnly);
 
-        $q = DB::getHandler()->createSelectQuery();
+        $q = Eresus_DB::getHandler()->createSelectQuery();
 
         if ($activeOnly)
         {
@@ -226,7 +226,7 @@ class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
      */
     private static function load($query, $limit = null, $offset = null)
     {
-        eresus_log(__METHOD__, LOG_DEBUG, '("%s", %d, %d)', $query, $limit, $offset);
+        Eresus_Kernel::log(__METHOD__, LOG_DEBUG, '("%s", %d, %d)', $query, $limit, $offset);
 
         $query->select('*');
         $query->from(self::getDbTableStatic(__CLASS__));
@@ -245,7 +245,7 @@ class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
 
         }
 
-        $raw = DB::fetchAll($query);
+        $raw = $query->fetchAll();
         $result = array();
         if (count($raw))
         {
@@ -283,10 +283,8 @@ class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
 
         if (!upload($this->upload, $this->logoPath))
         {
-            throw new EresusFsRuntimeException();
+            throw new RuntimeException('Logo not uploaded');
         }
-
-        useLib('glib');
 
         /*
          * Если изображение слишком больше - уменьшаем
