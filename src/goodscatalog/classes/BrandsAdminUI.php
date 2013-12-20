@@ -225,28 +225,27 @@ class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
         try
         {
             $brand = new GoodsCatalog_Brand($id);
+            $brand->title = arg('title');
+            $brand->description = arg('description');
+            $brand->logo = 'logo'; // $_FILES['image'];
+            try
+            {
+                $brand->save();
+            }
+            catch (RuntimeException $e)
+            {
+                Eresus_Kernel::app()->getPage()->addErrorMessage($e->getMessage());
+            }
+            catch (Exception $e)
+            {
+                Eresus_Kernel::logException($e);
+                Eresus_Kernel::app()->getPage()->addErrorMessage(
+                    'Произошла внутренняя ошибка при изменении бренда.');
+            }
         }
         catch (DomainException $e)
         {
             $this->reportBadURL($e);
-        }
-
-        $brand->title = arg('title');
-        $brand->description = arg('description');
-        $brand->logo = 'logo'; // $_FILES['image'];
-        try
-        {
-            $brand->save();
-        }
-        catch (RuntimeException $e)
-        {
-            Eresus_Kernel::app()->getPage()->addErrorMessage($e->getMessage());
-        }
-        catch (Exception $e)
-        {
-            Eresus_Kernel::logException($e);
-            Eresus_Kernel::app()->getPage()->addErrorMessage(
-                'Произошла внутренняя ошибка при изменении бренда.');
         }
 
         HTTP::redirect('admin.php?mod=ext-' . $this->plugin->getName() . '&ref=brands');

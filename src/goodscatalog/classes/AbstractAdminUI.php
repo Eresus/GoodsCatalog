@@ -70,6 +70,7 @@ abstract class GoodsCatalog_AbstractAdminUI extends GoodsCatalog_AbstractUI
      */
     public function getHTML()
     {
+        $html = '';
         switch (true)
         {
             case arg('action') == 'insert':
