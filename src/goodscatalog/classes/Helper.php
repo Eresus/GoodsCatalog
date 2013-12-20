@@ -70,36 +70,6 @@ class GoodsCatalog_Helper
     }
 
     /**
-     * Подключает библиотеку jQuery
-     *
-     * @return void
-     *
-     * @since 1.00
-     */
-    public function linkJQuery()
-    {
-        $page = Eresus_Kernel::app()->getPage();
-        $Eresus = Eresus_CMS::getLegacyKernel();
-
-        $page->linkScripts($Eresus->root . 'core/jquery/jquery.min.js');
-    }
-
-    /**
-     * Подключает библиотеку jQueryUI
-     *
-     * @return void
-     *
-     * @since 1.00
-     */
-    public function linkJQueryUI()
-    {
-        $page = Eresus_Kernel::app()->getPage();
-        $Eresus = Eresus_CMS::getLegacyKernel();
-
-        $page->linkScripts($Eresus->root . 'core/jquery/jquery-ui.min.js');
-    }
-
-    /**
      * Возвращает массив данных для шаблона.
      *
      * Массив предварительно наполняется часто используемыми переменными.
