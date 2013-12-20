@@ -54,7 +54,7 @@ jQuery('#content .brand-list-item a.delete').live('click', function (e)
 
 
 /**
- * Отслеживание изменений на вкладке "Основные совйства товара"
+ * Отслеживание изменений на вкладке "Основные свойства товара"
  */
 jQuery('#catalogEdit-main :input').live('change', function ()
 {

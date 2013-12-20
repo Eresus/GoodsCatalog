@@ -93,7 +93,7 @@ a.ui-button:visited
 	}
 
 /**
- * Поле для ввода чилса
+ * Поле для ввода числа
  */
 input[type=text].number
 {
