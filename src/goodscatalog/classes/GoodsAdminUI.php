@@ -305,37 +305,36 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
         try
         {
             $good = new GoodsCatalog_Good($id);
+            $good->section = arg('section', 'int');
+            $good->article = arg('article');
+            $good->title = arg('title');
+            $good->about = arg('about');
+            $good->description = arg('description');
+            $good->cost = arg('cost');
+            $good->active = arg('active', 'int');
+            $good->special = arg('special', 'int');
+            $good->description = arg('description');
+            $good->brand = arg('brand', 'int');
+            $good->photo = 'photo'; // $_FILES['photo'];
+
+            try
+            {
+                $good->save();
+            }
+            catch (RuntimeException $e)
+            {
+                Eresus_Kernel::app()->getPage()->addErrorMessage($e->getMessage());
+            }
+            catch (Exception $e)
+            {
+                Eresus_Kernel::logException($e);
+                Eresus_Kernel::app()->getPage()->addErrorMessage(
+                    'Произошла внутренняя ошибка при изменении товара.');
+            }
         }
         catch (DomainException $e)
         {
             $this->reportBadURL($e);
-        }
-
-        $good->section = arg('section', 'int');
-        $good->article = arg('article');
-        $good->title = arg('title');
-        $good->about = arg('about');
-        $good->description = arg('description');
-        $good->cost = arg('cost');
-        $good->active = arg('active', 'int');
-        $good->special = arg('special', 'int');
-        $good->description = arg('description');
-        $good->brand = arg('brand', 'int');
-        $good->photo = 'photo'; // $_FILES['photo'];
-
-        try
-        {
-            $good->save();
-        }
-        catch (RuntimeException $e)
-        {
-            Eresus_Kernel::app()->getPage()->addErrorMessage($e->getMessage());
-        }
-        catch (Exception $e)
-        {
-            Eresus_Kernel::logException($e);
-            Eresus_Kernel::app()->getPage()->addErrorMessage(
-                'Произошла внутренняя ошибка при изменении товара.');
         }
 
         HTTP::goback();
