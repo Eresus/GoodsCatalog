@@ -38,9 +38,9 @@
 abstract class GoodsCatalog_AbstractActiveRecord
 {
     /**
-     * Описание файла для загрузки - элемент из массива $_FILES
+     * Описание файла для загрузки - ключ элемента из массива $_FILES
      *
-     * @var array
+     * @var string
      * @since 1.00
      */
     protected $upload;
@@ -189,7 +189,8 @@ abstract class GoodsCatalog_AbstractActiveRecord
      *                           надо получить имя таблицы
      * @return string
      *
-     * @throws EresusTypeException если класс $className не потомок GoodsCatalog_AbstractActiveRecord
+     * @throws Eresus_Exception_InvalidArgumentType  если класс $className не потомок
+     *                                               GoodsCatalog_AbstractActiveRecord
      * @uses getDbTable
      * @since 1.00
      */
@@ -273,6 +274,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
      *
      * @return void
      *
+     * @throws Exception
      * @since 1.00
      */
     public function save()
@@ -493,8 +495,9 @@ abstract class GoodsCatalog_AbstractActiveRecord
      * @param mixed $value  Значение
      * @return void
      *
-     * @throws EresusPropertyNotExistsException если свойства $key нет
-     * @throws EresusTypeException если у свойства неподдерживаемый тип (см. {@link getAttrs()})
+     * @throws LogicException  если свойства $key нет
+     * @throws Eresus_Exception_InvalidArgumentType  если у свойства неподдерживаемый тип
+     *                                               (см. {@link getAttrs()})
      * @uses getAttrs
      * @uses PDO
      * @since 1.00
@@ -538,7 +541,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
      * @param string $key  имя свойства
      * @return mixed  значение свойства
      *
-     * @throws EresusPropertyNotExistsException  если такого свойства нет
+     * @throws LogicException  если такого свойства нет
      * @uses getAttrs
      * @since 1.00
      */
@@ -616,7 +619,7 @@ abstract class GoodsCatalog_AbstractActiveRecord
      *
      * @return void
      *
-     * @throws EresusRuntimeException
+     * @throws DomainException
      * @since 1.00
      */
     protected function checkFormat($mime)

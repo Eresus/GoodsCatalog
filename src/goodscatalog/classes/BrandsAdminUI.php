@@ -195,7 +195,7 @@ class GoodsCatalog_BrandsAdminUI extends GoodsCatalog_AbstractAdminUI
         catch (DomainException $e)
         {
             $this->reportBadURL($e);
-            return;
+            return '';
         }
 
         // Данные для подстановки в шаблон

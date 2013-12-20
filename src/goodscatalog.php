@@ -166,7 +166,7 @@ class GoodsCatalog extends ContentPlugin
     /**
      * Действия при инсталляции
      *
-     * @throws EresusRuntimeException
+     * @throws RuntimeException
      *
      * @return void
      *
@@ -457,6 +457,8 @@ class GoodsCatalog extends ContentPlugin
 
     /**
      * Удаляет товары при удалении раздела
+     *
+     * @param int $id
      *
      * @return void
      *

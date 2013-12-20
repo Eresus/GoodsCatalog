@@ -72,6 +72,8 @@ class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
      *
      * @return string  HTML
      *
+     * @throws Eresus_HTTP_Exception_NotFound
+     *
      * @since 1.00
      */
     private function renderList()
@@ -116,6 +118,7 @@ class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
      * Возвращает разметку описания товара
      *
      * @throws DomainException
+     * @throws Eresus_HTTP_Exception_NotFound
      *
      * @return string  HTML
      *

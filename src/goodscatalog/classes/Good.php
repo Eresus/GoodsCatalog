@@ -508,8 +508,8 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
      *
      * @return void
      *
-     * @throws EresusRuntimeException Если формат файла не поддерживается
-     * @throws EresusFsRuntimeException Если загрузка не удалась
+     * @throws DomainException Если формат файла не поддерживается
+     * @throws RuntimeException Если загрузка не удалась
      * @since 1.07
      */
     protected function serveUpload()

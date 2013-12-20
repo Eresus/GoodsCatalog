@@ -139,6 +139,8 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
      *
      * @return void
      *
+     * @throws RuntimeException
+     *
      * @since 1.00
      * @uses HTTP::redirect
      */
@@ -453,6 +455,8 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
      * Возвращает диалог добавления дополнительной фотографии
      *
      * @param GoodsCatalog_Good $good
+     *
+     * @return string  HTML
      */
     private function renderPhotoAddDialog($good)
     {

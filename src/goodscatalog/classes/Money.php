@@ -47,11 +47,11 @@ class GoodsCatalog_Money
     /**
      * Создаёт новый объект "Деньги"
      *
-     * @param float $amount  начальное количество денег
+     * @param float $amount начальное количество денег
      *
      * @since 1.02
      */
-    public function __construct($amount = 0)
+    public function __construct($amount = 0.0)
     {
         $this->setAmount($amount);
     }
