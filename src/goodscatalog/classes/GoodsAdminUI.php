@@ -350,13 +350,13 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
         try
         {
             $good = new GoodsCatalog_Good(arg('up', 'int'));
+            $good->moveUp();
         }
         catch (DomainException $e)
         {
             $this->reportBadURL($e);
         }
 
-        $good->moveUp();
         HTTP::goback();
     }
 
@@ -370,13 +370,13 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
         try
         {
             $good = new GoodsCatalog_Good(arg('down', 'int'));
+            $good->moveDown();
         }
         catch (DomainException $e)
         {
             $this->reportBadURL($e);
         }
 
-        $good->moveDown();
         HTTP::goback();
     }
 
