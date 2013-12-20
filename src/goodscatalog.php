@@ -276,15 +276,13 @@ class GoodsCatalog extends ContentPlugin
 
         $page->linkStyles($this->urlCode . 'admin.css');
 
-        Eresus_Kernel::app()->getPage()->linkJsLib('webshim');
-
         // Данные для подстановки в шаблон
         $data = $this->getHelper()->prepareTmplData();
         $data['logoExists'] = is_file($this->getLogoFileName());
 
         // Создаём экземпляр шаблона
         //$tmpl = $this->getHelper()->getAdminTemplate('settings.html');
-        $form = new EresusForm('ext/' . $this->getName() . '/templates/settings.html');
+        $form = new EresusForm('ext/' . $this->getName() . '/templates/admin/settings.html');
 
         foreach ($data as $key => $value)
         {
