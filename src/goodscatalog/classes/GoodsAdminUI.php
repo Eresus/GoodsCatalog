@@ -524,13 +524,13 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
         try
         {
             $photo = new GoodsCatalog_Photo(arg('photo_up', 'int'));
+            $photo->moveUp();
         }
         catch (DomainException $e)
         {
             $this->reportBadURL($e);
         }
 
-        $photo->moveUp();
         HTTP::goback();
     }
 
@@ -544,13 +544,13 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
         try
         {
             $photo = new GoodsCatalog_Photo(arg('photo_down', 'int'));
+            $photo->moveDown();
         }
         catch (DomainException $e)
         {
             $this->reportBadURL($e);
         }
 
-        $photo->moveDown();
         HTTP::goback();
     }
 
