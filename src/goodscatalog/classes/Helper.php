@@ -66,7 +66,7 @@ class GoodsCatalog_Helper
      */
     public function getTempFileName()
     {
-        return $this->plugin->getDataDir() . 'tmp_upload.bin';
+        return $this->plugin->getDataDir() . '/tmp_upload.bin';
     }
 
     /**

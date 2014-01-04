@@ -128,42 +128,6 @@ class GoodsCatalog extends ContentPlugin
     }
 
     /**
-     * Возвращает URL директории файлов плагина
-     *
-     * @return string
-     *
-     * @since 1.00
-     */
-    public function getCodeURL()
-    {
-        return $this->urlCode;
-    }
-
-    /**
-     * Возвращает путь к директории данных плагина
-     *
-     * @return string
-     *
-     * @since 1.00
-     */
-    public function getDataDir()
-    {
-        return $this->dirData;
-    }
-
-    /**
-     * Возвращает URL директории данных плагина
-     *
-     * @return string
-     *
-     * @since 1.00
-     */
-    public function getDataURL()
-    {
-        return $this->urlData;
-    }
-
-    /**
      * Действия при инсталляции
      *
      * @throws RuntimeException

@@ -301,7 +301,7 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
     {
         if ($this->ext)
         {
-            return self::plugin()->getDataDir() . 'goods/' . $this->id . '/main.' . $this->ext;
+            return self::plugin()->getDataDir() . '/goods/' . $this->id . '/main.' . $this->ext;
         }
         else
         {
@@ -339,7 +339,7 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
     {
         if ($this->ext)
         {
-            return self::plugin()->getDataDir() . 'goods/' . $this->id . '/main-thmb.jpg';
+            return self::plugin()->getDataDir() . '/goods/' . $this->id . '/main-thmb.jpg';
         }
         else
         {
@@ -585,7 +585,7 @@ class GoodsCatalog_Good extends GoodsCatalog_AbstractActiveRecord
      */
     private function overlayLogo($file)
     {
-        $logoFile = self::plugin()->getDataDir() . 'logo.png';
+        $logoFile = self::plugin()->getDataDir() . '/logo.png';
 
         if (!file_exists($logoFile))
         {

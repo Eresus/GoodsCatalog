@@ -186,7 +186,7 @@ class GoodsCatalog_Brand extends GoodsCatalog_AbstractActiveRecord
     {
         if ($this->ext)
         {
-            return self::plugin()->getDataDir() . 'brands/' . $this->id . '.' . $this->ext;
+            return self::plugin()->getDataDir() . '/brands/' . $this->id . '.' . $this->ext;
         }
         else
         {
