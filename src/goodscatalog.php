@@ -153,8 +153,8 @@ class GoodsCatalog extends ContentPlugin
 				`position` int(10) unsigned NOT NULL default '0' COMMENT 'Порядковый номер',
 				`article` varchar(255) NOT NULL default '' COMMENT 'Артикул',
 				`title` varchar(255) NOT NULL default '' COMMENT 'Название',
-				`about` text NOT NULL default '' COMMENT 'Краткое описание',
-				`description` longtext NOT NULL default '' COMMENT 'Описание',
+				`about` text COMMENT 'Краткое описание',
+				`description` longtext COMMENT 'Описание',
 				`cost` double NOT NULL default 0 COMMENT 'Цена',
 				`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла основной фотографии',
 				`special` bool NOT NULL default 0 COMMENT 'Спец. предложение',
@@ -174,7 +174,7 @@ class GoodsCatalog extends ContentPlugin
 				`id` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
 				`active` bool NOT NULL default 0 COMMENT 'Активность',
 				`title` varchar(255) NOT NULL default '' COMMENT 'Название',
-				`description` longtext NOT NULL default '' COMMENT 'Описание',
+				`description` longtext COMMENT 'Описание',
 				`ext` varchar(4) NOT NULL default '' COMMENT 'Расширение файла логотипа',
 				PRIMARY KEY  (`id`),
 				KEY `admin_list` (`title`),
@@ -235,18 +235,13 @@ class GoodsCatalog extends ContentPlugin
      */
     public function settings()
     {
-        /** @var TAdminUI $page */
-        $page = Eresus_Kernel::app()->getPage();
-
-        $page->linkStyles($this->urlCode . 'admin.css');
-
         // Данные для подстановки в шаблон
         $data = $this->getHelper()->prepareTmplData();
         $data['logoExists'] = is_file($this->getLogoFileName());
 
         // Создаём экземпляр шаблона
         //$tmpl = $this->getHelper()->getAdminTemplate('settings.html');
-        $form = new EresusForm('ext/' . $this->getName() . '/templates/admin/settings.html');
+        $form = new EresusForm('ext/' . $this->getName() . '/admin/templates/settings.html');
 
         foreach ($data as $key => $value)
         {
@@ -316,7 +311,7 @@ class GoodsCatalog extends ContentPlugin
      */
     private function getLogoFileName()
     {
-        return $this->dirData . 'logo.png';
+        return $this->getDataDir() . '/logo.png';
     }
 
     /**

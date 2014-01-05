@@ -157,8 +157,8 @@ class GoodsCatalog_GoodsClientUI extends GoodsCatalog_AbstractUI
         $html = $tmpl->compile($data);
 
         $page->linkJsLib('jquery', 'ui');
-        $page->linkScripts($this->plugin->getCodeURL() . 'client.js');
-        $page->linkStyles($this->plugin->getCodeURL() . 'client.css');
+        $page->linkScripts($this->plugin->getCodeUrl() . 'client/client.js');
+        $page->linkStyles($this->plugin->getCodeUrl() . 'client/client.css');
 
         return $html;
     }

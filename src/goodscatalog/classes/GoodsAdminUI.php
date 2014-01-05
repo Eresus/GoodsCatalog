@@ -250,8 +250,8 @@ class GoodsCatalog_GoodsAdminUI extends GoodsCatalog_AbstractAdminUI
          * Основные свойства
          */
 
-        $form = new EresusForm('ext/' . $this->plugin->getName()
-            . '/templates/goods-edit-form.html');
+        $form = new EresusForm($this->plugin->templates()
+            ->adminPath('goods-edit-form.html', false));
 
         // Данные для подстановки в шаблон
         $data = $this->plugin->getHelper()->prepareTmplData();
