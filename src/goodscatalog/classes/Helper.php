@@ -1,14 +1,12 @@
 <?php
 /**
- * Каталог товаров
- *
  * Класс-помощник
  *
  * @version ${product.version}
  *
  * @copyright 2010, ООО "Два слона", http://dvaslona.ru/
- * @license http://www.gnu.org/licenses/gpl.txt	GPL License 3
- * @author Михаил Красильников <mk@3wstyle.ru>
+ * @license http://www.gnu.org/licenses/gpl.txt    GPL License 3
+ * @author Михаил Красильников <mk@dvaslona.ru>
  *
  * Данная программа является свободным программным обеспечением. Вы
  * вправе распространять ее и/или модифицировать в соответствии с
@@ -27,8 +25,6 @@
  * <http://www.gnu.org/licenses/>
  *
  * @package GoodsCatalog
- *
- * $Id$
  */
 
 
@@ -41,122 +37,54 @@
  */
 class GoodsCatalog_Helper
 {
-	/**
-	 * Объект плагина
-	 *
-	 * @var GoodsCatalog
-	 */
-	private $plugin;
+    /**
+     * Объект плагина
+     *
+     * @var GoodsCatalog
+     */
+    private $plugin;
 
-	/**
-	 * Конструктор
-	 *
-	 * @param GoodsCatalog $plugin
-	 *
-	 * @return GoodsCatalog_Helper
-	 */
-	public function __construct(GoodsCatalog $plugin)
-	{
-		$this->plugin = $plugin;
-	}
-	//-----------------------------------------------------------------------------
+    /**
+     * Конструктор
+     *
+     * @param GoodsCatalog $plugin
+     *
+     * @return GoodsCatalog_Helper
+     */
+    public function __construct(GoodsCatalog $plugin)
+    {
+        $this->plugin = $plugin;
+    }
 
-	/**
-	 * Метод возвращает имя для временного файла в области, доступной для безопасного чтения
-	 * и записи.
-	 *
-	 * @return string
-	 *
-	 * @since 1.00
-	 */
-	public function getTempFileName()
-	{
-		return $this->plugin->getDataDir() . 'tmp_upload.bin';
-	}
-	//-----------------------------------------------------------------------------
+    /**
+     * Метод возвращает имя для временного файла в области, доступной для безопасного чтения
+     * и записи.
+     *
+     * @return string
+     *
+     * @since 1.00
+     */
+    public function getTempFileName()
+    {
+        return $this->plugin->getDataDir() . '/tmp_upload.bin';
+    }
 
-	/**
-	 * Подключает библиотеку jQuery
-	 *
-	 * @return void
-	 *
-	 * @since 1.00
-	 */
-	public function linkJQuery()
-	{
-		$page = Eresus_Kernel::app()->getPage();
-		$Eresus = Eresus_CMS::getLegacyKernel();
-
-		$page->linkScripts($Eresus->root . 'core/jquery/jquery.min.js');
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Подключает библиотеку jQueryUI
-	 *
-	 * @return void
-	 *
-	 * @since 1.00
-	 */
-	public function linkJQueryUI()
-	{
-		$page = Eresus_Kernel::app()->getPage();
-		$Eresus = Eresus_CMS::getLegacyKernel();
-
-		$page->linkScripts($Eresus->root . 'core/jquery/jquery-ui.min.js');
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Возвращает экземпляр шаблона АИ с указанным именем
-	 *
-	 * @param string $name  Имя файла шаблона относительно директории шаблонов плагина
-	 *
-	 * @return Template
-	 *
-	 * @since 1.00
-	 */
-	public function getAdminTemplate($name)
-	{
-		$tmpl = new Template('ext/' . $this->plugin->name . '/templates/' . $name);
-		return $tmpl;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Возвращает экземпляр шаблона КИ с указанным именем
-	 *
-	 * @param string $name  Имя файла шаблона относительно директории шаблонов плагина
-	 *
-	 * @return Template
-	 *
-	 * @since 1.00
-	 */
-	public function getClientTemplate($name)
-	{
-		$ts = TemplateService::getInstance();
-		$tmpl = $ts->getTemplate($name, $this->plugin->name);
-
-		return $tmpl;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Возвращает массив данных для шаблона.
-	 *
-	 * Массив предварительно наполняется часто используемыми переменными.
-	 *
-	 * @return array
-	 *
-	 * @since 1.00
-	 */
-	public function prepareTmplData()
-	{
-		$data = array();
-		$data['this'] = $this->plugin;
-		$data['page'] = Eresus_Kernel::app()->getPage();
-		$data['Eresus'] = Eresus_CMS::getLegacyKernel();
-		return $data;
-	}
-	//-----------------------------------------------------------------------------
+    /**
+     * Возвращает массив данных для шаблона.
+     *
+     * Массив предварительно наполняется часто используемыми переменными.
+     *
+     * @return array
+     *
+     * @since 1.00
+     */
+    public function prepareTmplData()
+    {
+        $data = array();
+        $data['this'] = $this->plugin;
+        $data['page'] = Eresus_Kernel::app()->getPage();
+        $data['Eresus'] = Eresus_CMS::getLegacyKernel();
+        return $data;
+    }
 }
+

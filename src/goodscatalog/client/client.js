@@ -1,13 +1,13 @@
 /**
  * Каталог товаров
  *
- * Клиентские скрипты АИ
+ * Клиентские скрипты КИ
  *
  * @version ${product.version}
  *
  * @copyright 2010, ООО "Два слона", http://dvaslona.ru/
  * @license http://www.gnu.org/licenses/gpl.txt  GPL License 3
- * @author Михаил Красильников <mk@3wstyle.ru>
+ * @author Михаил Красильников <mk@dvaslona.ru>
  *
  * Данная программа является свободным программным обеспечением. Вы
  * вправе распространять ее и/или модифицировать в соответствии с
@@ -26,51 +26,29 @@
  * <http://www.gnu.org/licenses/>
  *
  * @package GoodsCatalog
- *
- * $Id$
  */
 
-/**
- * Реестр переменных каталога
- */
-var GoodsCatalog = {
-	// Признак изменения данных в диалоге
-	dialogDataChanged: false
-};
-
-/* Запросы подтверждения на удаление объектов */
-jQuery('#content .goods-list-item a.delete').live('click', function (e)
+jQuery('a[href$="#catalog-popup"]').live('click', function (e)
 {
-	return confirm("Подтверждаете удаление товара?");
-});
+	e.stopPropagation();
+	e.preventDefault();
 
-jQuery('#content .photo-list-item a.delete').live('click', function (e)
-{
-	return confirm("Подтверждаете удаление фотографии?");
-});
+	var img = jQuery('<img alt="" id="goodscatalog-popup" />');
+	img.dialog({
+		autoOpen: false,
+		closeText: 'Закрыть',
+		draggable: false,
+		modal: true,
+		resizable: false,
+		width: 'auto',
 
-jQuery('#content .brand-list-item a.delete').live('click', function (e)
-{
-	return confirm("Подтверждаете удаление бренда?");
-});
-
-
-/**
- * Отслеживание изменений на вкладке "Основные совйства товара"
- */
-jQuery('#catalogEdit-main :input').live('change', function ()
-{
-	GoodsCatalog.dialogDataChanged = true;
-});
-
-jQuery(document).ready(function ()
-{
-	jQuery('#catalogEdit-btn-images a').click(function (e)
-	{
-		if (GoodsCatalog.dialogDataChanged)
+		close: function(event)
 		{
-			alert('На вкладке "Основные свойства" есть несохранённые изменения. Сохраните их прежде чем перейти к дополнительным фотографиям.');
-			jQuery(e).stopPropagation().preventDefault();
+			jQuery(event.target).remove().closest('div.ui-dialog').remove();
 		}
 	});
+
+	img.
+		load(function () { jQuery('#goodscatalog-popup').dialog('open'); }).
+		attr('src', e.currentTarget.href);
 });

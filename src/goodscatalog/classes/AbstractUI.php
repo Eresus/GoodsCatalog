@@ -1,14 +1,12 @@
 <?php
 /**
- * Каталог товаров
- *
  * Абстрактный пользовательский интерфейс
  *
  * @version ${product.version}
  *
  * @copyright 2010, ООО "Два слона", http://dvaslona.ru/
- * @license http://www.gnu.org/licenses/gpl.txt	GPL License 3
- * @author Михаил Красильников <mk@3wstyle.ru>
+ * @license http://www.gnu.org/licenses/gpl.txt GPL License 3
+ * @author Михаил Красильников <mk@dvaslona.ru>
  *
  * Данная программа является свободным программным обеспечением. Вы
  * вправе распространять ее и/или модифицировать в соответствии с
@@ -27,8 +25,6 @@
  * <http://www.gnu.org/licenses/>
  *
  * @package GoodsCatalog
- *
- * $Id$
  */
 
 
@@ -39,51 +35,48 @@
  */
 abstract class GoodsCatalog_AbstractUI
 {
-	/**
-	 * Объект плагина
-	 *
-	 * @var GoodsCatalog
-	 */
-	protected $plugin;
+    /**
+     * Объект плагина
+     *
+     * @var GoodsCatalog
+     */
+    protected $plugin;
 
-	/**
-	 * Имя класса ActiveRecord, соответствующего типу объектов с которыми работает интерфейс
-	 *
-	 * @var string
-	 * @see getActiveRecordClass
-	 */
-	protected $activeRecordClass;
+    /**
+     * Имя класса ActiveRecord, соответствующего типу объектов с которыми работает интерфейс
+     *
+     * @var string
+     * @see getActiveRecordClass
+     */
+    protected $activeRecordClass;
 
-	/**
-	 * Конструктор
-	 *
-	 * @param ContentPlugin $plugin экземпляр класса плагина GoodsCatalog
-	 *
-	 * @uses getActiveRecordClass
-	 * @since 1.00
-	 */
-	public function __construct(ContentPlugin $plugin)
-	{
-		$this->plugin = $plugin;
-		$this->activeRecordClass = $this->getActiveRecordClass();
-	}
-	//-----------------------------------------------------------------------------
+    /**
+     * Конструктор
+     *
+     * @param ContentPlugin $plugin экземпляр класса плагина GoodsCatalog
+     *
+     * @uses getActiveRecordClass
+     * @since 1.00
+     */
+    public function __construct(ContentPlugin $plugin)
+    {
+        $this->plugin = $plugin;
+        $this->activeRecordClass = $this->getActiveRecordClass();
+    }
 
-	/**
-	 * Должен возвращать HTML-разметку интерфейса
-	 *
-	 * @return string
-	 */
-	abstract public function getHTML();
-	//-----------------------------------------------------------------------------
+    /**
+     * Должен возвращать HTML-разметку интерфейса
+     *
+     * @return string
+     */
+    abstract public function getHTML();
 
-	/**
-	 * Метод должен возвращать имя класса активной записи соответствующего типу объектов,
-	 * с которыми работает интерфейс
-	 *
-	 * @return string
-	 */
-	abstract protected function getActiveRecordClass();
-	//-----------------------------------------------------------------------------
-
+    /**
+     * Метод должен возвращать имя класса активной записи соответствующего типу объектов,
+     * с которыми работает интерфейс
+     *
+     * @return string
+     */
+    abstract protected function getActiveRecordClass();
 }
+

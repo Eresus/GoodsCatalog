@@ -1,0 +1,15 @@
+{
+    "name": "eresus/goods-catalog",
+    "description": "Модуль расширения «Каталог товаров» для Eresus CMS",
+    "authors":
+    [
+        {
+            "name": "Михаил Красильников",
+            "email": "mk@dvaslona.ru"
+        }
+    ],
+    "require":
+    {
+        "mekras/test-doubles": "dev-master"
+    }
+}

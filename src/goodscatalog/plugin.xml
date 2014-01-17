@@ -1,9 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <declaration uid="ru.eresus.plugins.GoodsCatalog" format="1.00">
-
-	<requires>
-		<!-- plugin name="orm" min="2.00" max="2.99" / -->
-		<plugin name="templateservice" min="1.00a" max="1.99" />
-	</requires>
-
 </declaration>
